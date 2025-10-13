@@ -1,28 +1,77 @@
 <!DOCTYPE html>
 <html lang="th" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head><meta charset="UTF-8"><title>งานของฉัน</title></head>
+
+<head>
+    <meta charset="UTF-8">
+    <title>งานของฉัน</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
 <body>
-  <div>
-    <span>เข้าสู่ระบบโดย: <b sec:authentication="name">user</b></span>
-    |
-    <form method="post" action="/logout" th:object="${_csrf}" style="display:inline">
-      <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
-      <button type="submit">ออกจากระบบ</button>
-    </form>
-    | <a href="/">หน้าแรก</a>
-  </div>
+    <div class="navbar">
+        <div class="logo">VolenteeU</div>
+        <div class="nav-links">
+            <a href="/" style="font-weight: bold;">Home</a>
 
-  <h2>งานของฉัน (อาจารย์)</h2>
-  <p><a href="/teacher/jobs/new">+ สร้างงานใหม่</a></p>
+            <th:block sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/applications}">ใบสมัครของฉัน</a>
+            </th:block>
 
-  <table border="1" cellpadding="6" cellspacing="0">
-    <thead><tr><th>ชื่อเรื่อง</th><th>คำถาม</th><th>จัดการ</th></tr></thead>
-    <tbody>
-      <tr th:each="j : ${jobs}">
-        <td th:text="${j.title}">title</td>
-        <td th:text="${j.questionPrompt}">question</td>
-        <td><a th:href="@{|/teacher/jobs/${j.id}/applications|}">ดูผู้สมัคร</a></td>
-      </tr>
-    </tbody>
-  </table>
-</body></html>
+            <th:block sec:authorize="hasRole('TEACHER')">
+                <a th:href="@{/teacher/jobs}" class="active">พื้นที่อาจารย์</a>
+            </th:block>
+
+            <th:block sec:authorize="isAuthenticated()">
+                <a th:href="@{/profile}">Profile</a>
+
+                <form method="post" action="/logout" th:object="${_csrf}" style="display:inline; margin-left: 25px;">
+                    <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
+                    <button type="submit"
+                        style="background:none; border:none; color:#A3062C; cursor:pointer;">Logout</button>
+                </form>
+            </th:block>
+
+            <th:block sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </th:block>
+        </div>
+    </div>
+
+    <div class="main-content">
+
+        <header class="teacher-page-header">
+            <h2>งานของฉัน</h2>
+            <a href="/teacher/jobs/new" class="btn btn-primary">+ สร้างงานใหม่</a>
+        </header>
+
+        <div class="job-list">
+            <div class="job-card" th:each="j : ${jobs}">
+
+                <div class="job-details">
+                    <h3 th:text="${j.title}"></h3>
+                    <p th:text="${j.questionPrompt}"></p>
+                </div>
+
+                <div class="job-actions">
+                    <a th:href="@{|/teacher/jobs/${j.id}/applications|}" class="btn btn-secondary">ดูผู้สมัคร</a>
+                </div>
+
+            </div>
+
+            <div class="empty-state" th:if="${#lists.isEmpty(jobs)}">
+                <p>ยังไม่มีงานที่คุณสร้าง</p>
+            </div>
+
+        </div>
+    </div>
+    <div class="footer">
+        © 2025 VolenteeU — Software Project Recruitment
+    </div>
+</body>
+
+</html>
