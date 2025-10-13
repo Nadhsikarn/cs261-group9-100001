@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+      <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="../static/css/style.css">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+
+</head>
+<body>
+
+<header>
+    <h1>VolenteeU</h1>
+    <nav>
+      <a href="#" class="active">Dashboard</a>
+      <a href="#">Posts</a>
+      <a href="#">Applicant</a>
+      <a href="#">Interview</a>
+      <a href="#">Final</a>
+      <span class="icon">👤</span>
+    </nav>
+</header>
+
+<div class="dashboard-container">
+
+    <!-- Dashboard Title + Stats -->
+    <div class="top-section">
+        <div class="title">Dash<br>Board</div>
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number">9</div>
+                <div class="stat-text">All posts</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">9</div>
+                <div class="stat-text">Active post</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">999</div>
+                <div class="stat-text">New applicant</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+        <div class="timeline-left">
+            <div class="timeline-item">
+                <div class="dot"></div>
+                <div>create new post</div>
+            </div>
+            <div class="timeline-item">
+                <div class="dot"></div>
+                <div>Interview</div>
+            </div>
+            <div class="timeline-item">
+                <div class="dot"></div>
+                <div>create new post</div>
+            </div>
+        </div>
+        <div class="recent-title">
+            Recent<br>Activities
+        </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="section-title">In progress</div>
+    <div class="card">
+        <div>Staff งานรับเพื่อนใหม่ TU92</div>
+        <div>
+            <a href="#">edit</a>
+            <a href="#">view</a>
+        </div>
+    </div>
+
+    <!-- Completed -->
+    <div class="section-title">Completed</div>
+    <div class="card">
+        <div>Staff งานรับเพื่อนใหม่ TU91</div>
+        <div>
+            <a href="#">›</a>
+        </div>
+    </div>
+    <div class="card">
+        <div>Staff งานรับเพื่อนใหม่ TU90</div>
+        <div>
+            <a href="#">›</a>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    © 2025 VolenteeU — Software Project Recruitment
+</div>
+
+</body>
+</html>

@@ -1,22 +1,110 @@
 <!DOCTYPE html>
-<html lang="th"><head><meta charset="UTF-8"><title>สร้างงานใหม่</title></head>
+<html lang="th" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+      <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="../static/css/style.css">
+ <head>
+  <meta charset="UTF-8">
+  <title>Create new post</title>
+  
+</head>
 <body>
-  <h2>สร้างงานใหม่</h2>
+  <header>
+    <h1>VolenteeU</h1>
+    <nav>
+      <a href="#">Dashboard</a>
+      <a href="#" class="active">Posts</a>
+      <a href="#">Applicant</a>
+      <a href="#">Interview</a>
+      <a href="#">Final</a>
+      <span class="icon">👤</span>
+    </nav>
+  </header>
+
+  <div class="teacher-container">
+    <h2>Create new post</h2>
   <form method="post" action="/teacher/jobs" th:object="${_csrf}">
     <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
-    <div>
-      <label>ชื่อเรื่อง</label><br/>
-      <input type="text" name="title" required style="width:420px"/>
+    <div class="grid">
+      <div class="box">
+        <label><h3>กรอกรายละเอียด</h3></label>
+        <label>ชื่องาน</label>
+        <input type="text" required>
+
+        <label>รายละเอียดงาน</label>
+        <textarea name="description" required></textarea>
+
+        <label>Skills ที่ต้องการในแต่ละฝ่าย</label>
+        <textarea name="questionPrompt" required></textarea>
+      </div>
+
+      <div>
+        <div class="upload">
+          <div>📷</div>
+          <label for="image-upload" class="custom-upload-button">กดเพื่ออัปโหลดรูปภาพ</label>
+          <input type="file" id="image-upload" accept="image/*" style="display: none;">   
+        </div>
+
+        <div class="date-group">
+          <label>วันเปิดรับสมัคร</label>
+          <div class="date-row">
+            <select><option>Date</option></select>
+            <select><option>Month</option></select>
+            <select><option>Year</option></select>
+          </div>
+          <hr style="border: none; border-top: 1px solid #c57a7a; margin: 15px 0;">
+          <label>วันปิดรับสมัคร</label>
+          <div class="date-row">
+            <select><option>Date</option></select>
+            <select><option>Month</option></select>
+            <select><option>Year</option></select>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <label>รายละเอียด</label><br/>
-      <textarea name="description" required style="width:420px;height:120px"></textarea>
+
+    <div class="section">
+      <h3>ข้อมูลที่ต้องการจากผู้สมัคร</h3>
+      <div class="form-row">
+        <div>
+          <label>ชื่อจริง :</label>
+          <input type="text" required>
+          <label>นามสกุล :</label>
+          <input type="text" required>
+          <label>เลขนักศึกษา :</label>
+          <input type="text" required>
+        </div>
+        <div>
+          <label>ชื่อเล่น :</label>
+          <input type="text" required>
+          <label>แนะนำตัวเองสั้น ๆ :</label>
+          <input type="text" required>
+          <label>ชั้นปีการศึกษา :</label>
+          <select required>
+            <option>-- เลือก --</option>
+          </select>
+        </div>
+      </div>
+      <div class="add-btn">เพิ่มคำถามใหม่</div>
     </div>
-    <div>
-      <label>คำถามให้นักศึกษาตอบ</label><br/>
-      <textarea name="questionPrompt" required style="width:420px;height:80px"></textarea>
+  
+    <div class="dept-box">
+      <h3>ฝ่ายที่รับสมัคร</h3>
+      <input type="text">
+      <input type="text">
+      <input type="text">
+      <div class="add-btn">เพิ่มฝ่าย</div>
     </div>
-    <button type="submit">บันทึก</button>
+
+    <div class="btn-row">
+      <button class="submit">Save as draft</button>
+      <button class="btn primary">Preview</button>
+    </div>
   </form>
-  <p><a href="/teacher/jobs">ย้อนกลับ</a></p>
-</body></html>
+  </div>
+    <div class="footer">
+        © 2025 VolenteeU — Software Project Recruitment
+    </div>
+</body>
+</html>
