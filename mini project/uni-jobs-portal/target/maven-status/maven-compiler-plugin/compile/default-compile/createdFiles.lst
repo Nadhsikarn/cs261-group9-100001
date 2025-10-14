@@ -1,0 +1,14 @@
+com\example\campusjobs\CampusJobsApplication.class
+com\example\campusjobs\config\SecurityConfig.class
+com\example\campusjobs\util\SecUtil.class
+com\example\campusjobs\model\Job.class
+com\example\campusjobs\config\DataSeeder.class
+com\example\campusjobs\controller\HomeController.class
+com\example\campusjobs\repo\ApplicationRepository.class
+com\example\campusjobs\controller\TeacherJobController.class
+com\example\campusjobs\controller\AuthController.class
+com\example\campusjobs\controller\StudentController.class
+com\example\campusjobs\controller\JobsController.class
+com\example\campusjobs\repo\JobRepository.class
+com\example\campusjobs\model\Application.class
+com\example\campusjobs\model\ApplicationStatus.class
