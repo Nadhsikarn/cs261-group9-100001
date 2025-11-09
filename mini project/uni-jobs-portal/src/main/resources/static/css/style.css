@@ -1072,9 +1072,11 @@ td {
 }
 
 .job-box img {
+  max-width: 600px;
   width: 100%;
-  border-radius: 10px;
-  object-fit: cover;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .job-meta {
@@ -1116,7 +1118,6 @@ td {
 .page-description{
     color: #A3062C;
     font-size: 11px;
-    margin-bottom: px;
 }
 
 .cancel-btn {
@@ -1143,6 +1144,5 @@ td {
   width: 100%;
   height: 1px;
   background-color: #CCCCCC;
-  margin-top: 8px;
-  margin-bottom: 20px;
 }
+

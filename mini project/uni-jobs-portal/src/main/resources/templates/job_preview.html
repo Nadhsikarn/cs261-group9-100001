@@ -79,7 +79,8 @@
                 <h1>Staff งานปฐมนิเทศ</h1>
                 <div class="section-divider"></div>
             </div>
-    <img src="event-full.png" alt="โปสเตอร์ TU92">
+
+        <img th:src="@{/images/event-full.png}" alt="poster">
 
      <div class="page-description">
                 <h1>Description</h1>
@@ -87,15 +88,18 @@
         </div>
 
     <div class="job-description">
-      <p>รับสมัครสต๊าฟงานรับเพื่อนใหม่ TU92 ณ ยิมเนเซียม 4 และ ยิมเนเซียม 5 จัดขึ้นในวันที่ 10 สิงหาคม 2569 ผ่ายกิจกรรม , ฝ่ายพัสดุ , ฝ่ายมะเบียน , ฝ่ายสถานที่ , ฝ่าย stage & run script , ฝ่ายคมนาคม ฯลฯ</p>
-      <p>ผู้ที่มีสิทธิ์สมัคร : นักศึกษามหาวิทยาลัยธรรมศาสตร์ทุกชั้นปี (ยกเว้นรหัส 69)</p>
+      รับสมัครสต๊าฟงานรับเพื่อนใหม่ TU92 ณ ยิมเนเซียม 4 และ ยิมเนเซียม 5 จัดขึ้นในวันที่ 10 สิงหาคม 2569 ผ่ายกิจกรรม , ฝ่ายพัสดุ , ฝ่ายทะเบียน , ฝ่ายสถานที่ , ฝ่าย stage & run script , ฝ่ายคมนาคม ฯลฯ </p>
+      ผู้ที่มีสิทธิ์สมัคร : นักศึกษามหาวิทยาลัยธรรมศาสตร์ทุกชั้นปี (ยกเว้นรหัส 69)</p>
     </div>
 
     <div class="job-footer">
             <button onclick="window.location.href='/'" class="cancel-btn">Cancel</button> 
-            <button class="apply-btn">Apply Now</button>
+            <a th:href="@{|/jobs/${job.id}|}" class="apply-btn">Apply Now</a>
     </div>
-
+    </div>
+    
+    <div class="footer">
+        © 2025 VolunteeU — Software Project Recruitment
     </div>
 
     <script>
@@ -117,9 +121,6 @@
     </script>
     
 
-    <div class="footer">
-        © 2025 VolunteeU — Software Project Recruitment
-    </div>
 
 </body>
 </html>
