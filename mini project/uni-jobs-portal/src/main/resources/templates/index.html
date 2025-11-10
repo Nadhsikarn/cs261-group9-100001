@@ -98,7 +98,7 @@
                         </th:block>
 
                         <th:block sec:authorize="hasRole('STUDENT')">
-                            <a th:href="@{|/jobs/${job.id}|}" class="apply-btn">Apply Now</a>
+                            <a th:href="@{|/jobs/preview?id=${job.id}|}" class="apply-btn">Apply Now</a>
                         </th:block>
 
                         <th:block sec:authorize="hasRole('TEACHER')">

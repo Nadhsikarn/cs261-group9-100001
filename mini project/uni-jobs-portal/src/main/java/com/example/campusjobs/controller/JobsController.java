@@ -22,6 +22,14 @@ public class JobsController {
         this.applicationRepository = applicationRepository;
     }
 
+    @GetMapping("/preview")
+        //public String preview(@PathVariable Long id, Model model)
+        public String preview(@RequestParam Long id, Model model) {
+        var job = jobRepository.findById(id).orElse(null);
+        model.addAttribute("job", job); // ส่ง job เข้าไปใน preview
+        return "job_preview"; // ต้องมีไฟล์ job_preview.html ใน /templates
+    }
+
     @GetMapping("/{id}")
     public String detail(@PathVariable Long id, Model model) {
         var job = jobRepository.findById(id).orElse(null);

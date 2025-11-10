@@ -8,7 +8,7 @@
     <title>ใบสมัครของฉัน</title>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
@@ -72,11 +72,11 @@
 
     <div class="job-box">
             <div class="page-header">
-                <h1>Staff งานปฐมนิเทศ</h1>
+                <h1 th:text="${job.title}">ชื่อของงาน</h1>
                 <div class="section-divider"></div>
             </div>
 
-        <img th:src="@{/images/event-full.png}" alt="poster">
+        <img th:src="@{/image/event-full.png}" alt="poster">
 
      <div class="page-description">
                 <h1>Description</h1>
@@ -97,6 +97,11 @@
     <div class="footer">
         © 2025 VolunteeU — Software Project Recruitment
     </div>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
 
     <script>
         function toggleNotificationPopup(event) {
