@@ -19,10 +19,7 @@
         <a href="/teacher/interview">Interview</a>
         <a href="/teacher/final" class="active" style="font-weight: bold;">Final</a>
         <a href="/profile">Profile</a>
-        <form method="post" th:action="@{/logout}" th:object="${_csrf}" style="display:inline; margin-left: 25px;">
-            <input type="hidden" th:name="*{parameterName}" th:value="*{token}" />
-            <button type="submit" style="background:none;border:none;color:#A3062C;cursor:pointer;">Logout</button>
-        </form>
+        
     </div>
 </div>
 
