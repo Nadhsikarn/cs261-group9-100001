@@ -1310,4 +1310,53 @@ td {
 }
 
 
+/*----Final Staff Member List----*/
+.staff-row-mem{
+    display: grid;
+    grid-template-columns:  2fr 1fr;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.05em;
+    color: #333;
+    text-align: center;
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #A3062C;
+    column-gap: 200px;
+}
 
+.staff-row-name{
+        display: grid;
+    grid-template-columns: 2fr 0.8fr;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.05em;
+    color: #333;
+    text-align: center;
+    
+}
+
+.staff-list-name {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto 50px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.name {
+  text-align: left;
+  justify-self: start;
+  padding-left: 35px; 
+}
+
+.role{
+    text-align: left;
+    justify-self: start;
+    padding-left: 35px; 
+}

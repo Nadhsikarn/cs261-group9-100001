@@ -32,35 +32,35 @@
         <a href="#" class="details-link-head">< ฝ่าย XXXXX</a>
     </div>
 
-<div class="staff-list">
-  <div class="staff-row">
+<div class="staff-list-name">
+  <div class="staff-row-mem">
     <span class="name">ชื่อ</span>
 
     <span class="details">ดูรายละเอียด</span>
   </div>
 
-  <div class="staff-row">
+  <div class="staff-row-name">
     <span class="name">xxxxx xxxxxx</span>
     <a href="#" class="details-link">></a>
   </div>
-  <div class="staff-row">
+  <div class="staff-row-name"">
     <span class="name">xxxxx xxxxxx</span>
 
     <a href="#" class="details-link">></a>
   </div>
-  <div class="staff-row">
+  <div class="staff-row-name">
     <span class="name">xxxxx xxxxxx</span>
     <a href="#" class="details-link">></a>
   </div>
-  <div class="staff-row">
+  <div class="staff-row-name"">
     <span class="name">xxxxx xxxxxx</span>
     <a href="#" class="details-link">></a>
   </div>
-  <div class="staff-row">
+  <div class="staff-row-name">
     <span class="name">xxxxx xxxxxx</span>
     <a href="#" class="details-link">></a>
   </div>
-  <div class="staff-row">
+  <div class="staff-row-name">
     <span class="name">xxxxx xxxxxx</span>
     <a href="#" class="details-link">></a>
   </div>
