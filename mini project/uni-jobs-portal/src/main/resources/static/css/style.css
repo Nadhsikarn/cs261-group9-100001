@@ -1242,13 +1242,18 @@ td {
     color: #A3062C;
     font-weight: bold;
     text-decoration: none;
-    display: inline-block;
-    width: 100%;
-    padding-left: 350px;
+    display: inline;
+    width: 50%;
     margin-bottom: 30px;
 }
 .details-link-head:hover {
     color: #FFBF00;
+}
+
+.details-link-head-wrapper {
+    padding-left: 350px;
+    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 .finalstafflist-page-header {
@@ -1297,3 +1302,12 @@ td {
 .sub-title {
   box-sizing: border-box;
 }
+
+.final-page-wrapper {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
