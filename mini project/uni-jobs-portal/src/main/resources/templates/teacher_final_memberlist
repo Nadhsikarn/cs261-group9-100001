@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>ดูรายชื่อ staff</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+<div class="final-page-wrapper">
+<div class="navbar">
+    <div class="logo">VolunteeU</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/teacher/jobs">Posts</a>
+        <a href="/teacher/applicant">Applicant</a>
+        <a href="/teacher/interview">Interview</a>
+        <a href="/teacher/final" class="active" style="font-weight: bold;">Final</a>
+        <a href="/profile">Profile</a>
+        
+    </div>
+</div>  
+    <div class="finalstafflist-page-header">
+        Final staff lists
+        <div class="section-divider"></div>
+    </div>
+
+    <div class="details-link-head-wrapper">
+        <a href="#" class="details-link-head">< ฝ่าย XXXXX</a>
+    </div>
+
+<div class="staff-list">
+  <div class="staff-row">
+    <span class="name">ชื่อ</span>
+
+    <span class="details">ดูรายละเอียด</span>
+  </div>
+
+  <div class="staff-row">
+    <span class="name">xxxxx xxxxxx</span>
+    <a href="#" class="details-link">></a>
+  </div>
+  <div class="staff-row">
+    <span class="name">xxxxx xxxxxx</span>
+
+    <a href="#" class="details-link">></a>
+  </div>
+  <div class="staff-row">
+    <span class="name">xxxxx xxxxxx</span>
+    <a href="#" class="details-link">></a>
+  </div>
+  <div class="staff-row">
+    <span class="name">xxxxx xxxxxx</span>
+    <a href="#" class="details-link">></a>
+  </div>
+  <div class="staff-row">
+    <span class="name">xxxxx xxxxxx</span>
+    <a href="#" class="details-link">></a>
+  </div>
+  <div class="staff-row">
+    <span class="name">xxxxx xxxxxx</span>
+    <a href="#" class="details-link">></a>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+    © 2025 VolunteeU — Software Project Recruitment
+</div>
+</body>
+</html>
