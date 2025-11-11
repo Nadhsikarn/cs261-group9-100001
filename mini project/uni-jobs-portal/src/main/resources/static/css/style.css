@@ -1146,3 +1146,82 @@ td {
   background-color: #CCCCCC;
 }
 
+/*----Final Staff List----*/
+.staff-list {
+    width: 90%;
+    max-width: 700px;
+    margin: 0 auto 50px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+
+
+.staff-row:first-child {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #A3062C;
+}
+
+.details-link {
+    color: #A3062C;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+.details-link:hover {
+    color: #FFBF00;
+}
+
+.count {
+    flex: 1;
+    text-align: center;
+    min-width: 50px;
+}
+.sub-title {
+    padding-left: 30px;
+    font-size: 1.1em;
+    color: #555;
+    margin-top: -10px;
+    margin-bottom: 30px;
+}
+
+
+.details-link:hover {
+    color: #FFBF00;}
+    
+.staff-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.05em;
+    color: #333;
+    text-align: center;
+}
+
+
+.role {
+    text-align: left;
+}
+
+.count {
+    min-width: 50px;
+}
+
+.details-link {
+    font-size: 1.8em;
+    color: #A3062C;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+}
+
+.details-link:hover {
+    color: #FFBF00;
+}
