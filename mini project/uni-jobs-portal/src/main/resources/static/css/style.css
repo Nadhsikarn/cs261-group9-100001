@@ -1148,16 +1148,26 @@ td {
 
 /*----Final Staff List----*/
 .staff-list {
-    width: 90%;
-    max-width: 700px;
+    width: 95%;
+    max-width: 1200px;
     margin: 0 auto 50px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     overflow: hidden;
+    box-sizing: border-box;
 }
 
-
+.staff-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.05em;
+    color: #333;
+    text-align: center;
+}
 
 .staff-row:first-child {
     background-color: #f0f0f0;
@@ -1202,6 +1212,7 @@ td {
     font-size: 1.05em;
     color: #333;
     text-align: center;
+    
 }
 
 
@@ -1224,4 +1235,65 @@ td {
 
 .details-link:hover {
     color: #FFBF00;
+}
+
+.details-link-head{
+    font-size: 1.1em;
+    color: #A3062C;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    padding-left: 350px;
+    margin-bottom: 30px;
+}
+.details-link-head:hover {
+    color: #FFBF00;
+}
+
+.finalstafflist-page-header {
+    font-family: 'Inria Sans', sans-serif;
+    color: #A3062C;
+    font-size: 2.5em;
+    font-weight: 600;
+    margin-bottom: 30px;
+    padding-top: 40px;
+    padding-left: 350px;
+    padding-right: 350px;
+    
+}
+.back-link:hover {
+    color: #FFBF00;
+}
+
+.section-header {
+    padding: 0 30px;
+    margin-bottom: 20px;
+}
+
+.back-link {
+    display: inline-block;
+    font-size: 1.1em;
+    color: #A3062C;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.back-link:hover {
+    color: #FFBF00;
+}
+
+.section-divider {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+.staff-list,
+.staff-row,
+.finalstafflist-page-header,
+.details-link-head,
+.sub-title {
+  box-sizing: border-box;
 }
