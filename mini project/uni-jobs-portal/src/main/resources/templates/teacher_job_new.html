@@ -60,6 +60,25 @@
         <input type="file" name="image" accept="image/*" style="width:35%"/>
       </div>
 
+      <div class="job-question-section">
+      <div class="question-header">
+        <h3>คำถามสำหรับผู้สมัคร</h3>
+        <button type="button" class="add-question-btn" onclick="openQuestionModal()">+ เพิ่มคำถามใหม่</button>
+      </div>
+
+      <div id="questionList"></div>
+      <div id="hiddenInputs"></div>
+    </div>
+
+      <div class="modal-overlay" id="questionModal">
+        <div class="modal">
+          <button type="button" class="close-btn" onclick="closeQuestionModal()">×</button>
+          <h2>เพิ่มคำถามใหม่ (ข้อมูลส่วนตัว)</h2>
+          <textarea id="questionInput" placeholder="ใส่คำถาม...."></textarea>
+          <button type="button" class="save-btn" onclick="saveQuestion()">บันทึก</button>
+        </div>
+      </div>
+
       <div class="savenback-btn">
         <div class="save-btn">
           <button type="submit" class="job-save">บันทึก</button>
@@ -74,5 +93,48 @@
   <div class="footer">
     © 2025 VolunteeU — Software Project Recruitment
   </div>
+
+  <script>
+  let modal = document.getElementById("questionModal");
+  let questionInput = document.getElementById("questionInput");
+  let questionList = document.getElementById("questionList");
+  let hiddenInputs = document.getElementById("hiddenInputs");
+
+  function openQuestionModal() {
+    modal.style.display = "flex";
+    questionInput.value = "";
+  }
+
+  function closeQuestionModal() {
+    modal.style.display = "none";
+  }  
+
+  function saveQuestion() {
+    const text = questionInput.value.trim();
+    if (!text) {
+      alert("กรุณากรอกคำถามก่อนบันทึก");
+      return;
+    }
+
+    const item = document.createElement("div");
+    item.className = "question-item";
+    item.textContent = text;
+    questionList.appendChild(item);
+
+    const hidden = document.createElement("input");
+    hidden.type = "hidden";
+    hidden.name = "questions";
+    hidden.value = text;
+    hiddenInputs.appendChild(hidden);
+
+    closeQuestionModal();
+  }
+
+  window.onclick = function(event) {
+    if (event.target === modal) {
+      closeQuestionModal();
+    }
+  }
+</script>
 </body>
 </html>

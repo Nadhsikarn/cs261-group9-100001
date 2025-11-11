@@ -4,6 +4,7 @@ import com.example.campusjobs.model.*;
 import com.example.campusjobs.repo.ApplicationRepository;
 import com.example.campusjobs.repo.JobRepository;
 import com.example.campusjobs.util.SecUtil;
+import com.example.campusjobs.repo.QuestionRepository;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,6 +23,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Collectors; 
+import java.util.List;
 
 @Controller
 @Validated
@@ -30,10 +32,12 @@ public class TeacherJobController {
 
     private final JobRepository jobRepository;
     private final ApplicationRepository applicationRepository;
+    private final QuestionRepository questionRepository;
 
-    public TeacherJobController(JobRepository jobRepository, ApplicationRepository applicationRepository) {
+    public TeacherJobController(JobRepository jobRepository, ApplicationRepository applicationRepository,  QuestionRepository questionRepository) {
         this.jobRepository = jobRepository;
         this.applicationRepository = applicationRepository;
+        this.questionRepository = questionRepository;  
     }
 
     @GetMapping("/jobs")
@@ -55,6 +59,7 @@ public class TeacherJobController {
                             @RequestParam("openDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate openDate,
                             @RequestParam("closeDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate closeDate,
                             @RequestParam("image") MultipartFile image,
+                            @RequestParam(value = "questions", required = false) List<String> questions, 
                             RedirectAttributes ra) {
         String me = SecUtil.currentUsername();
 
@@ -73,8 +78,18 @@ public class TeacherJobController {
         e.printStackTrace();
     }
 
-        Job job = new Job(title, description, me, requiredSkill, openDate, closeDate, imagePath);
+    Job job = new Job(title, description, me, requiredSkill, openDate, closeDate, imagePath);
         jobRepository.save(job);
+
+    if (questions != null) {
+        for (String text : questions) {
+            if (text != null && !text.isBlank()) {
+                Question q = new Question(text);
+                q.setJob(job);
+                questionRepository.save(q);
+            }
+        }
+    }
 
         ra.addFlashAttribute("popupMsg", "Your post has been published !");
         return "redirect:/teacher/jobs";
@@ -133,9 +148,12 @@ public class TeacherJobController {
         return "redirect:/teacher/jobs/" + job.getId() + "/applications";
     }
     //อันนี้เพิ่มมาให้กด link ได้เฉยๆ ยังไม่ได้ใส่ logic ใดๆ
-    @GetMapping("/applicant")
-    public String applicantsPage() {
-        return "teacher_applicant";
+   @GetMapping("/applicant")
+    public String applicantsPage(Model model) {
+        String me = SecUtil.currentUsername();
+        var jobs = jobRepository.findByCreatorUsernameOrderByCreatedAtDesc(me);
+        model.addAttribute("jobs", jobs);
+       return "teacher_applicant";
     }
 
     @GetMapping("/interview")

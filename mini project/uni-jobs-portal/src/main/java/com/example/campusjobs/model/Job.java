@@ -2,13 +2,14 @@ package com.example.campusjobs.model;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "jobs")
@@ -36,6 +37,10 @@ public class Job {
 
     private Instant createdAt = Instant.now(); // เวลาที่สร้างงาน
 
+    // คำถามเพิ่มเติมสำหรับงานนี้
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
+
     public Job() {}
 
     public Job(String title, String description, String creatorUsername, String requiredSkill,
@@ -47,6 +52,12 @@ public class Job {
         this.openDate = openDate;
         this.closeDate = closeDate;
         this.imagePath = imagePath;
+    }
+
+    // เพิ่มคำถามใหม่ให้กับงานนี้
+    public void addQuestion(Question question) {
+    questions.add(question);
+    question.setJob(this);
     }
 
     public Long getId() { return id; }

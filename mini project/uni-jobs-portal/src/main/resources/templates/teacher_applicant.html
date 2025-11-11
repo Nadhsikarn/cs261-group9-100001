@@ -25,6 +25,19 @@
 
 <div class="main-content">
     <h2>Applicant</h2>
+    <h3 class="section-title">In progress</h3>
+
+    <div class="job-list">
+      <div th:if="${#lists.isEmpty(jobs)}">
+        <p>ยังไม่มีโพสต์ที่สร้างไว้</p>
+      </div>
+
+      <div th:each="job : ${jobs}" class="job-card">
+        <a th:href="@{|/teacher/jobs/${job.id}/applications|}" class="job-link">
+          รายชื่อผู้สมัครงาน <span th:text="${job.title}"></span>
+        </a>
+      </div>
+    </div>
 </div>
 
 <div class="footer">
