@@ -79,6 +79,14 @@
         </div>
       </div>
 
+      <div class="job-department">
+        <label>ฝ่ายที่ต้องการ</label><br/>
+        <div id="departmentContainer">
+          <input type="text" name="departments" placeholder="เช่น ฝ่ายต้อนรับ" style="width:35%; padding:5px;" />
+        </div>
+        <button type="button" onclick="addDepartment()" style="margin-top:5px;">+ เพิ่มฝ่าย</button>
+      </div>
+
       <div class="savenback-btn">
         <div class="save-btn">
           <button type="submit" class="job-save">บันทึก</button>
@@ -135,6 +143,17 @@
       closeQuestionModal();
     }
   }
+
+  function addDepartment() {
+  const container = document.getElementById("departmentContainer");
+  const input = document.createElement("input");
+  input.type = "text";
+  input.name = "departments";
+  input.placeholder = "เพิ่มฝ่ายอื่น ๆ";
+  input.style = "width:35%; margin-top:5px; margin-right:5px; padding:5px;";
+  container.appendChild(input);
+  }
 </script>
+
 </body>
 </html>

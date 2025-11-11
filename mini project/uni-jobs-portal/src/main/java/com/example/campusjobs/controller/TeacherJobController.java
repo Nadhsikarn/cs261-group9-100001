@@ -5,6 +5,7 @@ import com.example.campusjobs.repo.ApplicationRepository;
 import com.example.campusjobs.repo.JobRepository;
 import com.example.campusjobs.util.SecUtil;
 import com.example.campusjobs.repo.QuestionRepository;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -58,6 +59,7 @@ public class TeacherJobController {
                             @RequestParam("requiredSkill") @NotBlank String requiredSkill,
                             @RequestParam("openDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate openDate,
                             @RequestParam("closeDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate closeDate,
+                            @RequestParam(value = "departments", required = false) List<String> departments,
                             @RequestParam("image") MultipartFile image,
                             @RequestParam(value = "questions", required = false) List<String> questions, 
                             RedirectAttributes ra) {
@@ -81,6 +83,7 @@ public class TeacherJobController {
     Job job = new Job(title, description, me, requiredSkill, openDate, closeDate, imagePath);
         jobRepository.save(job);
 
+    // บันทึกคำถามเพิ่มเติมถ้ามี
     if (questions != null) {
         for (String text : questions) {
             if (text != null && !text.isBlank()) {
@@ -89,6 +92,16 @@ public class TeacherJobController {
                 questionRepository.save(q);
             }
         }
+    }
+
+    // บันทึกฝ่ายเพิ่มเติมถ้ามี
+    if (departments != null && !departments.isEmpty()) {
+        for (String deptName : departments) {
+            if (!deptName.trim().isEmpty()) {
+                job.addDepartment(new Department(deptName.trim()));
+            }
+        }
+        jobRepository.save(job);
     }
 
         ra.addFlashAttribute("popupMsg", "Your post has been published !");

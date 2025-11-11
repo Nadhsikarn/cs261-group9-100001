@@ -41,6 +41,10 @@ public class Job {
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
+    // ฝ่ายเพิ่มเติมที่เกี่ยวข้องกับงานนี้
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Department> departments = new ArrayList<>();
+
     public Job() {}
 
     public Job(String title, String description, String creatorUsername, String requiredSkill,
@@ -59,6 +63,14 @@ public class Job {
     questions.add(question);
     question.setJob(this);
     }
+
+    // เพิ่มฝ่ายใหม่ให้กับงานนี้
+    public void addDepartment(Department department) {
+    departments.add(department);
+    department.setJob(this);
+    }
+
+
 
     public Long getId() { return id; }
     public String getTitle() { return title; }
