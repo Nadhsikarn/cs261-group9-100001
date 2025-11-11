@@ -49,7 +49,6 @@ public class JobsController {
             @RequestParam String studentId,
             @RequestParam String email,
             @RequestParam String phone,
-            @RequestParam String answerText,         
             RedirectAttributes ra) 
         {
 
@@ -72,7 +71,7 @@ public class JobsController {
         return "redirect:/jobs/" + id;
     }
 
-    var app = new Application(job, me, fullName, studentId, email, phone, answerText);
+    var app = new Application(job, me, fullName, studentId, email, phone );
     applicationRepository.save(app);
     ra.addFlashAttribute("popupMsg", "Application Submitted Successfully!");
     return "redirect:/";

@@ -5,14 +5,24 @@ import com.example.campusjobs.repo.ApplicationRepository;
 import com.example.campusjobs.repo.JobRepository;
 import com.example.campusjobs.util.SecUtil;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Collectors; 
+
 @Controller
 @Validated
 @RequestMapping("/teacher")
@@ -41,11 +51,31 @@ public class TeacherJobController {
     @PostMapping("/jobs")
     public String createJob(@RequestParam("title") @NotBlank String title,
                             @RequestParam("description") @NotBlank String description,
-                            @RequestParam("questionPrompt") @NotBlank String questionPrompt,
+                            @RequestParam("requiredSkill") @NotBlank String requiredSkill,
+                            @RequestParam("openDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate openDate,
+                            @RequestParam("closeDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate closeDate,
+                            @RequestParam("image") MultipartFile image,
                             RedirectAttributes ra) {
         String me = SecUtil.currentUsername();
-        Job job = new Job(title, description, me, questionPrompt);
+
+    String imagePath = null;
+    try {
+        if (image != null && !image.isEmpty()) {
+            // เปลี่ยนชื่อไฟล์เพื่อป้องกันการซ้ำกัน
+            String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+            Path uploadDir = Paths.get("./jobUploads").toAbsolutePath().normalize();
+            Files.createDirectories(uploadDir);
+            Path filePath = uploadDir.resolve(fileName);
+            image.transferTo(filePath);
+            imagePath = "/jobUploads/" + fileName;
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+        Job job = new Job(title, description, me, requiredSkill, openDate, closeDate, imagePath);
         jobRepository.save(job);
+
         ra.addFlashAttribute("popupMsg", "Your post has been published !");
         return "redirect:/teacher/jobs";
     }

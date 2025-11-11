@@ -49,7 +49,6 @@
           &times; Back
         </span>
         <p th:text="${job.description}">desc</p>
-        <p><b>คำถาม:</b> <span th:text="${job.questionPrompt}">question</span></p>
 
 
         <div th:if="${apps == null or #lists.isEmpty(apps)}" class="no-applicants">
@@ -65,7 +64,6 @@
                 <th>รหัส นศ.</th>
                 <th>อีเมล</th>
                 <th>โทร</th>
-                <th>คำตอบ</th>
                 <th>สถานะ</th>
                 <th>จัดการ</th>
               </tr>
@@ -76,7 +74,6 @@
                 <td th:text="${a.studentId}">sid</td>
                 <td th:text="${a.email}">email</td>
                 <td th:text="${a.phone}">phone</td>
-                <td th:text="${a.answerText}">answer</td>
                 <td th:text="${a.status}" th:classappend="'status-' + ${#strings.toLowerCase(a.status)}">
                   PENDING
                 </td>
@@ -110,7 +107,6 @@
                 <th>รหัส นศ.</th>
                 <th>อีเมล</th>
                 <th>โทร</th>
-                <th>คำตอบ</th>
               </tr>
             </thead>
             <tbody>
@@ -119,7 +115,6 @@
                 <td th:text="${a.studentId}">รหัส</td>
                 <td th:text="${a.email}">อีเมล</td>
                 <td th:text="${a.phone}">โทร</td>
-                <td th:text="${a.answerText}">คำตอบ</td>
               </tr>
             </tbody>
           </table>

@@ -28,7 +28,7 @@
   <div class="main-content">
     <h2>สร้างงานใหม่</h2>
 
-    <form method="post" th:action="@{/teacher/jobs}">
+    <form method="post" th:action="@{/teacher/jobs}" enctype="multipart/form-data">
       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
       <div class="job-bigbox">
@@ -42,10 +42,22 @@
           <textarea name="description" required style="width:35%;height:120px"></textarea>
         </div>
 
-        <div class="job-quiz">
-          <label>คำถามให้นักศึกษาตอบ</label><br/>
-          <textarea name="questionPrompt" required style="width:35%;height:80px"></textarea>
+         <div class="job-quiz">
+          <label>Skill ที่ต้องการในแต่ละฝ่าย</label><br/>
+          <textarea name="requiredSkill" required style="width:35%;height:80px"></textarea>
         </div>
+        <div class="job-date">
+          <label>วันที่เปิดรับสมัคร</label><br/>
+          <input type="date" name="openDate" required style="width:35%" />
+          <br/>
+          <label>วันที่ปิดรับสมัคร</label><br/>
+          <input type="date" name="closeDate" required style="width:35%" />
+        </div>
+      </div>
+
+      <div class="job-img">
+        <label>อัปโหลดรูปภาพ</label><br/>
+        <input type="file" name="image" accept="image/*" style="width:35%"/>
       </div>
 
       <div class="savenback-btn">
