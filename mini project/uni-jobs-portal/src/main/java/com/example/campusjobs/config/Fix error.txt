@@ -1,5 +1,0 @@
-    @PostConstruct
-    public void init(){
-        System.out.println("DEBUG ========== " + apiKey);
-    }
-ใส่หลัง api_token
