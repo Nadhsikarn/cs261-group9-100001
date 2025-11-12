@@ -2,109 +2,56 @@
 <html lang="th" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>ดูรายชื่อ staff</title>
+    <title>ดูรายชื่อผู้สมัคร</title>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
-<div class="final-page-wrapper">
-    <div class="navbar">
-        <div class="logo">VolunteeU</div>
-        <div class="nav-links">
-         <a href="/">Home</a>
-         <a href="/teacher/jobs">Posts</a>
-         <a href="/teacher/applicant">Applicant</a>
-         <a href="/teacher/interview">Interview</a>
-         <a href="/teacher/final" class="active" style="font-weight: bold;">Final</a>
-         <a href="/profile">Profile</a>
-         </div>
-    </div>  
-    <div class="finalstafflist-page-header">
-        Final staff lists
+<body>
+<div class="navbar">
+    <div class="logo">VolunteeU</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/teacher/jobs">Posts</a>
+        <a href="/teacher/applicant" class="active" style="font-weight: bold;">Applicants</a>
+        <a href="/teacher/interview">Interview</a>
+        <a href="/teacher/final">Final</a>
+        <a href="/profile">Profile</a>
+        
     </div>
+</div>
 
 <div class="main-content">
-        <div class="container">
-            
-            <div class="application-list" th:if="${apps != null and !apps.isEmpty()}">
+        <div class="finalstafflist-page-header">
+        Final staff lists
+    </div>
+    
+
+    <div class="container"> 
+      <div class="application-list" th:if="${apps != null and !apps.isEmpty()}">
                 <div class="application-card" th:each="a : ${apps}">
                     <div class="application-details">
                         <div class="job-title" >รายชื่อผู้สมัคร Staff งานรับเพื่อนใหม่ TU92</div>
                     </div>
 
-                    <!-- สถานะ/ปุ่ม -->
+                    <!-- ปุ่ม -->
                     <div class="status-container">
                         <a href="#" class="details-link-s">></a>
                     </div>              
                 </div>
+                    <!-- ต้องเปลี่ยนเป็นlogicของอาจารย์ตอนที่ยังไม่ได้มีงาน/ไม่มีfinal staff -->
+                <div class="no-applications" th:if="${apps == null or apps.isEmpty()}">
+                    <p>You have not submitted any applicant yet.</p>
+                </div>
 
-            <div class="no-applications" th:if="${apps == null or apps.isEmpty()}">
-                <p>You have not submitted any applicant yet.</p>
-            </div>
         </div>
     </div>
-    </div>
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
+
+<div class="footer">
+    © 2025 VolunteeU — Software Project Recruitment
+</div>
+</body>
+</html>
