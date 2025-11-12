@@ -1408,4 +1408,39 @@ td {
   width: calc(100% + 50px);
   margin-left: -50px;       /* ดันออกไปทางซ้ายให้ชิดขอบ */
 }
-  
+
+
+
+
+/*----Final Staff Job---*/
+
+.details-link-staff {
+    color: #A3062C;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.8em;
+    
+}
+
+.details-link-staff:hover {
+    color: #FFBF00;
+}
+
+
+.status-container-staff{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.details-link-s{
+    color: #A3062C;
+    text-decoration: none;
+    font-weight: bold;
+      font-size: 1.8em;
+    line-height: 0.7;
+}
+
+.details-link-s:hover {
+    color: #FFBF00;
+}
