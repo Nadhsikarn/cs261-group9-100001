@@ -31,3 +31,23 @@
     <div class="details-link-head-wrapper">
         <a href="#" class="details-link-head">< ฝ่าย XXXXX</a>
     </div>
+  <div class="staff-info-card">
+  <h2 class="staff-title">ข้อมูล staff</h2>
+    <div class="section-divider-staff"></div>
+        <div class="staff-field"><span class="label">ชื่อ :</span> xxxxxxxx</div>
+        <div class="staff-field"><span class="label">นามสกุล :</span> xxxxxxxxxxxxxxxx</div>
+        <div class="staff-field"><span class="label">ชื่อเล่น :</span> xxx</div>
+        <div class="staff-field"><span class="label">ชั้นปีที่ :</span> x</div>
+        <div class="staff-field"><span class="label">เลขนักศึกษา :</span> xxxxxxxxxx</div>
+        <div class="staff-field"><span class="label">คณะ :</span> xxxxxxxxxxxx</div>
+        <div class="staff-field"><span class="label">แนะนำตัวสั้น ๆ :</span> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+  </div>    
+
+
+</div>
+
+<div class="footer">
+    © 2025 VolunteeU — Software Project Recruitment
+</div>
+</body>
+</html>
