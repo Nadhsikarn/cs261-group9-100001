@@ -89,6 +89,8 @@ public class Job {
     public String getRequiredSkill() { return requiredSkill; }
     public LocalDate getOpenDate() { return openDate; }
     public LocalDate getCloseDate() { return closeDate; }
+    public List<Question> getQuestions() { return questions; }
+    public List<Department> getDepartments() { return departments; }
     public Instant getCreatedAt() { return createdAt; }
 
     public void setId(Long id) { this.id = id; }
@@ -98,5 +100,7 @@ public class Job {
     public void setRequiredSkill(String q) { this.requiredSkill = q; }
     public void setOpenDate(LocalDate openDate) { this.openDate = openDate; }
     public void setCloseDate(LocalDate closeDate) { this.closeDate = closeDate; }
+    public void setQuestions(List<Question> questions) { this.questions = questions;}
+    public void setDepartments(List<Department> departments) { this.departments = departments; }
     public void setCreatedAt(Instant i) { this.createdAt = i; }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import com.example.campusjobs.model.Application;
 import com.example.campusjobs.model.Notification;
 import com.example.campusjobs.model.User;
@@ -19,6 +20,7 @@ import com.example.campusjobs.repo.JobRepository;
 import com.example.campusjobs.repo.NotificationRepository;
 import com.example.campusjobs.repo.UserRepository;
 import com.example.campusjobs.util.SecUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/jobs")
@@ -48,7 +50,10 @@ public class JobsController {
     @GetMapping("/{id}")
     public String detail(@PathVariable Long id, Model model) {
         var job = jobRepository.findById(id).orElse(null);
+
         model.addAttribute("job", job);
+        model.addAttribute("questions", job.getQuestions());
+        model.addAttribute("departments", job.getDepartments());
 
         String me = SecUtil.currentUsername();
         boolean alreadyApplied = (me != null) && applicationRepository.existsByJobIdAndApplicantUsername(id, me);
@@ -61,9 +66,16 @@ public class JobsController {
         public String apply(
             @PathVariable Long id,
             @RequestParam String fullName,
+            @RequestParam(required = false) String nickname,
+            @RequestParam String yearLevel,
+            @RequestParam String faculty,
+            @RequestParam(required = false) String bio,
             @RequestParam String studentId,
             @RequestParam String email,
             @RequestParam String phone,
+            @RequestParam String department,
+            @RequestParam List<Long> questionIds,
+            @RequestParam List<String> answers,
             RedirectAttributes ra) 
         {
 
@@ -86,8 +98,28 @@ public class JobsController {
         return "redirect:/jobs/" + id;
     }
 
-    var app = new Application(job, me, fullName, studentId, email, phone );
+    Application app = new Application();
+    app.setJob(job);
+    app.setApplicantUsername(me);
+    app.setFullName(fullName);
+    app.setNickname(nickname);
+    app.setYearLevel(yearLevel);
+    app.setFaculty(faculty);
+    app.setBio(bio);
+    app.setStudentId(studentId);
+    app.setEmail(email);
+    app.setPhone(phone);
+    app.setDepartment(department);
+
+    try {
+        ObjectMapper mapper = new ObjectMapper();
+        String answersJson = mapper.writeValueAsString(answers);
+        app.setAnswersJson(answersJson);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
     applicationRepository.save(app);
+
     try {
                 // 4.1 ดึง Username (String) จาก Application
                 String applicantUsername = app.getApplicantUsername();
