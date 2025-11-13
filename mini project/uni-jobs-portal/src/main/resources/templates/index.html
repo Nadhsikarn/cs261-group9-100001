@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="th"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="th" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -41,7 +39,7 @@
                     <div class="notification-container">
                         <a href="#" class="notification-bell" onclick="toggleNotificationPopup(event)">
                             <i data-lucide="bell"></i>
-                            <span class="badge" th:text="${notificationCount}" 
+                            <span class="badge" th:text="${notificationCount}"
                                 th:if="${notificationCount != null && notificationCount > 0}"></span>
                         </a>
                         <!-- กล่อง popup -->
@@ -49,9 +47,11 @@
                             <h3><strong>Notifications</strong></h3>
                             <ul th:if="${notifications != null && !notifications.isEmpty()}">
                                 <!-- message ที่จะแจ้งใน noti -->
-                                <li th:each="noti : ${notifications}"><a th:href="@{${noti.linkUrl}}" th:text="${noti.description}">ข้อความ</a>
-                                    
-                                    <div class="notif-time" th:text="${#temporals.format(noti.createdAt, 'dd MMM yyyy, HH:mm', 'Asia/Bangkok')}">
+                                <li th:each="noti : ${notifications}"><a th:href="@{${noti.linkUrl}}"
+                                        th:text="${noti.description}">ข้อความ</a>
+
+                                    <div class="notif-time"
+                                        th:text="${#temporals.format(noti.createdAt, 'dd MMM yyyy, HH:mm', 'Asia/Bangkok')}">
                                         เวลา
                                     </div>
                                 </li>
@@ -63,7 +63,7 @@
                     </div>
                 </th:block>
 
-                
+
             </th:block>
 
             <th:block sec:authorize="isAnonymous()">
@@ -72,47 +72,136 @@
         </div>
     </div>
 
-    <div class="main-content">
-        <div class="main-header">
-            <h1>Thammasat Event</h1>
-            <p>From volunteering to leadership—your next experience starts here</p>
-        </div>
+    <th:block sec:authorize="!hasRole('TEACHER')">
+        <div class="main-content">
+            <div class="main-header">
+                <h1>Thammasat Event</h1>
+                <p>From volunteering to leadership—your next experience starts here</p>
+            </div>
 
-        <div class="search-bar container">
-            <input type="text" placeholder="Search by title, department, or keyword" />
-        </div>
+            <div class="search-bar container">
+                <input type="text" placeholder="Search by title, department, or keyword" />
+            </div>
 
-        <div class="activity-feed container">
-            <div th:if="${jobs != null and !jobs.isEmpty()}">
-                <div th:each="job : ${jobs}" class="activity-card">
-                    <div class="job-details">
-                        <h3 th:text="${job.title}">ชื่อกิจกรรมตัวอย่าง</h3>
-                        <p th:text="${job.description}">รายละเอียดกิจกรรมสั้นๆ</p>
+            <div class="activity-feed container">
+                <div th:if="${jobs != null and !jobs.isEmpty()}">
+                    <div th:each="job : ${jobs}" class="activity-card">
+                        <div class="job-details">
+                            <h3 th:text="${job.title}">ชื่อกิจกรรมตัวอย่าง</h3>
+                            <p th:text="${job.description}">รายละเอียดกิจกรรมสั้นๆ</p>
 
-                        <!-- ✅ Logic เดิม: เห็นปุ่มทุกคน แต่ anonymous กดแล้วไป /login -->
-                        <th:block sec:authorize="isAnonymous()">
-                            <a th:href="@{/role}" class="apply-btn">Apply Now</a>
-                        </th:block>
+                            <!-- ✅ Logic เดิม: เห็นปุ่มทุกคน แต่ anonymous กดแล้วไป /login -->
+                            <th:block sec:authorize="isAnonymous()">
+                                <a th:href="@{/login}" class="apply-btn">Apply Now</a>
+                            </th:block>
 
-                        <th:block sec:authorize="hasRole('STUDENT')">
-                            <a th:href="@{|/jobs/preview?id=${job.id}|}" class="apply-btn">Apply Now</a>
-                        </th:block>
+                            <th:block sec:authorize="hasRole('STUDENT')">
+                                <a th:href="@{|/jobs/preview?id=${job.id}|}" class="apply-btn">Apply Now</a>
+                            </th:block>
 
-                        <th:block sec:authorize="hasRole('TEACHER')">
-                            <!-- teacher: hide apply button -->
-                        </th:block>
+                            <th:block sec:authorize="hasRole('TEACHER')">
+                                <!-- teacher: hide apply button -->
+                            </th:block>
+                        </div>
+
+                        <img class="job-image" th:src="@{/image/default-event.png}" alt="Event Banner" />
+
                     </div>
+                </div>
 
-                    <img class="job-image" th:src="@{/image/default-event.png}" alt="Event Banner" />
-
+                <div th:if="${jobs == null or jobs.isEmpty()}" style="text-align:center; padding: 50px; color:#999;">
+                    <p>ตอนนี้ยังไม่มีงานประกาศ</p>
                 </div>
             </div>
-
-            <div th:if="${jobs == null or jobs.isEmpty()}" style="text-align:center; padding: 50px; color:#999;">
-                <p>ตอนนี้ยังไม่มีงานประกาศ</p>
-            </div>
         </div>
-    </div>
+    </th:block>
+
+    <!------------- Dashboard สำหรับ role TEACHER ---------------->
+
+    <th:block sec:authorize="hasRole('TEACHER')">
+        <div class="dashboard-container">
+
+            <section class="dash-header">
+                <h1 class="dash-title">Dash Board</h1>
+                <div class="stats-container">
+
+                    <div class="stat-box">
+                        <span class="stat-number">9</span>
+                        <span class="stat-label">All posts</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">9</span>
+                        <span class="stat-label">Active post</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">999</span>
+                        <span class="stat-label">New applicant</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="recent-activity-section">
+                <div class="activity-timeline">
+
+                    <div class="activity-item">
+                        <div class="activity-dot"></div>
+                        <span class="activity-text">create new post</span>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-dot"></div>
+                        <span class="activity-text">Interview</span>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-dot"></div>
+                        <span class="activity-text">create new post</span>
+                    </div>
+                </div>
+                <h2 class="recent-activity-title">Recent Activities</h2>
+            </section>
+
+            <section class="task-section">
+
+                <h2 class="task-list-title">In progress</h2>
+                <div class="task-list" id="in-progress-list">
+
+                    <div class="task-item">
+                        <span class="task-name">Staff งานรับเพื่อนใหม่ TU92</span>
+                        <div class="task-actions">
+                            <a href="#" class="task-edit">edit</a>
+                            <a href="#" class="task-view">view</a>
+                        </div>
+                    </div>
+
+                    <div class="task-item">
+                        <span class="task-name">Another In Progress Job</span>
+                        <div class="task-actions">
+                            <a href="#" class="task-edit">edit</a>
+                            <a href="#" class="task-view">view</a>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="task-list-title">Completed</h2>
+                <div class="task-list" id="completed-list">
+
+                    <div class="task-item">
+                        <span class="task-name">Staff งานรับเพื่อนใหม่ TU91</span>
+                        <a href="#" class="task-arrow">&gt;</a>
+                    </div>
+                    <div class="task-item">
+                        <span class="task-name">Staff งานรับเพื่อนใหม่ TU90</span>
+                        <a href="#" class="task-arrow">&gt;</a>
+                    </div>
+                </div>
+
+                <div class="draft-button-wrapper">
+                    <a href="#" class="draft-button">Draft</a>
+                </div>
+
+            </section>
+
+        </div>
+    </th:block>
 
     <div class="footer">
         © 2025 VolunteeU — Software Project Recruitment
@@ -126,9 +215,10 @@
                 <div class="popup-icon-outer">
                     <div class="popup-icon-inner">
                         <div class="popup-icon-inner">
-                                <svg class="checkmark-svg" viewBox="0 0 52 52">
-                                <path d="M14 27 L22 35 L38 16" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
+                            <svg class="checkmark-svg" viewBox="0 0 52 52">
+                                <path d="M14 27 L22 35 L38 16" fill="none" stroke="white" stroke-width="5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -141,7 +231,7 @@
 
     <script>
         function goHome() {
-        window.location.href = "/";
+            window.location.href = "/";
         }
 
         function toggleNotificationPopup(event) {
@@ -165,6 +255,6 @@
         lucide.createIcons();
     </script>
 
-    </body>
+</body>
 
 </html>
