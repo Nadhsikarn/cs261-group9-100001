@@ -33,7 +33,7 @@
       </div>
 
       <div th:each="job : ${jobs}" class="job-card">
-        <a th:href="@{|/teacher/jobs/${job.id}/applications|}" class="job-link">
+        <a th:href="@{|/teacher/applicants/${job.id}|}" class="job-link">
           รายชื่อผู้สมัครงาน <span th:text="${job.title}"></span>
         </a>
       </div>

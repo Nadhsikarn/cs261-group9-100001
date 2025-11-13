@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.campusjobs.model.ApplicationStatus;
+import com.example.campusjobs.model.Application;
 import com.example.campusjobs.model.Department;
 import com.example.campusjobs.model.Job;
 import com.example.campusjobs.model.JobImage;
@@ -190,6 +191,56 @@ public class TeacherJobController {
 
         return "teacher_applications";
     }
+
+    @GetMapping("/applicants/{jobId}")
+public String applicants(@PathVariable Long jobId, 
+                        @RequestParam(value = "keyword", required = false) String keyword,
+                        @RequestParam(value = "department", required = false) String department,
+                        Model model, RedirectAttributes ra) {
+
+    var jobOpt = jobRepository.findById(jobId);
+
+    if (jobOpt.isEmpty()) {
+        ra.addFlashAttribute("err", "ไม่พบบันทึกงาน");
+        return "redirect:/teacher/jobs";
+    }
+    
+    var job = jobOpt.get();
+    
+    String me = SecUtil.currentUsername();
+    if (me == null || !job.getCreatorUsername().equals(me)) {
+        ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าดูผู้สมัครงานนี้");
+        return "redirect:/teacher/jobs";
+    }
+    
+    List<Application> apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId);
+
+    if (keyword != null && !keyword.trim().isEmpty()) {
+        String kw = keyword.toLowerCase();
+        apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId)
+                .stream()
+                .filter(a ->
+                        (a.getFullName() != null && a.getFullName().toLowerCase().contains(keyword))
+                ).toList();
+    } else {
+        apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId);
+    }
+
+    if (department != null && !department.equals("ALL")) {
+        apps = apps.stream()
+                .filter(a -> a.getDepartment() != null &&
+                             a.getDepartment().equalsIgnoreCase(department))
+                .toList();
+    }
+
+    model.addAttribute("job", job);
+    model.addAttribute("apps", apps);
+    model.addAttribute("keyword", keyword);
+    model.addAttribute("department", department);
+    model.addAttribute("departments", job.getDepartments());
+
+    return "teacher_applicants_list"; 
+}
 
     @PostMapping("/applications/{appId}/approve")
     public String approve(@PathVariable("appId") Long appId, RedirectAttributes ra) {

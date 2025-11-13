@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ผู้สมัครงาน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div class="navbar">
+    <div class="logo">VolunteeU</div>
+    <div class="nav-links">
+      <a href="/" style="font-weight: bold;">Home</a>
+
+      <th:block sec:authorize="hasRole('STUDENT')">
+        <a th:href="@{/student/applications}">Application</a>
+      </th:block>
+
+      <th:block sec:authorize="hasRole('TEACHER')">
+        <a th:href="@{/teacher/jobs}">Posts</a>
+        <a th:href="@{/teacher/applicant}" class="active" style="font-weight: bold;">Applicant</a>
+        <a th:href="@{/teacher/interview}">Interview</a>
+        <a th:href="@{/teacher/final}">Final</a>
+      </th:block>
+
+      <th:block sec:authorize="isAuthenticated()">
+        <a th:href="@{/profile}">Profile</a>
+
+        
+      </th:block>
+
+      <th:block sec:authorize="isAnonymous()">
+        <a href="/login">Login</a>
+      </th:block>
+    </div>
+  </div>
+
+    <div class="main-content">
+    <div class="application-container">
+      <h1 style="color:#A00000; font-size:42px;">Applicants</h1>
+      <h2>รายชื่อผู้สมัคร: <span th:text="${job.title}">Job</span></h2>
+        <span class="close-button" style="margin-top: 70px; font-family: 'Inria Sans'; font-size: 14px;"
+          th:onclick="|window.location.href='@{/teacher/jobs}'|">
+          &times; Back
+        </span>
+        <p th:text="${job.description}">desc</p>
+
+        <div class="search-box">
+            <form th:action="@{|/teacher/applicants/${job.id}|}" method="get">
+                <input type="text" name="keyword" placeholder="ค้นหาชื่อ" 
+                       th:value="${keyword}">
+                <button type="submit">ค้นหา</button>
+            </form>
+
+            <form th:action="@{|/teacher/applicants/${job.id}|}" method="get">
+            <select name="department">
+                    <option value="ALL"
+                            th:selected="${department == null or department == 'ALL'}">
+                        ทุกฝ่าย
+                    </option>
+                     <option th:each="d : ${departments}"
+                            th:value="${d.name}"
+                            th:selected="${department == d.name}"
+                            th:text="${d.name}">
+                    </option>
+                </select>
+                <button type="submit">กรองฝ่าย</button>
+            </form>
+        </div>
+
+        <div th:if="${apps == null or #lists.isEmpty(apps)}" class="no-applicants">
+          ยังไม่มีผู้สมัครในขณะนี้
+        </div>
+
+
+        <div th:unless="${apps == null or #lists.isEmpty(apps)}">
+          <table>
+            <thead>
+              <tr>
+                <th>รายชื่อผู้สมัคร</th>
+                <th>ฝ่ายที่สมัคร</th>
+                <th>วันที่สมัคร</th>
+                <th>สถานะ</th>
+                <th>ดูรายละเอียด</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="a : ${apps}">
+                <td th:text="${a.fullName}">ชื่อ</td>
+                <td th:text="${a.department}">ฝ่าย</td>
+                <td th:text="${#temporals.format(a.appliedAt, 'dd.MM.yy')}">วันที่</td>
+                <td class="status-icon">
+                    <span th:if="${a.status.name() == 'INTERVIEW'}" class="circle interview">✔</span>
+                    <span th:if="${a.status.name()  == 'PENDING'}" class="circle pending"></span>
+                    <span th:if="${a.status.name()  == 'REJECTED'}" class="circle rejected">✖</span>
+                </td>
+                <td>
+                    <a th:href="@{|/teacher/applicants/${a.id}/detail|}" class="detail-btn">
+                        >
+                    </a>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+  </div>
+  <div class="footer">
+    © 2025 VolunteeU — Software Project Recruitment
+  </div>
+
+</body>
+
+</html>
