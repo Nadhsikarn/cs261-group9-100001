@@ -1,30 +1,42 @@
 package com.example.campusjobs.controller;
 
-import com.example.campusjobs.model.*;
-import com.example.campusjobs.repo.ApplicationRepository;
-import com.example.campusjobs.repo.JobRepository;
-import com.example.campusjobs.util.SecUtil;
-import com.example.campusjobs.repo.QuestionRepository;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.Optional;
-import java.util.stream.Collectors; 
-import java.util.List;
+import com.example.campusjobs.model.ApplicationStatus;
+import com.example.campusjobs.model.Department;
+import com.example.campusjobs.model.Job;
+import com.example.campusjobs.model.Notification;
+import com.example.campusjobs.model.Question;
+import com.example.campusjobs.model.User;
+import com.example.campusjobs.repo.ApplicationRepository;
+import com.example.campusjobs.repo.JobRepository;
+import com.example.campusjobs.repo.NotificationRepository;
+import com.example.campusjobs.repo.QuestionRepository;
+import com.example.campusjobs.repo.UserRepository;
+import com.example.campusjobs.util.SecUtil;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Controller
 @Validated
@@ -34,10 +46,15 @@ public class TeacherJobController {
     private final JobRepository jobRepository;
     private final ApplicationRepository applicationRepository;
     private final QuestionRepository questionRepository;
+    private NotificationRepository notificationRepository;
+    private UserRepository userRepository;
 
-    public TeacherJobController(JobRepository jobRepository, ApplicationRepository applicationRepository,  QuestionRepository questionRepository) {
+    public TeacherJobController(JobRepository jobRepository, ApplicationRepository applicationRepository,  QuestionRepository questionRepository,
+                                NotificationRepository notificationRepository, UserRepository userRepository) {
         this.jobRepository = jobRepository;
         this.applicationRepository = applicationRepository;
+        this.notificationRepository = notificationRepository;
+        this.userRepository = userRepository;
         this.questionRepository = questionRepository;  
     }
 
@@ -103,6 +120,36 @@ public class TeacherJobController {
         }
         jobRepository.save(job);
     }
+    try {
+        // 1. ค้นหานักเรียนทั้งหมด (เราใช้ Role "STUDENT" ตามที่คุณตั้งไว้)
+        List<User> allStudents = userRepository.findByRole("ROLE_STUDENT");
+
+        // 2. สร้าง List ว่างๆ เพื่อเก็บ Noti ทั้งหมด (เพื่อประสิทธิภาพ)
+        List<Notification> notificationsToSave = new ArrayList<>();
+
+        // 3. วนลูปนักเรียนทุกคนเพื่อสร้าง Noti
+        for (User student : allStudents) {
+            Notification notification = new Notification();
+            notification.setUserId(student.getId()); // ⬅️ ส่ง Noti ไปหานักเรียนคนนี้
+            notification.setDescription("เปิดรับสมัคร: Staff '" + job.getTitle() + "' Please check the new details");
+            
+            // (ผมเดาว่านี่คือ URL ที่นักเรียนใช้ดูรายละเอียดงาน)
+            notification.setLinkUrl("/jobs/preview?id=" + job.getId()); 
+            
+            notificationsToSave.add(notification);
+        }
+
+        // 4. บันทึก Noti ทั้งหมดลง DB ในครั้งเดียว (เร็วและดีกว่า save ทีละอัน)
+        if (!notificationsToSave.isEmpty()) {
+            notificationRepository.saveAll(notificationsToSave);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace(); // (พิมพ์ Error ไว้ดูใน Log)
+        
+        // (Optional) แจ้งเตือน Teacher เบาๆ ว่าส่ง Noti ไม่สำเร็จ
+        ra.addFlashAttribute("err", "เผยแพร่โพสต์สำเร็จ แต่ส่ง Notification หานักเรียนล้มเหลว!");
+    }
 
         ra.addFlashAttribute("popupMsg", "Your post has been published !");
         return "redirect:/teacher/jobs";
@@ -136,6 +183,11 @@ public class TeacherJobController {
         return updateStatus(appId, ApplicationStatus.APPROVED, ra);
     }
 
+    @PostMapping("/applications/{appId}/interview")
+    public String interview(@PathVariable("appId") Long appId, RedirectAttributes ra) {
+        return updateStatus(appId, ApplicationStatus.INTERVIEW, ra);
+    }
+
     @PostMapping("/applications/{appId}/reject")
     public String reject(@PathVariable("appId") Long appId, RedirectAttributes ra) {
         return updateStatus(appId, ApplicationStatus.REJECTED, ra);
@@ -157,6 +209,40 @@ public class TeacherJobController {
 
         app.setStatus(status);
         applicationRepository.save(app);
+        try {
+            // 4.1 ดึง User มาเตรียมไว้ (ทำแค่ครั้งเดียว)
+            String applicantUsername = app.getApplicantUsername();
+            User userToNotify = userRepository.findByUsername(applicantUsername)
+                    .orElseThrow(() -> new Exception("ไม่พบผู้ใช้งาน" + applicantUsername)); // ดีกว่า check isEmpty
+            Long applicantId = userToNotify.getId();
+
+            Notification notification = new Notification();
+            notification.setUserId(applicantId);
+            notification.setLinkUrl("/student/applications");
+
+            String description = "";
+            switch (status) {
+                case APPROVED:
+                    description = "Congratulations! You’ve been selected for Staff " + job.getTitle() + " More details will be sent to your email.";
+                    break;
+                case INTERVIEW:
+                    description = "Congratulations! You’re shortlisted for Staff " + job.getTitle() + " check your email for interview details.";
+                    break;
+                case REJECTED:
+                    description = "Unfortunately, you did not pass the selection process to become a staff member. " + job.getTitle();
+                    break;
+                default:
+                    // ถ้าเป็นสถานะอื่น (เช่น PENDING) ก็ไม่ต้องทำอะไร
+                    ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย (ไม่มี Notification)");
+                    return "redirect:/teacher/jobs/" + job.getId() + "/applications";
+            }
+            notification.setDescription(description);
+            notificationRepository.save(notification);
+        }
+        catch (Exception e) {
+            // จัดการ Error (ทำแค่ครั้งเดียว)
+            ra.addFlashAttribute("err", "อัปเดตสถานะสำเร็จ แต่ส่ง Notification ล้มเหลว: " + e.getMessage());
+        }
         ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย");
         return "redirect:/teacher/jobs/" + job.getId() + "/applications";
     }

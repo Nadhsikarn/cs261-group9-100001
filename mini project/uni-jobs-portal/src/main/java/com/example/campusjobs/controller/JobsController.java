@@ -29,9 +29,12 @@ public class JobsController {
     private NotificationRepository notificationRepository;
     private UserRepository userRepository;
 
-    public JobsController(JobRepository jobRepository, ApplicationRepository applicationRepository) {
+    public JobsController(JobRepository jobRepository, ApplicationRepository applicationRepository, 
+                            NotificationRepository notificationRepository, UserRepository userRepository) {
         this.jobRepository = jobRepository;
         this.applicationRepository = applicationRepository;
+        this.notificationRepository = notificationRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/preview")
@@ -100,7 +103,7 @@ public class JobsController {
                 Notification notification = new Notification();
                 notification.setUserId(applicantId); // ⬅️ ใช้ ID (Long) ที่ถูกต้องแล้ว
                 notification.setDescription("You’ve applied for Staff " + job.getTitle() + " successfully!");
-                notification.setLinkUrl("/student/applications" + app.getId()); // (แก้ URL ให้ถูก)
+                notification.setLinkUrl("/student/applications");
                 // 4.6 บันทึก Notification
                 notificationRepository.save(notification);
             }
