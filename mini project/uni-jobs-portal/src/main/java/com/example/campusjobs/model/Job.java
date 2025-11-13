@@ -34,6 +34,10 @@ public class Job {
     private LocalDate closeDate; // วันที่ปิดรับสมัคร
 
     private Instant createdAt = Instant.now(); // เวลาที่สร้างงาน
+    
+    // รูปภาพที่เกี่ยวข้องกับงานนี้
+    @OneToOne(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    private JobImage image;
 
     // คำถามเพิ่มเติมสำหรับงานนี้
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -42,6 +46,8 @@ public class Job {
     // ฝ่ายเพิ่มเติมที่เกี่ยวข้องกับงานนี้
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Department> departments = new ArrayList<>();
+
+    public JobImage getImage() { return image; }
 
     public Job() {}
 
@@ -55,6 +61,15 @@ public class Job {
         this.closeDate = closeDate;
     }
 
+    
+    // เพิ่มรูปภาพใหม่ให้กับงานนี้
+    public void setImage(JobImage image) {
+        this.image = image;
+        if (image != null) {
+             image.setJob(this);
+        }
+    }
+
     // เพิ่มคำถามใหม่ให้กับงานนี้
     public void addQuestion(Question question) {
     questions.add(question);
@@ -66,8 +81,6 @@ public class Job {
     departments.add(department);
     department.setJob(this);
     }
-
-
 
     public Long getId() { return id; }
     public String getTitle() { return title; }

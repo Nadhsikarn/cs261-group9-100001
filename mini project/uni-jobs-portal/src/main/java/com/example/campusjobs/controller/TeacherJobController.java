@@ -1,6 +1,7 @@
 package com.example.campusjobs.controller;
 
 import java.io.IOException;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.campusjobs.model.ApplicationStatus;
 import com.example.campusjobs.model.Department;
 import com.example.campusjobs.model.Job;
+import com.example.campusjobs.model.JobImage;
 import com.example.campusjobs.model.Notification;
 import com.example.campusjobs.model.Question;
 import com.example.campusjobs.model.User;
@@ -76,13 +78,37 @@ public class TeacherJobController {
                             @RequestParam("requiredSkill") @NotBlank String requiredSkill,
                             @RequestParam("openDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate openDate,
                             @RequestParam("closeDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate closeDate,
+                            @RequestParam("image") MultipartFile image,
                             @RequestParam(value = "departments", required = false) List<String> departments,
                             @RequestParam(value = "questions", required = false) List<String> questions, 
                             RedirectAttributes ra) {
-        String me = SecUtil.currentUsername();
+    String me = SecUtil.currentUsername();
 
     Job job = new Job(title, description, me, requiredSkill, openDate, closeDate);
-        jobRepository.save(job);
+    jobRepository.save(job);
+
+    // บันทึกรูปภาพถ้ามี
+    if (image != null && !image.isEmpty()) {
+        try {
+            String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+
+            String uploadFolder = System.getProperty("user.dir") + "/jobUploads";
+
+            Path uploadDir = Paths.get(uploadFolder);
+            Files.createDirectories(uploadDir);
+
+            Path target = uploadDir.resolve(fileName);
+            image.transferTo(target.toFile());
+
+            JobImage jobImage = new JobImage("/jobUploads/" + fileName);
+            job.setImage(jobImage);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            ra.addFlashAttribute("err", "อัปโหลดรูปไม่สำเร็จ");
+        }
+    }
+
 
     // บันทึกคำถามเพิ่มเติมถ้ามี
     if (questions != null) {
@@ -104,6 +130,9 @@ public class TeacherJobController {
         }
         jobRepository.save(job);
     }
+    
+    jobRepository.save(job);
+
     try {
         // 1. ค้นหานักเรียนทั้งหมด (เราใช้ Role "STUDENT" ตามที่คุณตั้งไว้)
         List<User> allStudents = userRepository.findByRole("ROLE_STUDENT");

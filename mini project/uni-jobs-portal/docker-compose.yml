@@ -43,6 +43,7 @@ services:
     volumes:
       - .:/workspace
       - m2:/root/.m2
+      - ./jobUploads:/app/jobUploads
 
   # โปรไฟล์ prod: รันด้วย JAR ที่ build จาก Dockerfile
   app:
@@ -59,6 +60,8 @@ services:
       TU_API_KEY: ${TU_API_KEY}
     depends_on:
       - db
+    volumes:
+      - ./jobUploads:/app/jobUploads
 
 volumes:
   mssql-data:

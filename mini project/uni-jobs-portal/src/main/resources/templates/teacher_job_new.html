@@ -28,8 +28,8 @@
   <div class="main-content">
     <h2>สร้างงานใหม่</h2>
 
-    <form method="post" th:action="@{/teacher/jobs}">
-      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <form method="post" th:action="@{/teacher/jobs}" enctype="multipart/form-data">
+      <input type="hidden" th:name="${_csrf.parameterName}" value="${_csrf.token}" />
 
       <div class="job-bigbox">
         <div class="job-name">
@@ -53,6 +53,11 @@
           <label>วันที่ปิดรับสมัคร</label><br/>
           <input type="date" name="closeDate" required style="width:35%" />
         </div>
+      </div>
+
+      <div class="job-img">
+        <label>อัปโหลดรูปภาพ</label><br/>
+        <input type="file" name="image" accept="image/*" style="width:35%; padding:5px;"/>
       </div>
 
       <div class="job-question-section">

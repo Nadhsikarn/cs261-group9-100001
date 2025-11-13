@@ -15,4 +15,10 @@ public class AppConfig implements WebMvcConfigurer {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/jobUploads/**")
+                .addResourceLocations("file:" + System.getProperty("user.dir") + "/jobUploads/");
+    }
+
 }
