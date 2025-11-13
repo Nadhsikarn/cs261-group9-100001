@@ -40,23 +40,18 @@
                     <!-- กล่อง popup -->
                     <div id="notification-box" class="notification-popup">
                         <h3><strong>Notifications</strong></h3>
-                        <ul>
-                            <!-- ตัวอย่าง message ที่จะแจ้งใน noti เด่วค่อยมาแก้อีกที-->
-                            <li>Congratulations! You’ve been selected for Staff – งานรับเพื่อนใหม่ TU92 More details
-                                will be sent to your email.
-                                <div class="notif-time">14 April 2025 , 11.11</div>
-                            </li>
-                            <li>Congratulations! You’re shortlisted for Staff งานรับเพื่อนใหม่ TU92 check your email for
-                                interview details.
-                                <div class="notif-time">7 March 2025 , 12.30</div>
-                            </li>
-                            <li>Job post Staff – งานรับเพื่อนใหม่ TU92 has been updated.Please check the new details.
-                                <div class="notif-time">21 Feb 2025 , 17.25</div>
-                            </li>
-                            <li>You’ve applied for Staff – งานรับเพื่อนใหม่ TU92 successfully!
-                                <div class="notif-time">14 Feb 2025 , 07.11</div>
+                        <ul th:if="${notifications != null && !notifications.isEmpty()}">
+                            <!-- message ที่จะแจ้งใน noti -->
+                            <li th:each="noti : ${notifications}"><a th:href="@{${noti.linkUrl}}" th:text="${noti.description}">ข้อความ</a>
+                                
+                                <div class="notif-time" th:text="${#temporals.format(noti.createdAt, 'dd MMM yyyy, HH:mm', 'Asia/Bangkok')}">
+                                    เวลา
+                                </div>
                             </li>
                         </ul>
+                        <div th:if="${notifications == null || notifications.isEmpty()}" style="padding: 10px;">
+                            ไม่มีการแจ้งเตือน
+                        </div>
                     </div>
                 </div>
 
