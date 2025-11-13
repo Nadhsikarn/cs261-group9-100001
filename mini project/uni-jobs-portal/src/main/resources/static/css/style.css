@@ -991,7 +991,7 @@ td {
 }
 
 .notification-popup {
-    display: block;
+    display: none;
     position: absolute;
     right: 0;
     top: 30px;
