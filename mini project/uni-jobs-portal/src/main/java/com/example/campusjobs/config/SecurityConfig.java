@@ -43,7 +43,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // ✅ เปลี่ยน /images/** -> /image/** ให้ตรงกับโฟลเดอร์ static/image
                 .requestMatchers("/", "/css/**", "/js/**", "/image/**", "/jobs", "/jobs/*").permitAll()
-                .requestMatchers("/login").permitAll()
+                .requestMatchers("/login", "/role").permitAll()
 
                 // Student-only actions
                 .requestMatchers("/jobs/*/apply", "/student/**").hasAuthority("ROLE_STUDENT")
@@ -54,8 +54,10 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login").permitAll()
+                .loginPage("/role")
+                .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
+                .permitAll()
             )
             .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
             .csrf(Customizer.withDefaults());

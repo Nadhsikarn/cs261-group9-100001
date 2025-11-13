@@ -67,7 +67,7 @@
             </th:block>
 
             <th:block sec:authorize="isAnonymous()">
-                <a href="/login">Login</a>
+                <a href="/role">Login</a>
             </th:block>
         </div>
     </div>
@@ -91,7 +91,7 @@
 
                         <!-- ✅ Logic เดิม: เห็นปุ่มทุกคน แต่ anonymous กดแล้วไป /login -->
                         <th:block sec:authorize="isAnonymous()">
-                            <a th:href="@{/login}" class="apply-btn">Apply Now</a>
+                            <a th:href="@{/role}" class="apply-btn">Apply Now</a>
                         </th:block>
 
                         <th:block sec:authorize="hasRole('STUDENT')">
