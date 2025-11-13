@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="th">
+      <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .main_container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0px;
+            padding: 0px;
+            height: 100vh;
+            align-items: center;
+        }
+        .logo{
+            display: inline-block;
+            color: #A3062C;
+            background: #A3062C;
+            background: linear-gradient(90deg,rgba(163, 6, 44, 1) 0%, rgba(255, 211, 60, 1) 0%, rgba(163, 6, 44, 1) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            font-size: 100px;
+            font-family: 'Josefin Sans';
+        }
+        .detail p{
+            font-family: 'Inria Sans';
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: #918A8A;
+        }
+        .button{
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .applicant button{
+            padding: 20px;
+            width: 350px;
+            font-family: 'Josefin Sans';
+            font-size: 30px;
+            border: 0px;
+            border-radius: 10px;
+            background-color: #FDCF3B;
+        }
+        .recruiter button{
+            padding: 20px;
+            width: 350px;
+            font-family: 'Josefin Sans';
+            font-size: 30px;
+            border: 0px;
+            border-radius: 10px;
+            background-color: #A3062C;
+            color: #f7f7f7;
+        }
+       .applicant button:hover{
+            cursor: pointer;
+            background-color: #e1b935;
+        }
+        .recruiter button:hover{
+            cursor: pointer;
+            background-color: #a8002a;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="main_container">
+        <div class="logo">VolenteeU</div>
+        <div class="detail">
+            <p>please select your role</p>
+        </div>
+        <div class="button">
+            <div class="applicant">
+                <a href="/login">
+                <button>Applicant</button>
+                </a>
+            </div>
+            <div class="recruiter">
+                <a href="/login">
+                <button>Recruiter</button>
+                </a>
+            </div>  
+        </div>
+    </div>
+</body>
+</html>
