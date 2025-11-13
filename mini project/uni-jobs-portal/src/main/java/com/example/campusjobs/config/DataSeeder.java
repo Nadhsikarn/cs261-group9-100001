@@ -22,8 +22,7 @@ public class DataSeeder {
                     "admin",
                     "บริการ, ยิ้มแย้ม, ทำงานทีม",
                     LocalDate.of(2025, 11, 1),
-                    LocalDate.of(2025, 11, 15),
-                    null
+                    LocalDate.of(2025, 11, 15)
                 ));
 
                 repo.save(new Job(
@@ -32,8 +31,7 @@ public class DataSeeder {
                     "admin",
                     "ขยัน, รับผิดชอบ, ทำงานทีม",
                     LocalDate.of(2025, 11, 5),
-                    LocalDate.of(2025, 11, 20),
-                    null
+                    LocalDate.of(2025, 11, 20)
                 ));
             }
         };

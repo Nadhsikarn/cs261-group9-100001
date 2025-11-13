@@ -33,8 +33,6 @@ public class Job {
     private LocalDate openDate; // วันที่เปิดรับสมัคร
     private LocalDate closeDate; // วันที่ปิดรับสมัคร
 
-    private String imagePath; // รูปที่อัพโหลด
-
     private Instant createdAt = Instant.now(); // เวลาที่สร้างงาน
 
     // คำถามเพิ่มเติมสำหรับงานนี้
@@ -48,14 +46,13 @@ public class Job {
     public Job() {}
 
     public Job(String title, String description, String creatorUsername, String requiredSkill,
-               LocalDate openDate, LocalDate closeDate, String imagePath) {
+               LocalDate openDate, LocalDate closeDate) {
         this.title = title;
         this.description = description;
         this.creatorUsername = creatorUsername;
         this.requiredSkill = requiredSkill;
         this.openDate = openDate;
         this.closeDate = closeDate;
-        this.imagePath = imagePath;
     }
 
     // เพิ่มคำถามใหม่ให้กับงานนี้
@@ -79,7 +76,6 @@ public class Job {
     public String getRequiredSkill() { return requiredSkill; }
     public LocalDate getOpenDate() { return openDate; }
     public LocalDate getCloseDate() { return closeDate; }
-    public String getImagePath() { return imagePath; }
     public Instant getCreatedAt() { return createdAt; }
 
     public void setId(Long id) { this.id = id; }
@@ -89,6 +85,5 @@ public class Job {
     public void setRequiredSkill(String q) { this.requiredSkill = q; }
     public void setOpenDate(LocalDate openDate) { this.openDate = openDate; }
     public void setCloseDate(LocalDate closeDate) { this.closeDate = closeDate; }
-    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
     public void setCreatedAt(Instant i) { this.createdAt = i; }
 }

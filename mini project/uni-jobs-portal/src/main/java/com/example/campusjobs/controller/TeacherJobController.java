@@ -77,27 +77,11 @@ public class TeacherJobController {
                             @RequestParam("openDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate openDate,
                             @RequestParam("closeDate") @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate closeDate,
                             @RequestParam(value = "departments", required = false) List<String> departments,
-                            @RequestParam("image") MultipartFile image,
                             @RequestParam(value = "questions", required = false) List<String> questions, 
                             RedirectAttributes ra) {
         String me = SecUtil.currentUsername();
 
-    String imagePath = null;
-    try {
-        if (image != null && !image.isEmpty()) {
-            // เปลี่ยนชื่อไฟล์เพื่อป้องกันการซ้ำกัน
-            String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-            Path uploadDir = Paths.get("./jobUploads").toAbsolutePath().normalize();
-            Files.createDirectories(uploadDir);
-            Path filePath = uploadDir.resolve(fileName);
-            image.transferTo(filePath);
-            imagePath = "/jobUploads/" + fileName;
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-
-    Job job = new Job(title, description, me, requiredSkill, openDate, closeDate, imagePath);
+    Job job = new Job(title, description, me, requiredSkill, openDate, closeDate);
         jobRepository.save(job);
 
     // บันทึกคำถามเพิ่มเติมถ้ามี

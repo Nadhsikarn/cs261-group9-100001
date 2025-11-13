@@ -15,9 +15,4 @@ public class AppConfig implements WebMvcConfigurer {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/jobUploads/**")      // URL pattern ที่จะเข้าถึงได้ เช่น /uploads/รูป.png
-                .addResourceLocations("file:jobUploads/"); // path จริงของโฟลเดอร์ที่เก็บรูป
-    }
 }
