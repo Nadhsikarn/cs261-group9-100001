@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { width: 90%; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .header { font-size: 24px; color: #333; }
+        .content { margin-top: 20px; }
+        .footer { margin-top: 30px; font-size: 12px; color: #888; }
+        .logo {
+            display: inline-block;
+            color: #A3062C;
+            background: #A3062C;
+            background: linear-gradient(90deg, rgba(163, 6, 44, 1) 0%, rgba(255, 211, 60, 1) 0%, rgba(163, 6, 44, 1) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            font-size: 1.5em;
+            font-family: 'Josefin Sans';
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">VolunteeU</div>
+        <h1 class="header" th:text="${emailSubject}">Email Subject Goes Here</h1>
+        
+        <div class="content">
+            <p th:text="${emailDescription}">Email Description Goes Here</p>
+        </div>
+
+        <div class="footer">
+            <p>Best regards,<br>The VolunteeU Team</p>
+        </div>
+    </div>
+</body>
+</html>

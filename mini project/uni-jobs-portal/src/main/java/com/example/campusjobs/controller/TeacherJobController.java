@@ -36,6 +36,7 @@ import com.example.campusjobs.repo.JobRepository;
 import com.example.campusjobs.repo.NotificationRepository;
 import com.example.campusjobs.repo.QuestionRepository;
 import com.example.campusjobs.repo.UserRepository;
+import com.example.campusjobs.service.EmailService;
 import com.example.campusjobs.util.SecUtil;
 
 import jakarta.validation.constraints.NotBlank;
@@ -49,16 +50,18 @@ public class TeacherJobController {
     private final JobRepository jobRepository;
     private final ApplicationRepository applicationRepository;
     private final QuestionRepository questionRepository;
+    private final EmailService emailService;
     private NotificationRepository notificationRepository;
     private UserRepository userRepository;
 
     public TeacherJobController(JobRepository jobRepository, ApplicationRepository applicationRepository,  QuestionRepository questionRepository,
-                                NotificationRepository notificationRepository, UserRepository userRepository) {
+                                NotificationRepository notificationRepository, UserRepository userRepository, EmailService emailService) {
         this.jobRepository = jobRepository;
         this.applicationRepository = applicationRepository;
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
-        this.questionRepository = questionRepository;  
+        this.questionRepository = questionRepository;
+        this.emailService = emailService;
     }
 
     @GetMapping("/jobs")
@@ -331,29 +334,45 @@ public String reject(
             User userToNotify = userRepository.findByUsername(applicantUsername)
                     .orElseThrow(() -> new Exception("ไม่พบผู้ใช้งาน" + applicantUsername)); // ดีกว่า check isEmpty
             Long applicantId = userToNotify.getId();
+            String userEmail = app.getEmail();
 
             Notification notification = new Notification();
             notification.setUserId(applicantId);
             notification.setLinkUrl("/student/applications");
 
-            String description = "";
+            String notiDescription = "";
+            String emailDescription = "";
+            String subject = "";
             switch (status) {
                 case APPROVED:
-                    description = "Congratulations! You’ve been selected for Staff " + job.getTitle() + " More details will be sent to your email.";
+                    subject = "ยินดีด้วย! คุณผ่านการคัดเลือกเป็น Staff ในงาน " + job.getTitle();
+                    notiDescription = "Congratulations! You’ve been selected for Staff " + job.getTitle() + " More details will be sent to your email.";
+                    emailDescription = "ขอแสดงความยินดีกับคุณ "+ app.getFullName() +" ที่ผ่านการสัมภาษณ์และได้รับเลือกเป็น Staff ของงาน " + 
+                                        job.getTitle() + " โปรดรอรับรายละเอียดการติดต่อจากทีมงานอีกครั้งทาง Email ที่แจ้งไว้";
                     break;
                 case INTERVIEW:
-                    description = "Congratulations! You’re shortlisted for Staff " + job.getTitle() + " check your email for interview details.";
+                    subject = "คุณได้รับสิทธิ์สัมภาษณ์งานเพื่อคัดเลือกเป็น Staff ในงาน " + job.getTitle();
+                    notiDescription = "Congratulations! You’re shortlisted for Staff " + job.getTitle() + " check your email for interview details.";
+                    emailDescription = "ขอแสดงความยินดีกับคุณ "+ app.getFullName() +" ที่ผ่านการคัดเลือกรอบที่ 1 ได้รับสิทธิ์สัมภาษณ์การเป็น Staff ในงาน " + 
+                                        job.getTitle() + " โปรดรอรับรายละเอียดการสัมภาษณ์จากทีมงานทาง Email ที่แจ้งไว้";
                     break;
                 case REJECTED:
-                    description = "Unfortunately, you did not pass the selection process to become a staff member. " + job.getTitle();
+                    subject = "ขอแสดงความเสียใจด้วย คุณไม่ผ่านการคัดเลือก " + job.getTitle();
+                    notiDescription = "Unfortunately, you did not pass the selection process to become a staff member. " + job.getTitle();
+                    emailDescription = "ขอแสดงความเสียใจกับคุณ " + app.getFullName() + " เป็นอย่างยิ่ง " + 
+                                        "คุณยังไม่ผ่านการคัดเลือกจากทางทีมงานสำหรับตำแหน่ง Staff งาน " + job.getTitle() + " ในครั้งนี้ " +
+                                        "เราขอขอบคุณเป็นอย่างสูงสำหรับความสนใจ และหวังเป็นอย่างยิ่งว่าจะมีโอกาสได้ร่วมงานกับคุณในอนาคต";
                     break;
                 default:
                     // ถ้าเป็นสถานะอื่น (เช่น PENDING) ก็ไม่ต้องทำอะไร
                     ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย (ไม่มี Notification)");
                     return "redirect:/teacher/applicants/" + job.getId();
             }
-            notification.setDescription(description);
+            notification.setDescription(notiDescription);
             notificationRepository.save(notification);
+            if (userEmail != null && !userEmail.isBlank()) { // (เช็กก่อนว่า User มีอีเมล)
+                emailService.sendHtmlMessage(userEmail, subject, emailDescription);
+            }
         }
 
         catch (Exception e) {
