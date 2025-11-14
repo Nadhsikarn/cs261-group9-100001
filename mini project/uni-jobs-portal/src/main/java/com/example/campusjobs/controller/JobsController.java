@@ -1,5 +1,8 @@
 package com.example.campusjobs.controller;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
@@ -11,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.List;
 import com.example.campusjobs.model.Application;
 import com.example.campusjobs.model.Notification;
 import com.example.campusjobs.model.User;
@@ -76,8 +76,8 @@ public class JobsController {
             @RequestParam String email,
             @RequestParam String phone,
             @RequestParam String department,
-            @RequestParam List<Long> questionIds,
-            @RequestParam List<String> answers,
+            @RequestParam(required = false) List<Long> questionIds,
+            @RequestParam(required = false) List<String> answers,
             RedirectAttributes ra) 
         {
 
@@ -113,36 +113,39 @@ public class JobsController {
     app.setPhone(phone);
     app.setDepartment(department);
 
-    try {
-        ObjectMapper mapper = new ObjectMapper();
+    applicationRepository.save(app);
 
-        Map<String, String> qa = new LinkedHashMap<>();
+    if (questionIds != null && answers != null && questionIds.size() == answers.size()){
+        try {
+            ObjectMapper mapper = new ObjectMapper();
 
-        // loop ตามลำดับ index ของคำถาม
-        for (int i = 0; i < questionIds.size(); i++) {
-            Long qid = questionIds.get(i);
-            String ans = answers.get(i);
+            Map<String, String> qa = new LinkedHashMap<>();
 
-            // ดึงคำถามจาก DB
-            var qOpt = job.getQuestions()
-                          .stream()
-                          .filter(q -> q.getId().equals(qid))
-                          .findFirst();
+            // loop ตามลำดับ index ของคำถาม
+            for (int i = 0; i < questionIds.size(); i++) {
+                Long qid = questionIds.get(i);
+                String ans = answers.get(i);
 
-            if (qOpt.isPresent()) {
-                qa.put(qOpt.get().getText(), ans);
+                // ดึงคำถามจาก DB
+                var qOpt = job.getQuestions()
+                              .stream()
+                              .filter(q -> q.getId().equals(qid))
+                              .findFirst();
+
+                if (qOpt.isPresent()) {
+                    qa.put(qOpt.get().getText(), ans);
+                }
             }
-        }
 
-        // แปลง Map เป็น JSON
-        String answersJson = mapper.writeValueAsString(qa);
-        app.setAnswersJson(answersJson);
+            // แปลง Map เป็น JSON
+            String answersJson = mapper.writeValueAsString(qa);
+            app.setAnswersJson(answersJson);
 
-        applicationRepository.save(app);
+            applicationRepository.save(app);
 
-    } catch (Exception e) {
-        e.printStackTrace();}
-
+        } catch (Exception e) {
+            e.printStackTrace();}
+    }
     try {
                 // 4.1 ดึง Username (String) จาก Application
                 String applicantUsername = app.getApplicantUsername();
