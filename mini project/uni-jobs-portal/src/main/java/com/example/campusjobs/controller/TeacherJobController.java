@@ -355,7 +355,11 @@ public class TeacherJobController {
     }
 
     @GetMapping("/interview")
-    public String interviewsPage() {
+    public String interviewsPage(Model model) {
+        String me = SecUtil.currentUsername();
+        var jobs = jobRepository.findByCreatorUsernameOrderByCreatedAtDesc(me);
+
+        model.addAttribute("jobs", jobs);
         return "teacher_interview";
     }
 
