@@ -18,12 +18,9 @@ services:
       - db
     volumes:
       - ./db:/scripts
-    entrypoint: ["/bin/bash", "-c", "
-      echo 'Waiting for SQL Server to start...';
-      sleep 60;
-      /opt/mssql-tools/bin/sqlcmd -S db -U SA -P 'MyP@ssw0rd!1234' -i /scripts/init.sql;
-      echo 'Database initialized successfully!'
-      "]
+    environment:
+      - SA_PASSWORD=MyP@ssw0rd!1234
+    entrypoint: ["/bin/bash", "/scripts/entrypoint.sh"]
 
   # โปรไฟล์ dev: ให้เพื่อนแก้ UI แล้วเห็นผลทันที
   app-dev:
