@@ -47,6 +47,10 @@ public class Job {
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Department> departments = new ArrayList<>();
 
+    // รายการสมัครงานที่เกี่ยวข้องกับงานนี้
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Application> applications = new ArrayList<>();
+
     public JobImage getImage() { return image; }
 
     public Job() {}

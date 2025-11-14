@@ -101,7 +101,7 @@
                     <span th:if="${a.status.name()  == 'REJECTED'}" class="circle rejected">✖</span>
                 </td>
                 <td>
-                    <a th:href="@{|/teacher/applicants/${a.id}/detail|}" class="detail-btn">
+                    <a th:href="@{|/teacher/applicants/${job.id}/detail/${a.id}|}" class="detail-btn">
                         >
                     </a>
                 </td>

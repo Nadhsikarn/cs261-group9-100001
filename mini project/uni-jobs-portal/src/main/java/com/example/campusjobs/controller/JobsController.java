@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.List;
 import com.example.campusjobs.model.Application;
 import com.example.campusjobs.model.Notification;
@@ -113,12 +115,33 @@ public class JobsController {
 
     try {
         ObjectMapper mapper = new ObjectMapper();
-        String answersJson = mapper.writeValueAsString(answers);
+
+        Map<String, String> qa = new LinkedHashMap<>();
+
+        // loop ตามลำดับ index ของคำถาม
+        for (int i = 0; i < questionIds.size(); i++) {
+            Long qid = questionIds.get(i);
+            String ans = answers.get(i);
+
+            // ดึงคำถามจาก DB
+            var qOpt = job.getQuestions()
+                          .stream()
+                          .filter(q -> q.getId().equals(qid))
+                          .findFirst();
+
+            if (qOpt.isPresent()) {
+                qa.put(qOpt.get().getText(), ans);
+            }
+        }
+
+        // แปลง Map เป็น JSON
+        String answersJson = mapper.writeValueAsString(qa);
         app.setAnswersJson(answersJson);
+
+        applicationRepository.save(app);
+
     } catch (Exception e) {
-        e.printStackTrace();
-    }
-    applicationRepository.save(app);
+        e.printStackTrace();}
 
     try {
                 // 4.1 ดึง Username (String) จาก Application

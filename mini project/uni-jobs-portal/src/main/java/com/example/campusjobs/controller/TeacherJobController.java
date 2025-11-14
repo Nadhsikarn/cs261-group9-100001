@@ -193,54 +193,88 @@ public class TeacherJobController {
     }
 
     @GetMapping("/applicants/{jobId}")
-public String applicants(@PathVariable Long jobId, 
+    public String applicants(@PathVariable Long jobId, 
                         @RequestParam(value = "keyword", required = false) String keyword,
                         @RequestParam(value = "department", required = false) String department,
                         Model model, RedirectAttributes ra) {
 
-    var jobOpt = jobRepository.findById(jobId);
+        var jobOpt = jobRepository.findById(jobId);
 
-    if (jobOpt.isEmpty()) {
-        ra.addFlashAttribute("err", "ไม่พบบันทึกงาน");
-        return "redirect:/teacher/jobs";
-    }
+        if (jobOpt.isEmpty()) {
+            ra.addFlashAttribute("err", "ไม่พบบันทึกงาน");
+            return "redirect:/teacher/jobs";
+        }
     
-    var job = jobOpt.get();
+        var job = jobOpt.get();
     
-    String me = SecUtil.currentUsername();
-    if (me == null || !job.getCreatorUsername().equals(me)) {
-        ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าดูผู้สมัครงานนี้");
-        return "redirect:/teacher/jobs";
-    }
+        String me = SecUtil.currentUsername();
+        if (me == null || !job.getCreatorUsername().equals(me)) {
+            ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าดูผู้สมัครงานนี้");
+            return "redirect:/teacher/jobs";
+        }
     
-    List<Application> apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId);
+        List<Application> apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId);
 
-    if (keyword != null && !keyword.trim().isEmpty()) {
-        String kw = keyword.toLowerCase();
-        apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId)
-                .stream()
-                .filter(a ->
-                        (a.getFullName() != null && a.getFullName().toLowerCase().contains(keyword))
-                ).toList();
-    } else {
-        apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId);
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            String kw = keyword.toLowerCase();
+            apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId)
+                    .stream()
+                    .filter(a ->
+                            (a.getFullName() != null && a.getFullName().toLowerCase().contains(keyword))
+                    ).toList();
+        } else {
+            apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId);
+        }
+
+        if (department != null && !department.equals("ALL")) {
+            apps = apps.stream()
+                    .filter(a -> a.getDepartment() != null &&
+                                 a.getDepartment().equalsIgnoreCase(department))
+                    .toList();
+        }
+
+        model.addAttribute("job", job);
+        model.addAttribute("apps", apps);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("department", department);
+        model.addAttribute("departments", job.getDepartments());
+
+        return "teacher_applicants_list"; 
     }
 
-    if (department != null && !department.equals("ALL")) {
-        apps = apps.stream()
-                .filter(a -> a.getDepartment() != null &&
-                             a.getDepartment().equalsIgnoreCase(department))
-                .toList();
-    }
+    @GetMapping("/applicants/{jobId}/detail/{appId}")
+    public String applicantDetail(@PathVariable Long jobId,
+                                  @PathVariable Long appId,
+                                  Model model,
+                                  RedirectAttributes ra) {
 
-    model.addAttribute("job", job);
-    model.addAttribute("apps", apps);
-    model.addAttribute("keyword", keyword);
-    model.addAttribute("department", department);
-    model.addAttribute("departments", job.getDepartments());
+        var jobOpt = jobRepository.findById(jobId);
+        if (jobOpt.isEmpty()) {
+            ra.addFlashAttribute("err", "ไม่พบงานนี้");
+            return "redirect:/teacher/jobs";
+        }
 
-    return "teacher_applicants_list"; 
+        var appOpt = applicationRepository.findById(appId);
+        if (appOpt.isEmpty()) {
+            ra.addFlashAttribute("err", "ไม่พบใบสมัครนี้");
+            return "redirect:/teacher/applicants/" + jobId;
+        }
+
+        var job = jobOpt.get();
+        var app = appOpt.get();
+
+        // ตรวจสิทธิ์
+        if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
+            ra.addFlashAttribute("err", "ไม่มีสิทธิ์ดูข้อมูลผู้สมัครคนนี้");
+            return "redirect:/teacher/jobs";
+        }
+
+        model.addAttribute("job", job);
+        model.addAttribute("app", app);
+
+        return "teacher_applicant_detail";
 }
+
 
     @PostMapping("/applications/{appId}/approve")
     public String approve(@PathVariable("appId") Long appId, RedirectAttributes ra) {
@@ -298,7 +332,7 @@ public String applicants(@PathVariable Long jobId,
                 default:
                     // ถ้าเป็นสถานะอื่น (เช่น PENDING) ก็ไม่ต้องทำอะไร
                     ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย (ไม่มี Notification)");
-                    return "redirect:/teacher/jobs/" + job.getId() + "/applications";
+                    return "redirect:/teacher/applicants/" + job.getId();
             }
             notification.setDescription(description);
             notificationRepository.save(notification);
@@ -308,7 +342,8 @@ public String applicants(@PathVariable Long jobId,
             ra.addFlashAttribute("err", "อัปเดตสถานะสำเร็จ แต่ส่ง Notification ล้มเหลว: " + e.getMessage());
         }
         ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย");
-        return "redirect:/teacher/jobs/" + job.getId() + "/applications";
+        return "redirect:/teacher/applicants/" + job.getId();
+
     }
     //อันนี้เพิ่มมาให้กด link ได้เฉยๆ ยังไม่ได้ใส่ logic ใดๆ
    @GetMapping("/applicant")

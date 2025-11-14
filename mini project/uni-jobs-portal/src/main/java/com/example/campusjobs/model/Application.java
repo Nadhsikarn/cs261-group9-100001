@@ -14,6 +14,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.Transient;
+import java.util.Map;
+
 @Entity
 @Table(name = "applications")
 public class Application {
@@ -87,7 +92,7 @@ public class Application {
                                             this.phone = phone;
                                             this.department = department;
                                             this.answersJson = answersJson;}
-                                            
+
     public Long getId(){ return id; }
     public Job getJob(){ return job; }
     public String getApplicantUsername(){ return applicantUsername; }
@@ -119,4 +124,15 @@ public class Application {
     public void setAnswersJson(String answersJson) { this.answersJson = answersJson; }
     public void setStatus(ApplicationStatus s){ this.status = s; }
     public void setAppliedAt(Instant t){ this.appliedAt = t; }
+
+    // แปลงคำตอบจาก JSON เป็น Map<String, String>
+    @Transient
+    public Map<String, String> getAnswersMap() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(this.answersJson, new TypeReference<Map<String, String>>() {});
+        } catch (Exception e) {
+            return Map.of();
+        }
+    }
 }
