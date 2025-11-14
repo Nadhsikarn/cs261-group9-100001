@@ -95,22 +95,52 @@
                             <hr>
 
                             <!-- Progress -->
-                            <div class="status-progress">
-                                <div class="step" th:classappend="${a.status == 'PENDING'} ? 'active' : ''">
-                                    <div class="circle">⏳</div>
-                                    Pending
-                                </div>
-                                <div class="step" th:classappend="${a.status == 'INTERVIEW'} ? 'active' : ''">
-                                    <div class="circle">📋</div>
-                                    Interview
-                                </div>
-                                <div class="step" th:classappend="${a.status == 'ACCEPTED'} ? 'active' : ''">
-                                    <div class="circle">✅</div>
-                                    Accepted
-                                </div>
-                                <div class="step" th:classappend="${a.status == 'REJECTED'} ? 'active' : ''">
-                                    <div class="circle">❌</div>
-                                    Rejected
+                            <div class="status-progresssion"
+                                 th:classappend="('status-is-' + ${#strings.toLowerCase(a.status.toString())}) + 
+                                                (${a.rejectedAtStatus != null} ? ' rejected-at-' + ${#strings.toLowerCase(a.rejectedAtStatus.toString())} : '')">
+
+                                <div class="normal-track">
+        
+                                    <div class="step completed">
+                                        <div class="circle"></div>
+                                        Submitted
+                                    </div>
+                                
+                                    <div class="step" th:classappend="
+                                         (${a.status.toString() == 'PENDING'} ? 'active' : '') + 
+                                         (${a.rejectedAtStatus != null && a.rejectedAtStatus.toString() == 'PENDING'} ? 'rejected' : '') +
+                                         (${
+                                            a.status.toString() == 'INTERVIEW' || 
+                                            a.status.toString() == 'APPROVED' || 
+                                            (a.rejectedAtStatus != null && (
+                                                a.rejectedAtStatus.toString() == 'INTERVIEW' || 
+                                                a.rejectedAtStatus.toString() == 'APPROVED'
+                                            ))
+                                         } ? 'completed' : '')">
+                                     
+                                        <div class="circle"></div>
+                                        Under Review
+                                    </div>
+                                
+                                    <div class="step" th:classappend="
+                                         (${a.status.toString() == 'INTERVIEW'} ? 'active' : '') +
+                                         (${a.rejectedAtStatus != null && a.rejectedAtStatus.toString() == 'INTERVIEW'} ? 'rejected' : '') +
+                                         (${
+                                            a.status.toString() == 'APPROVED' || 
+                                            (a.rejectedAtStatus != null && a.rejectedAtStatus.toString() == 'APPROVED')
+                                         } ? 'completed' : '')">
+                                         
+                                        <div class="circle"></div>
+                                        Interview
+                                    </div>
+                                
+                                    <div class="step" th:classappend="
+                                         (${a.status.toString() == 'APPROVED'} ? 'completed' : '') +
+                                         (${a.rejectedAtStatus != null && a.rejectedAtStatus.toString() == 'APPROVED'} ? 'rejected' : '')">
+                                        
+                                        <div class="circle"></div>
+                                        Accepted
+                                    </div>
                                 </div>
                             </div>
                         </div>

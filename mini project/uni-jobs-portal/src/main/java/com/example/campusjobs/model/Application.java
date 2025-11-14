@@ -61,6 +61,9 @@ public class Application {
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String answersJson;
 
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatus rejectedAtStatus;
+
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status = ApplicationStatus.PENDING;
@@ -108,6 +111,7 @@ public class Application {
     public String getAnswersJson() { return answersJson; }
     public ApplicationStatus getStatus(){ return status; }
     public Instant getAppliedAt(){ return appliedAt; }
+    public ApplicationStatus getRejectedAtStatus() { return rejectedAtStatus; }
 
     public void setId(Long id){ this.id = id; }
     public void setJob(Job job){ this.job = job; }
@@ -124,6 +128,7 @@ public class Application {
     public void setAnswersJson(String answersJson) { this.answersJson = answersJson; }
     public void setStatus(ApplicationStatus s){ this.status = s; }
     public void setAppliedAt(Instant t){ this.appliedAt = t; }
+    public void setRejectedAtStatus(ApplicationStatus rejectedAtStatus) { this.rejectedAtStatus = rejectedAtStatus; }
 
     // แปลงคำตอบจาก JSON เป็น Map<String, String>
     @Transient

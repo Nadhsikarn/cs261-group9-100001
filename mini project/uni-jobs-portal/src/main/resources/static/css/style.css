@@ -339,10 +339,170 @@ body {
     min-width: 80px;
     text-align: center;
 }
+/* --- 1. Base Setup (เหมือนเดิม) --- */
+.status-progresssion {
+    display: flex;
+    width: 90%; 
+    margin: 30px auto; 
+    position: relative;
+}
+
+.status-progresssion .normal-track {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+}
+
+.normal-track::before {
+    content: '';
+    position: absolute;
+    top: 15px; left: 0;
+    width: 100%; height: 4px;
+    background-color: #e0e0e0; /* (เส้นเทา) */
+    z-index: 1; 
+}
+
+/* 5.1 "เส้นที่เติมสี" (Fill Line) - (นี่คือบล็อกที่หายไป) */
+.normal-track::after {
+    content: '';
+    position: absolute;
+    top: 15px; /* ⬅️ สูงเท่ากัน (ทับกันพอดี) */
+    left: 0;
+    height: 4px;
+    background-color: #A3062C; /* ⬅️ สีแดง */
+    z-index: 2; /* ⬅️ "เส้นสี" อยู่ทับ "เส้นเทา" */
+    width: 0%; /* ⬅️ กว้าง 0% (เริ่มต้น) */
+    transition: width 0.5s ease;
+}
+/* --- 3. Base Step & Circle (เหมือนเดิม) --- */
+.step {
+    display: flex; flex-direction: column; 
+    align-items: center; text-align: center;
+    font-size: 14px; color: #999;
+    position: relative; z-index: 3;
+    width: 80px;
+}
+.step .circle {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background-color: #ffffff; /* (พื้นหลังวงกลม) */
+    color: #999;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 8px;
+    border: 3px solid #e0e0e0; /* (ขอบสีเทา) */
+    transition: all 0.3s ease;
+}
+
+/* --- 4. 🌟 นี่คือ Logic ดีไซน์ใหม่ของคุณ 🌟 --- */
+
+/* 4.1 "Future" Step (อนาคต) = วงกลมเทา, ไม่มีไอคอน */
+.step .circle::before {
+    content: ''; 
+}
+
+/* 4.2 "Completed" Step (เสร็จแล้ว) = ✅ */
+.step.completed {
+    color: #333; /* Text สีเข้ม */
+}
+.step.completed .circle {
+    background-color: #A3062C; /* (พื้นหลังสีแดงทึบ) */
+    border-color: #A3062C;
+    color: white; /* (สีของไอคอน) */
+}
+.step.completed .circle::before {
+    content: '✔'; /* ⬅️ ไอคอนติ๊กถูกสีขาว */
+    font-size: 1.2em;
+}
+
+/* 4.3 "Active" Step (กำลังทำ) = ▶️ */
+.step.active {
+    color: #333;
+    font-weight: bold;
+}
+.step.active .circle {
+    background-color: #A3062C; /* (พื้นหลังสีแดงทึบ) */
+    border-color: #A3062C;
+    color: white; /* (สีของไอคอน) */
+}
+.step.active .circle::before {
+    content: '►'; /* ⬅️ ไอคอน Play สีขาว */
+    font-size: 1.1em;
+}
+
+/* 4.4 "Rejected" Step (ถูกปฏิเสธ) = ❌ */
+.step.rejected {
+    color: #333;
+    font-weight: bold;
+}
+.step.rejected .circle {
+    background-color: #A3062C; /* (พื้นหลังสีแดงทึบ) */
+    border-color: #A3062C;
+    color: white; /* (สีของไอคอน) */
+}
+.step.rejected .circle::before {
+    content: '✖'; /* ⬅️ ไอคอน X สีขาว */
+    font-size: 1.2em;
+}
+
+/* --- 5. "เส้น" (Lines) --- */
+.status-progresssion::before {
+    content: '';
+    position: absolute;
+    top: 15px; left: 0;
+    width: 100%; height: 4px;
+    background-color: #e0e0e0; /* (เส้นเทา) */
+    z-index: 1; 
+}
+/* 5.1 "เส้นที่เติมสี" (Fill Line) */
+.status-progresssion::after {
+    content: '';
+    position: absolute;
+    top: 15px; 
+    left: 0;
+    height: 4px;
+    background-color: #A3062C; /* ⬅️ สีแดง (ตามดีไซน์) */
+    z-index: 2; /* ⬅️ "เส้นสี" อยู่ทับ "เส้นเทา" */
+    
+    width: 0%; /* ⬅️ "ความกว้าง" เริ่มต้น = 0% */
+    transition: width 0.5s ease;
+}
+
+.status-progresssion.status-is-pending .normal-track::after {
+    width: 33.33%; 
+}
+
+.status-progresssion.status-is-interview .normal-track::after {
+    width: 66.66%;
+}
+
+.status-progresssion.status-is-approved .normal-track::after {
+    width: 100%;
+}
+
+.status-progresssion.status-is-rejected.rejected-at-pending .normal-track::after {
+    background-color: #A3062C;
+    width: 33.33%; 
+}
+
+.status-progresssion.status-is-rejected.rejected-at-interview .normal-track::after {
+    background-color: #A3062C;
+    width: 66.66%; 
+}
+
+.status-progresssion.status-is-rejected.rejected-at-approved .normal-track::after {
+    background-color: #A3062C;
+    width: 100%; 
+}
 
 .status-pending {
     background: #fdf4e3;
     color: #d89b00;
+}
+
+.status-interview {
+    background: #e6f2ff;
+    color: #0779eb;
 }
 
 .status-approved {

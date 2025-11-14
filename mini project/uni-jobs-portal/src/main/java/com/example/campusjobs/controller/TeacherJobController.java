@@ -1,7 +1,6 @@
 package com.example.campusjobs.controller;
 
 import java.io.IOException;
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.campusjobs.model.ApplicationStatus;
 import com.example.campusjobs.model.Application;
+import com.example.campusjobs.model.ApplicationStatus;
 import com.example.campusjobs.model.Department;
 import com.example.campusjobs.model.Job;
 import com.example.campusjobs.model.JobImage;
@@ -323,6 +322,10 @@ public String reject(
         if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
             ra.addFlashAttribute("err", "ไม่มีสิทธิ์ปรับสถานะงานนี้");
             return "redirect:/teacher/jobs";
+        }
+        if (status == ApplicationStatus.REJECTED) {
+            // 2. ให้ "จำ" สถานะ "ปัจจุบัน" (ก่อนที่จะเปลี่ยน) ไว้
+            app.setRejectedAtStatus(app.getStatus()); 
         }
 
         app.setStatus(status);
