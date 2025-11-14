@@ -41,18 +41,20 @@ public class SecurityConfig {
         http
             .authenticationManager(authenticationManager)
             .authorizeHttpRequests(auth -> auth
-                // ✅ เปลี่ยน /images/** -> /image/** ให้ตรงกับโฟลเดอร์ static/image
-                .requestMatchers("/", "/css/**", "/js/**", "/image/**", "/jobs", "/jobs/*").permitAll()
-                .requestMatchers("/login", "/role").permitAll()
-
-                // Student-only actions
-                .requestMatchers("/jobs/*/apply", "/student/**").hasAuthority("ROLE_STUDENT")
-
-                // Teacher-only actions
-                .requestMatchers("/teacher/**").hasAuthority("ROLE_TEACHER")
-
-                .anyRequest().authenticated()
-            )
+                .requestMatchers(
+                     "/", 
+                    "/css/**", 
+                "/js/**", 
+                "/image/**", 
+                "/jobUploads/**",
+                "/jobs", 
+                "/jobs/*"
+            ).permitAll()
+            .requestMatchers("/login", "/role").permitAll()
+            .requestMatchers("/jobs/*/apply", "/student/**").hasAuthority("ROLE_STUDENT")
+            .requestMatchers("/teacher/**").hasAuthority("ROLE_TEACHER")
+            .anyRequest().authenticated()
+        )
             .formLogin(form -> form
                 .loginPage("/role")
                 .loginProcessingUrl("/login")

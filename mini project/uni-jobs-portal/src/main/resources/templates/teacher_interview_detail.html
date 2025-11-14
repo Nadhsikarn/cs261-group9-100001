@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>ดูรายชื่อผู้สมัคร</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="navbar">
+    <div class="logo">VolunteeU</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/teacher/jobs">Posts</a>
+        <a href="/teacher/applicant">Applicants</a>
+        <a href="/teacher/interview" class="active" style="font-weight: bold;">Interview</a>
+        <a href="/teacher/final">Final</a>
+        <a href="/profile">Profile</a>
+        
+    </div>
+</div>
+
+<div class="main-content">
+    <h2 th:text="'ฝ่าย ' + ${app.department}">ฝ่าย xxx</h2>
+
+    <h3>ข้อมูลผู้สมัคร</h3>
+
+    <p>ชื่อ : <span th:text="${app.fullName}"></span></p>
+    <p>ชื่อเล่น : <span th:text="${app.nickname}"></span></p>
+    <p>ชั้นปีที่ : <span th:text="${app.yearLevel}"></span></p>
+    <p>เลขนักศึกษา : <span th:text="${app.studentId}"></span></p>
+    <p>คณะ : <span th:text="${app.faculty}"></span></p>
+    <p>แนะนำตัวสั้น ๆ : <span th:text="${app.bio}"></span></p> 
+
+    <div class="action-buttons">
+
+    <div th:if="${app.status.name() == 'INTERVIEW'}">
+
+        <form th:action="@{|/teacher/applications/${app.id}/approve|}" method="post">
+            <input type="hidden" name="from" value="interview"/>
+            <button class="approve-btn">✔ Approve</button>
+        </form>
+    
+        <form th:action="@{|/teacher/applications/${app.id}/reject|}" method="post">
+            <input type="hidden" name="from" value="interview"/>
+            <button class="reject-btn">✖ Reject</button>
+        </form>
+    </div>
+
+    <p th:if="${app.status.name() == 'APPROVED'}" class="status-info">
+        ผู้สมัครคนนี้ได้รับเลือกเข้าสัมภาษณ์แล้ว
+    </p>
+
+    <p th:if="${app.status.name() == 'REJECTED'}" class="status-info">
+        ผู้สมัครคนนี้ถูกปฏิเสธแล้ว
+    </p>
+
+</div>
+</div>
+
+</div>
+
+<div class="footer">
+    © 2025 VolunteeU — Software Project Recruitment
+</div>
+</body>
+</html>

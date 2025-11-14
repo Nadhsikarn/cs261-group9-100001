@@ -104,7 +104,15 @@
                             </th:block>
                         </div>
 
-                        <img class="job-image" th:src="@{/image/default-event.png}" alt="Event Banner" />
+                        <img th:if="${job.image != null}"
+                             th:src="@{${job.image.imagePath}}"
+                             alt="job-image"
+                             class="job-image">
+
+                        <img th:if="${job.image == null}"
+                             src="/image/event-full.png"
+                             alt="default-image"
+                             class="job-image">
 
                     </div>
                 </div>

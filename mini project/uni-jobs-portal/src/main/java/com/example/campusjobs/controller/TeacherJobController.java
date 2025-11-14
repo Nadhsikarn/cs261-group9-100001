@@ -449,6 +449,33 @@ public String reject(
         return "teacher_interview_list";
     }
 
+    @GetMapping("/interview/{jobId}/detail/{appId}")
+    public String interviewDetail(@PathVariable Long jobId,
+                                  @PathVariable Long appId,
+                                  Model model,
+                                  RedirectAttributes ra) {
+    
+        var jobOpt = jobRepository.findById(jobId);
+        var appOpt = applicationRepository.findById(appId);
+
+        if (jobOpt.isEmpty() || appOpt.isEmpty()) {
+            ra.addFlashAttribute("err", "ไม่พบข้อมูล");
+            return "redirect:/teacher/interview";
+        }
+
+        var job = jobOpt.get();
+        var app = appOpt.get();
+
+        if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
+            ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าถึง");
+            return "redirect:/teacher/interview";
+        }
+
+        model.addAttribute("job", job);
+        model.addAttribute("app", app);
+        return "teacher_interview_detail";
+    }
+
     @GetMapping("/final")
     public String finalPage() {
         return "teacher_final";
