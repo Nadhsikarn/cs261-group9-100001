@@ -213,23 +213,28 @@ public class TeacherJobController {
             return "redirect:/teacher/jobs";
         }
     
-        List<Application> apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId);
+        List<ApplicationStatus> statusFilter = List.of(
+            ApplicationStatus.PENDING,
+            ApplicationStatus.INTERVIEW,
+            ApplicationStatus.REJECTED
+        );
+
+        List<Application> apps = applicationRepository
+            .findByJobIdAndStatusInOrderByAppliedAtDesc(jobId, statusFilter);
 
         if (keyword != null && !keyword.trim().isEmpty()) {
             String kw = keyword.toLowerCase();
-            apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId)
-                    .stream()
-                    .filter(a ->
-                            (a.getFullName() != null && a.getFullName().toLowerCase().contains(keyword))
-                    ).toList();
-        } else {
-            apps = applicationRepository.findByJobIdOrderByAppliedAtDesc(jobId);
-        }
+            apps = apps.stream()
+                    .filter(a -> a.getFullName() != null &&
+                                 a.getFullName().toLowerCase().contains(kw))
+                    .toList();
+       }
+
 
         if (department != null && !department.equals("ALL")) {
             apps = apps.stream()
                     .filter(a -> a.getDepartment() != null &&
-                                 a.getDepartment().equalsIgnoreCase(department))
+                            a.getDepartment().equalsIgnoreCase(department))
                     .toList();
         }
 
@@ -277,21 +282,33 @@ public class TeacherJobController {
 
 
     @PostMapping("/applications/{appId}/approve")
-    public String approve(@PathVariable("appId") Long appId, RedirectAttributes ra) {
-        return updateStatus(appId, ApplicationStatus.APPROVED, ra);
-    }
+public String approve(
+        @PathVariable("appId") Long appId,
+        @RequestParam(value = "from", required = false) String from,
+        RedirectAttributes ra) {
 
-    @PostMapping("/applications/{appId}/interview")
-    public String interview(@PathVariable("appId") Long appId, RedirectAttributes ra) {
-        return updateStatus(appId, ApplicationStatus.INTERVIEW, ra);
-    }
+    return updateStatus(appId, ApplicationStatus.APPROVED, from, ra);
+}
 
-    @PostMapping("/applications/{appId}/reject")
-    public String reject(@PathVariable("appId") Long appId, RedirectAttributes ra) {
-        return updateStatus(appId, ApplicationStatus.REJECTED, ra);
-    }
+@PostMapping("/applications/{appId}/interview")
+public String interview(
+        @PathVariable("appId") Long appId,
+        @RequestParam(value = "from", required = false) String from,
+        RedirectAttributes ra) {
 
-    private String updateStatus(Long appId, ApplicationStatus status, RedirectAttributes ra) {
+    return updateStatus(appId, ApplicationStatus.INTERVIEW, from, ra);
+}
+
+@PostMapping("/applications/{appId}/reject")
+public String reject(
+        @PathVariable("appId") Long appId,
+        @RequestParam(value = "from", required = false) String from,
+        RedirectAttributes ra) {
+
+    return updateStatus(appId, ApplicationStatus.REJECTED, from, ra);
+}
+
+    private String updateStatus(Long appId, ApplicationStatus status, String from,RedirectAttributes ra) {
         var appOpt = applicationRepository.findById(appId);
         if (appOpt.isEmpty()) {
             ra.addFlashAttribute("err", "ไม่พบใบสมัคร");
@@ -307,6 +324,7 @@ public class TeacherJobController {
 
         app.setStatus(status);
         applicationRepository.save(app);
+
         try {
             // 4.1 ดึง User มาเตรียมไว้ (ทำแค่ครั้งเดียว)
             String applicantUsername = app.getApplicantUsername();
@@ -337,14 +355,28 @@ public class TeacherJobController {
             notification.setDescription(description);
             notificationRepository.save(notification);
         }
+
         catch (Exception e) {
             // จัดการ Error (ทำแค่ครั้งเดียว)
             ra.addFlashAttribute("err", "อัปเดตสถานะสำเร็จ แต่ส่ง Notification ล้มเหลว: " + e.getMessage());
         }
         ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย");
-        return "redirect:/teacher/applicants/" + job.getId();
 
+        if ("application".equals(from)) {
+            return "redirect:/teacher/jobs/" + job.getId() + "/applications";
+        } 
+    
+        if ("applicant".equals(from)) {
+            return "redirect:/teacher/applicants/" + job.getId();
+        }
+
+        if ("interview".equals(from)) {
+            return "redirect:/teacher/interview/" + job.getId();
+        }
+
+        return "redirect:/teacher/jobs";
     }
+
     //อันนี้เพิ่มมาให้กด link ได้เฉยๆ ยังไม่ได้ใส่ logic ใดๆ
    @GetMapping("/applicant")
     public String applicantsPage(Model model) {
@@ -361,6 +393,60 @@ public class TeacherJobController {
 
         model.addAttribute("jobs", jobs);
         return "teacher_interview";
+    }
+
+    @GetMapping("/interview/{jobId}")
+    public String interviewList(@PathVariable Long jobId,
+                                @RequestParam(value = "keyword", required = false) String keyword,
+                                @RequestParam(value = "department", required = false) String department,
+                                Model model,
+                                RedirectAttributes ra) {
+    
+        var jobOpt = jobRepository.findById(jobId);
+        if (jobOpt.isEmpty()) {
+            ra.addFlashAttribute("err", "ไม่พบบันทึกงาน");
+            return "redirect:/teacher/interview";
+        }
+
+        var job = jobOpt.get();
+
+        if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
+            ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าถึงงานนี้");
+            return "redirect:/teacher/interview";
+        }
+
+        List<ApplicationStatus> statusFilter = List.of(
+            ApplicationStatus.APPROVED,
+            ApplicationStatus.INTERVIEW,
+            ApplicationStatus.REJECTED
+        );
+
+        List<Application> apps = applicationRepository
+            .findByJobIdAndStatusInOrderByAppliedAtDesc(jobId, statusFilter);
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            String kw = keyword.toLowerCase();
+            apps = apps.stream()
+                    .filter(a ->
+                           (a.getFullName() != null && a.getFullName().toLowerCase().contains(kw)) ||
+                           (a.getStudentId() != null && a.getStudentId().toLowerCase().contains(kw))
+                    )
+                    .toList();
+        }
+
+        if (department != null && !department.equals("ALL")) {
+            apps = apps.stream()
+                    .filter(a -> a.getDepartment() != null && a.getDepartment().equalsIgnoreCase(department))
+                    .toList();
+        }
+
+        model.addAttribute("job", job);
+        model.addAttribute("apps", apps);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("department", department);
+        model.addAttribute("departments", job.getDepartments());
+
+        return "teacher_interview_list";
     }
 
     @GetMapping("/final")

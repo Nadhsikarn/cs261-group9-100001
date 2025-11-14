@@ -24,8 +24,8 @@
 
       <th:block sec:authorize="hasRole('TEACHER')">
         <a th:href="@{/teacher/jobs}">Posts</a>
-        <a th:href="@{/teacher/applicant}" class="active" style="font-weight: bold;">Applicant</a>
-        <a th:href="@{/teacher/interview}">Interview</a>
+        <a th:href="@{/teacher/applicant}">Applicant</a>
+        <a th:href="@{/teacher/interview}" class="active" style="font-weight: bold;">Interview</a>
         <a th:href="@{/teacher/final}">Final</a>
       </th:block>
 
@@ -44,7 +44,7 @@
     <div class="main-content">
     <div class="application-container">
       <h1 style="color:#A00000; font-size:42px;">Applicants</h1>
-      <h2>รายชื่อผู้สมัครงาน <span th:text="${job.title}">Job</span></h2>
+      <h2>รายชื่อผู้มีสิทธิ๋สัมภาษณ์งาน <span th:text="${job.title}">Job</span></h2>
         <span class="close-button" style="margin-top: 70px; font-family: 'Inria Sans'; font-size: 14px;"
           th:onclick="|window.location.href='@{/teacher/jobs}'|">
           &times; Back
@@ -52,13 +52,13 @@
         <p th:text="${job.description}">desc</p>
 
         <div class="search-box">
-            <form th:action="@{|/teacher/applicants/${job.id}|}" method="get">
+            <form th:action="@{|/teacher/interview/${job.id}|}" method="get">
                 <input type="text" name="keyword" placeholder="ค้นหาชื่อ" 
                        th:value="${keyword}">
                 <button type="submit">ค้นหา</button>
             </form>
 
-            <form th:action="@{|/teacher/applicants/${job.id}|}" method="get">
+            <form th:action="@{|/teacher/interview/${job.id}|}" method="get">
             <select name="department">
                     <option value="ALL"
                             th:selected="${department == null or department == 'ALL'}">
@@ -96,8 +96,8 @@
                 <td th:text="${a.department}">ฝ่าย</td>
                 <td th:text="${#temporals.format(a.appliedAt, 'dd.MM.yy')}">วันที่</td>
                 <td class="status-icon">
-                    <span th:if="${a.status.name() == 'INTERVIEW'}" class="circle interview">✔</span>
-                    <span th:if="${a.status.name()  == 'PENDING'}" class="circle pending"></span>
+                    <span th:if="${a.status.name() == 'APPROVED'}" class="circle approved">✔</span>
+                    <span th:if="${a.status.name() == 'INTERVIEW'}" class="circle interview"></span>
                     <span th:if="${a.status.name()  == 'REJECTED'}" class="circle rejected">✖</span>
                 </td>
                 <td>

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     List<Application> findByJobIdOrderByAppliedAtDesc(Long jobId);
+    List<Application> findByJobIdAndStatusInOrderByAppliedAtDesc(Long jobId, List<ApplicationStatus> statuses);
     List<Application> findByJobIdAndStatus(Long jobId, ApplicationStatus status);
     List<Application> findByApplicantUsernameOrderByAppliedAtDesc(String applicantUsername);
     boolean existsByJobIdAndApplicantUsername(Long jobId, String applicantUsername);
