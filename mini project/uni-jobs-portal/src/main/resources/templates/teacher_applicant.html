@@ -23,20 +23,24 @@
     </div>
 </div>
 
-<div class="main-content">
+<div class="main-contents">
     <h2>Applicant</h2>
     <h3 class="section-title">In progress</h3>
 
     <div class="job-list">
-      <div th:if="${#lists.isEmpty(jobs)}">
-        <p>ยังไม่มีโพสต์ที่สร้างไว้</p>
-      </div>
+        <div th:if="${#lists.isEmpty(jobs)}">
+            <p>ยังไม่มีโพสต์ที่สร้างไว้</p>
+        </div>
 
-      <div th:each="job : ${jobs}" class="job-card">
-        <a th:href="@{|/teacher/applicants/${job.id}|}" class="job-link">
-          รายชื่อผู้สมัครงาน <span th:text="${job.title}"></span>
-        </a>
-      </div>
+        <div th:each="job : ${jobs}" class="job-card">
+            <!-- เปลี่ยนจาก <a> เป็น <div> สำหรับ job -->
+            <div class="job-info">
+                รายชื่อผู้สมัครงาน <span th:text="${job.title}"></span>
+            </div>
+
+            <!-- เพิ่มไอคอนที่คลิกได้ -->
+            <div class="arrow-btn" th:onclick="|window.location.href='/teacher/applicants/${job.id}'|">›</div>
+        </div>
     </div>
 </div>
 
