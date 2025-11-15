@@ -134,15 +134,15 @@
                 <div class="stats-container">
 
                     <div class="stat-box">
-                        <span class="stat-number">9</span>
+                        <span class="stat-number" th:text="${allPosts}">0</span>
                         <span class="stat-label">All posts</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-number">9</span>
+                        <span class="stat-number" th:text="${activePosts}">0</span>
                         <span class="stat-label">Active post</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-number">999</span>
+                        <span class="stat-number" th:text="${newApplicants}">0</span>
                         <span class="stat-label">New applicant</span>
                     </div>
                 </div>
@@ -151,56 +151,56 @@
             <section class="recent-activity-section">
                 <div class="activity-timeline">
 
+
                     <div class="activity-item">
                         <div class="activity-dot"></div>
-                        <span class="activity-text">create new post</span>
+                        <a th:href="@{/teacher/jobs/new}" class="activity-text">
+                            Create new post
+                        </a>
                     </div>
+
+
                     <div class="activity-item">
                         <div class="activity-dot"></div>
-                        <span class="activity-text">Interview</span>
+                        <a th:href="@{/teacher/interview}" class="activity-text">
+                            Interview
+                        </a>
                     </div>
+
+
                     <div class="activity-item">
                         <div class="activity-dot"></div>
-                        <span class="activity-text">create new post</span>
+                        <a th:href="@{/teacher/final}" class="activity-text">
+                            Final
+                        </a>
                     </div>
+
                 </div>
                 <h2 class="recent-activity-title">Recent Activities</h2>
             </section>
 
-            <section class="task-section">
 
-                <h2 class="task-list-title">In progress</h2>
-                <div class="task-list" id="in-progress-list">
+                <section class="task-section">
+                    <h2 class="task-list-title">In progress</h2>
+                    <div class="task-list">
 
-                    <div class="task-item">
-                        <span class="task-name">Staff งานรับเพื่อนใหม่ TU92</span>
-                        <div class="task-actions">
-                            <a href="#" class="task-edit">edit</a>
-                            <a href="#" class="task-view">view</a>
+                        <div class="task-item" th:each="job : ${applicantJobList}">
+                            <span class="task-name" th:text="${job.title}"></span>
+
+                            <div class="task-actions">
+                                <a th:href="@{'/teacher/jobs/' + ${job.id} + '/edit'}"
+                                class="task-edit">edit</a>
+
+                                <a th:href="@{'/teacher/applicants/' + ${job.id}}"
+                                class="task-view">view</a>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="task-item">
-                        <span class="task-name">Another In Progress Job</span>
-                        <div class="task-actions">
-                            <a href="#" class="task-edit">edit</a>
-                            <a href="#" class="task-view">view</a>
-                        </div>
                     </div>
-                </div>
+                </section>
 
-                <h2 class="task-list-title">Completed</h2>
-                <div class="task-list" id="completed-list">
 
-                    <div class="task-item">
-                        <span class="task-name">Staff งานรับเพื่อนใหม่ TU91</span>
-                        <a href="#" class="task-arrow">&gt;</a>
-                    </div>
-                    <div class="task-item">
-                        <span class="task-name">Staff งานรับเพื่อนใหม่ TU90</span>
-                        <a href="#" class="task-arrow">&gt;</a>
-                    </div>
-                </div>
+                
 
                 <div class="draft-button-wrapper">
                     <a href="#" class="draft-button">Draft</a>
