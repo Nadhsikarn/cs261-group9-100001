@@ -7,7 +7,7 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div class="final-page-wrapper">
@@ -29,8 +29,10 @@
     </div>
 
     <div class="details-link-head-wrapper">
-        <a href="#" class="details-link-head">< staff งานรับเพื่อนใหม่ TU92</a>
-    </div>
+    <a th:href="@{|/teacher/final/${job.id}|}" class="details-link-head">
+        <span th:text="'< staff งาน ' + ${job.title}"> &lt; staff งาน</span>
+    </a>
+</div>
 
 <div class="staff-list">
   <div class="staff-row">
