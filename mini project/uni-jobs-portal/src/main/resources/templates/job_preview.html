@@ -10,6 +10,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .job-header-meta {
+            margin-top: 6px;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #777777;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .job-header-meta span {
+            white-space: nowrap;
+        }
+
+        .job-header-meta .separator {
+            color: #cccccc;
+            font-weight: 400;
+        }
+    </style>
 </head>
 
 <body>
@@ -67,9 +88,29 @@
 
     <div class="job-box">
             <div class="page-header">
-                <h1 th:text="${job.title}">ชื่อของงาน</h1>
-                <div class="section-divider"></div>
-            </div>
+        <h1 th:text="${job.title}">ชื่อของงาน</h1>
+
+
+        <div class="job-header-meta">
+            <span>
+                เปิดรับสมัคร :
+                <span th:text="${#temporals.format(job.openDate, 'd MMMM yyyy', 'Asia/Bangkok')}">
+                    1 มีนาคม 2569
+                </span>
+            </span>
+
+            <span class="separator">|</span>
+
+            <span>
+                ปิดรับสมัคร :
+                <span th:text="${#temporals.format(job.closeDate, 'd MMMM yyyy', 'Asia/Bangkok')}">
+                    15 มีนาคม 2569
+                </span>
+            </span>
+        </div>
+
+        <div class="section-divider"></div>
+    </div>
 
         <img th:if="${job.image != null}"
              th:src="@{${job.image.imagePath}}"
@@ -86,10 +127,10 @@
                 <div class="section-divider"></div>
         </div>
 
-    <div class="job-description">
-      รับสมัครสต๊าฟงานรับเพื่อนใหม่ TU92 ณ ยิมเนเซียม 4 และ ยิมเนเซียม 5 จัดขึ้นในวันที่ 10 สิงหาคม 2569 ผ่ายกิจกรรม , ฝ่ายพัสดุ , ฝ่ายทะเบียน , ฝ่ายสถานที่ , ฝ่าย stage & run script , ฝ่ายคมนาคม ฯลฯ </p>
-      ผู้ที่มีสิทธิ์สมัคร : นักศึกษามหาวิทยาลัยธรรมศาสตร์ทุกชั้นปี (ยกเว้นรหัส 69)</p>
-    </div>
+    <div class="job-description"
+     th:utext="${#strings.replace(job.description, '\n', '<br/>')}">
+</div>
+
 
     <div class="job-footer">
             <button onclick="window.location.href='/'" class="cancel-btn">Cancel</button> 
