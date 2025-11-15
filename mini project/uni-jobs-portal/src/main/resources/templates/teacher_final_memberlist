@@ -7,7 +7,7 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div class="final-page-wrapper">
@@ -29,42 +29,21 @@
     </div>
 
     <div class="details-link-head-wrapper">
-        <a href="#" class="details-link-head">< ฝ่าย XXXXX</a>
-    </div>
+    <a th:href="@{|/teacher/final/${job.id}|}" class="details-link-head">
+        <span th:text="'< ฝ่าย ' + ${department.name}">&lt; ฝ่าย</span>
+    </a>
+</div>
 
 <div class="staff-list-name">
   <div class="staff-row-mem">
     <span class="name">ชื่อ</span>
-
     <span class="details">ดูรายละเอียด</span>
   </div>
 
-  <div class="staff-row-name">
-    <span class="name">xxxxx xxxxxx</span>
-    <a href="#" class="details-link">></a>
+  <div class="staff-row-name" th:each="a : ${apps}">
+    <span class="name" th:text="${a.fullName}">ชื่อผู้สมัคร</span>
+    <a th:href="@{|/teacher/final/${job.id}/department/${department.id}/member/${a.id}|}" class="details-link">></a>
   </div>
-  <div class="staff-row-name"">
-    <span class="name">xxxxx xxxxxx</span>
-
-    <a href="#" class="details-link">></a>
-  </div>
-  <div class="staff-row-name">
-    <span class="name">xxxxx xxxxxx</span>
-    <a href="#" class="details-link">></a>
-  </div>
-  <div class="staff-row-name"">
-    <span class="name">xxxxx xxxxxx</span>
-    <a href="#" class="details-link">></a>
-  </div>
-  <div class="staff-row-name">
-    <span class="name">xxxxx xxxxxx</span>
-    <a href="#" class="details-link">></a>
-  </div>
-  <div class="staff-row-name">
-    <span class="name">xxxxx xxxxxx</span>
-    <a href="#" class="details-link">></a>
-  </div>
-</div>
 </div>
 
 <div class="footer">

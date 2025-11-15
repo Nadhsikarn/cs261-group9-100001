@@ -7,8 +7,7 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/style.css">
-</head>
+    <link rel="stylesheet" href="/css/style.css">
 <body>
 <div class="final-page-wrapper">
 <div class="navbar">
@@ -29,19 +28,44 @@
     </div>
 
     <div class="details-link-head-wrapper">
-        <a href="#" class="details-link-head">< ฝ่าย XXXXX</a>
+    <a th:href="@{|/teacher/final/${job.id}|}" class="details-link-head">
+        <span th:text="'< ฝ่าย ' + ${department.name}">&lt; ฝ่าย</span>
+    </a>
     </div>
-  <div class="staff-info-card">
-  <h2 class="staff-title">ข้อมูล staff</h2>
-    <div class="section-divider-staff"></div>
-        <div class="staff-field"><span class="label">ชื่อ :</span> xxxxxxxx</div>
-        <div class="staff-field"><span class="label">นามสกุล :</span> xxxxxxxxxxxxxxxx</div>
-        <div class="staff-field"><span class="label">ชื่อเล่น :</span> xxx</div>
-        <div class="staff-field"><span class="label">ชั้นปีที่ :</span> x</div>
-        <div class="staff-field"><span class="label">เลขนักศึกษา :</span> xxxxxxxxxx</div>
-        <div class="staff-field"><span class="label">คณะ :</span> xxxxxxxxxxxx</div>
-        <div class="staff-field"><span class="label">แนะนำตัวสั้น ๆ :</span> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
-  </div>    
+  <div class="staff-field">
+    <span class="label">ชื่อ :</span>
+    <span th:text="${app.fullName}">xxxxxxxx</span>
+</div>
+
+<div class="staff-field">
+    <span class="label">นามสกุล :</span>
+    <span th:text="${app.fullName}">xxxxxxxxxxxxxxxx</span>
+</div>
+
+<div class="staff-field">
+    <span class="label">ชื่อเล่น :</span>
+    <span th:text="${app.nickname}">xxx</span>
+</div>
+
+<div class="staff-field">
+    <span class="label">ชั้นปีที่ :</span>
+    <span th:text="${app.yearLevel}">x</span>
+</div>
+
+<div class="staff-field">
+    <span class="label">เลขนักศึกษา :</span>
+    <span th:text="${app.studentId}">xxxxxxxxxx</span>
+</div>
+
+<div class="staff-field">
+    <span class="label">คณะ :</span>
+    <span th:text="${app.faculty}">xxxxxxxxxxxx</span>
+</div>
+
+<div class="staff-field">
+    <span class="label">แนะนำตัวสั้น ๆ :</span>
+    <span th:text="${app.bio}">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+</div>    
 
 
 </div>
