@@ -1822,3 +1822,41 @@ td {
     margin-left: auto;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
+
+/* teacher applicant & teacher interview */
+.main-contents {
+    padding: 40px 50px;
+    flex-grow: 1;
+}
+
+.main-contents h2 {
+    font-family: 'Inria Sans', sans-serif;
+    font-weight: bold;
+    color: #A3062C;
+    font-size: 36px;
+}
+
+.job-info {
+    font-size: 16px;
+    color: #424242;
+    font-weight: 400;
+}
+
+.job-title {
+    font-size: 16px;
+    color: #424242;
+    font-weight: 400;
+}
+
+.arrow-btn {
+    font-size: 26px;
+    color: #C02B2B;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.arrow-btn:hover {
+    color: #FFBF00;
+    cursor: pointer;
+}
