@@ -1860,3 +1860,63 @@ td {
     color: #FFBF00;
     cursor: pointer;
 }
+
+/* teacher application detail */
+.main-content-app {
+    padding: 40px 50px;
+    flex-grow: 1;
+}
+/* -Applicant Info Section- */
+.applicant-info {
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.applicant-info h3 {
+    font-size: 24px;
+    color: #9c2a2b;
+    margin-bottom: 10px;
+}
+
+.applicant-info p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Answer Box */
+.qa-box {
+    margin-top: 30px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.qa-box h3 {
+    font-size: 24px;
+    color: #9c2a2b;
+    margin-bottom: 10px;
+}
+
+.qa-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.qa-item .question {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.qa-item .answer {
+    font-size: 16px;
+    margin-top: 10px;
+}

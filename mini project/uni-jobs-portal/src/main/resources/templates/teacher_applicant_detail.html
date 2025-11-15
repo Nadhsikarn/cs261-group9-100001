@@ -23,31 +23,25 @@
     </div>
 </div>
 
-<div class="main-content">
+<div class="main-content-app">
     <h2 th:text="'ฝ่าย ' + ${app.department}">ฝ่าย xxx</h2>
 
-    <h3>ข้อมูลผู้สมัคร</h3>
+    <div class="applicant-info">
+        <h3>ข้อมูลผู้สมัคร</h3>
+        <p><strong>ชื่อ :</strong> <span th:text="${app.fullName}"></span></p>
+        <p><strong>ชื่อเล่น :</strong> <span th:text="${app.nickname}"></span></p>
+        <p><strong>ชั้นปีที่ :</strong> <span th:text="${app.yearLevel}"></span></p>
+        <p><strong>เลขนักศึกษา :</strong> <span th:text="${app.studentId}"></span></p>
+        <p><strong>คณะ :</strong> <span th:text="${app.faculty}"></span></p>
+        <p><strong>แนะนำตัวสั้น ๆ :</strong> <span th:text="${app.bio}"></span></p>
+    </div>
 
-    <p>ชื่อ : <span th:text="${app.fullName}"></span></p>
-    <p>ชื่อเล่น : <span th:text="${app.nickname}"></span></p>
-    <p>ชั้นปีที่ : <span th:text="${app.yearLevel}"></span></p>
-    <p>เลขนักศึกษา : <span th:text="${app.studentId}"></span></p>
-    <p>คณะ : <span th:text="${app.faculty}"></span></p>
-    <p>แนะนำตัวสั้น ๆ : <span th:text="${app.bio}"></span></p>
-
-    <div class="detail-card">
-    <h3>คำตอบของผู้สมัคร</h3>
-
-    <div th:each="entry, iter : ${app.answersMap}" class="qa-box">
-        <p class="question">
-            <b>คำถาม <span th:text="${iter.index + 1}"></span> : </b>
-            <span th:text="${entry.key}"></span>
-        </p>
-
-        <p class="answer">
-            <b>คำตอบ : <span th:text="${entry.value}"></span></b>
-        </p>
-
+    <div class="qa-box">
+        <h3>คำตอบของผู้สมัคร</h3>
+        <div th:each="entry, iter : ${app.answersMap}" class="qa-item">
+            <p><strong>คำถาม <span th:text="${iter.index + 1}"></span> : </strong> <span th:text="${entry.key}"></span></p>
+            <p><strong>คำตอบ :</strong> <span th:text="${entry.value}"></span></p>
+        </div>
     </div>
 
     <div class="action-buttons">
