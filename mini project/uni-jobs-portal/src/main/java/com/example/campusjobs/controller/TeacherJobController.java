@@ -302,11 +302,13 @@ public String interview(
 }
 
 private String redirectByFrom(Long jobId, String from) {
+    if (from == null) from = "";   // กัน null ที่นี่
+
     return switch (from) {
         case "application" -> "redirect:/teacher/jobs/" + jobId + "/applications";
-        case "applicant"   -> "redirect:/teacher/applicants/" + jobId;
-        case "interview"   -> "redirect:/teacher/interview/" + jobId;
-        default            -> "redirect:/teacher/jobs";
+        case "applicant" -> "redirect:/teacher/applicants/" + jobId;
+        case "interview" -> "redirect:/teacher/interview/" + jobId;
+        default -> "redirect:/teacher/jobs";
     };
 }
 
@@ -328,6 +330,11 @@ public String reject(
 
         var app = appOpt.get();
         var job = app.getJob();
+        if (job == null) {
+            ra.addFlashAttribute("err", "ใบสมัครนี้ไม่ผูกกับงานแล้ว (ข้อมูลเสีย)");
+            return "redirect:/teacher/jobs";
+        }
+
         if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
             ra.addFlashAttribute("err", "ไม่มีสิทธิ์ปรับสถานะงานนี้");
             return "redirect:/teacher/jobs";
@@ -343,8 +350,14 @@ public String reject(
         try {
             // 4.1 ดึง User มาเตรียมไว้ (ทำแค่ครั้งเดียว)
             String applicantUsername = app.getApplicantUsername();
-            User userToNotify = userRepository.findByUsername(applicantUsername)
-                    .orElseThrow(() -> new Exception("ไม่พบผู้ใช้งาน" + applicantUsername)); // ดีกว่า check isEmpty
+            var userOpt = userRepository.findByUsername(applicantUsername);
+
+            if (userOpt.isEmpty()) {
+                ra.addFlashAttribute("err", "ไม่พบผู้ใช้งาน: " + applicantUsername);
+                return redirectByFrom(job.getId(), from);
+            }
+
+            var userToNotify = userOpt.get();
             Long applicantId = userToNotify.getId();
             String userEmail = app.getEmail();
 
@@ -383,8 +396,12 @@ public String reject(
             notification.setDescription(notiDescription);
             notificationRepository.save(notification);
             
-            if (userEmail != null && !userEmail.isBlank()) { // (เช็กก่อนว่า User มีอีเมล)
-                emailService.sendHtmlMessage(userEmail, subject, emailDescription);
+            if (userEmail != null && !userEmail.isBlank()) {
+                try {
+                    emailService.sendHtmlMessage(userEmail, subject, emailDescription);
+                } catch (Exception mailErr) {
+                    System.out.println("Email error: " + mailErr.getMessage());
+                }
             }
         }
 
@@ -393,6 +410,8 @@ public String reject(
             ra.addFlashAttribute("err", "อัปเดตสถานะสำเร็จ แต่ส่ง Notification ล้มเหลว: " + e.getMessage());
         }
         ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย");
+
+        if (from == null) from = "";
 
         return redirectByFrom(job.getId(), from);
     }
