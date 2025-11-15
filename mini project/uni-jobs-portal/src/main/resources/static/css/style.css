@@ -1861,12 +1861,12 @@ td {
     cursor: pointer;
 }
 
-/* teacher application detail */
+/* ----teacher application detail ----*/
 .main-content-app {
     padding: 40px 50px;
     flex-grow: 1;
 }
-/* -Applicant Info Section- */
+/* Applicant Info Section */
 .applicant-info {
     margin-bottom: 30px;
     background-color: #ffffff;
@@ -1921,13 +1921,14 @@ td {
     margin-top: 10px;
 }
 
-/* teacher applicant lists */
+/*---- teacher applicant lists ----*/
 .detail-btn{
     font-size: 20px;
     text-decoration: none;
     font-weight: bold;
     transition: 0.2s;
     text-align: right;
+    color: #3E3C3C;
 }
 .detail-btn:hover{
     color: #9c2a2b;
@@ -1977,10 +1978,11 @@ td {
 .filter-form {
     display: flex;
     align-items: center;
+    padding: 10px 14px;
 }
 
 .department-select {
-    padding: 10px;
+    padding: 5px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -1988,7 +1990,7 @@ td {
 }
 
 .filter-button {
-    padding: 10px 20px;
+    padding: 10px 14px;
     font-size: 16px;
     border-radius: 5px;
     background-color: #A00000;

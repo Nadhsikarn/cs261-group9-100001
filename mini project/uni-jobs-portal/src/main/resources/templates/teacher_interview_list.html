@@ -16,7 +16,7 @@
   <div class="navbar">
     <div class="logo">VolunteeU</div>
     <div class="nav-links">
-      <a href="/" style="font-weight: bold;">Home</a>
+      <a href="/">Home</a>
 
       <th:block sec:authorize="hasRole('STUDENT')">
         <a th:href="@{/student/applications}">Application</a>
@@ -43,39 +43,33 @@
 
     <div class="main-content">
     <div class="application-container">
-      <h1 style="color:#A00000; font-size:42px;">Applicants</h1>
-      <h2>รายชื่อผู้มีสิทธิ๋สัมภาษณ์งาน <span th:text="${job.title}">Job</span></h2>
+      <h1 style="color:#A00000; font-size:42px;">Interview</h1>
+      <h2>รายชื่อผู้มีสิทธิ์สัมภาษณ์งาน <span th:text="${job.title}">Job</span></h2>
         <span class="close-button" style="margin-top: 70px; font-family: 'Inria Sans'; font-size: 14px;"
-          th:onclick="|window.location.href='@{/teacher/jobs}'|">
+          th:onclick="|window.location.href='@{/teacher/interview}'|">
           &times; Back
         </span>
         <p th:text="${job.description}">desc</p>
 
         <div class="search-box">
-            <form th:action="@{|/teacher/interview/${job.id}|}" method="get">
-                <input type="text" name="keyword" placeholder="ค้นหาชื่อ" 
-                       th:value="${keyword}">
-                <button type="submit">ค้นหา</button>
+            <!-- ฟอร์มค้นหา -->
+            <form th:action="@{|/teacher/interview/${job.id}|}" method="get" class="search-form">
+                <input type="text" name="keyword" placeholder="ค้นหาชื่อ" th:value="${keyword}" class="search-input">
+                <button type="submit" class="search-button">ค้นหา</button>
             </form>
 
-            <form th:action="@{|/teacher/interview/${job.id}|}" method="get">
-            <select name="department">
-                    <option value="ALL"
-                            th:selected="${department == null or department == 'ALL'}">
-                        ทุกฝ่าย
-                    </option>
-                     <option th:each="d : ${departments}"
-                            th:value="${d.name}"
-                            th:selected="${department == d.name}"
-                            th:text="${d.name}">
-                    </option>
+            <!-- ฟอร์มกรองฝ่าย -->
+            <form th:action="@{|/teacher/interview/${job.id}|}" method="get" class="filter-form">
+                <select name="department" class="department-select">
+                    <option value="ALL" th:selected="${department == null or department == 'ALL'}">ทุกฝ่าย</option>
+                    <option th:each="d : ${departments}" th:value="${d.name}" th:selected="${department == d.name}" th:text="${d.name}"></option>
                 </select>
-                <button type="submit">กรองฝ่าย</button>
+                <button type="submit" class="filter-button">กรองฝ่าย</button>
             </form>
         </div>
 
         <div th:if="${apps == null or #lists.isEmpty(apps)}" class="no-applicants">
-          ยังไม่มีผู้สมัครในขณะนี้
+          ยังไม่มีผู้มีสิทธิ์สัมภาษณ์ในขณะนี้
         </div>
 
 
@@ -83,7 +77,7 @@
           <table>
             <thead>
               <tr>
-                <th>รายชื่อผู้สมัคร</th>
+                <th>รายชื่อผู้มีสิทธิ์สัมภาษณ์</th>
                 <th>ฝ่ายที่สมัคร</th>
                 <th>วันที่สมัคร</th>
                 <th>สถานะ</th>
