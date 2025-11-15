@@ -2003,3 +2003,6 @@ td {
 .filter-button:hover {
     background-color: #900000;
 }
+.activity-text {
+    text-decoration: none;  
+}
