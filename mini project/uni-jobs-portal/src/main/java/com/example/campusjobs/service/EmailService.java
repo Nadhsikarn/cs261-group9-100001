@@ -7,6 +7,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.springframework.scheduling.annotation.Async;
+
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -24,6 +26,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String senderEmail;
 
+    @Async
     public void sendHtmlMessage(String to, String subject, String description) {
         
         try {

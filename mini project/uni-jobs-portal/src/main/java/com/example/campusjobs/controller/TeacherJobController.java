@@ -301,6 +301,15 @@ public String interview(
     return updateStatus(appId, ApplicationStatus.INTERVIEW, from, ra);
 }
 
+private String redirectByFrom(Long jobId, String from) {
+    return switch (from) {
+        case "application" -> "redirect:/teacher/jobs/" + jobId + "/applications";
+        case "applicant"   -> "redirect:/teacher/applicants/" + jobId;
+        case "interview"   -> "redirect:/teacher/interview/" + jobId;
+        default            -> "redirect:/teacher/jobs";
+    };
+}
+
 @PostMapping("/applications/{appId}/reject")
 public String reject(
         @PathVariable("appId") Long appId,
@@ -373,6 +382,7 @@ public String reject(
             }
             notification.setDescription(notiDescription);
             notificationRepository.save(notification);
+            
             if (userEmail != null && !userEmail.isBlank()) { // (เช็กก่อนว่า User มีอีเมล)
                 emailService.sendHtmlMessage(userEmail, subject, emailDescription);
             }
@@ -384,19 +394,7 @@ public String reject(
         }
         ra.addFlashAttribute("msg", "อัปเดตสถานะเรียบร้อย");
 
-        if ("application".equals(from)) {
-            return "redirect:/teacher/jobs/" + job.getId() + "/applications";
-        } 
-    
-        if ("applicant".equals(from)) {
-            return "redirect:/teacher/applicants/" + job.getId();
-        }
-
-        if ("interview".equals(from)) {
-            return "redirect:/teacher/interview/" + job.getId();
-        }
-
-        return "redirect:/teacher/jobs";
+        return redirectByFrom(job.getId(), from);
     }
 
     //อันนี้เพิ่มมาให้กด link ได้เฉยๆ ยังไม่ได้ใส่ logic ใดๆ
