@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;   
 import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,6 +33,7 @@ import com.example.campusjobs.model.Question;
 import com.example.campusjobs.model.User;
 import com.example.campusjobs.repo.ApplicationRepository;
 import com.example.campusjobs.repo.JobRepository;
+import com.example.campusjobs.repo.DepartmentRepository;
 import com.example.campusjobs.repo.NotificationRepository;
 import com.example.campusjobs.repo.QuestionRepository;
 import com.example.campusjobs.repo.UserRepository;
@@ -52,6 +54,8 @@ public class TeacherJobController {
     private final EmailService emailService;
     private NotificationRepository notificationRepository;
     private UserRepository userRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    private DepartmentRepository departmentRepository;
 
     public TeacherJobController(JobRepository jobRepository, ApplicationRepository applicationRepository,  QuestionRepository questionRepository,
                                 NotificationRepository notificationRepository, UserRepository userRepository, EmailService emailService) {
