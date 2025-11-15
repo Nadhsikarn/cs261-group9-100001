@@ -650,4 +650,96 @@ public String reject(
 
         return "teacher_final_member_detail";
     }
+     @GetMapping
+public String teacherDashboard(Model model) {
+
+    String me = SecUtil.currentUsername();
+
+    int allPosts = jobRepository.countByCreatorUsername(me);
+    int activePosts = jobRepository.countByCreatorUsernameAndCloseDateAfter(me, LocalDate.now());
+    int newApplicants = applicationRepository.countNewApplicants(me);
+
+    model.addAttribute("allPosts", allPosts);
+    model.addAttribute("activePosts", activePosts);
+    model.addAttribute("newApplicants", newApplicants);
+
+    return "index";  //
+}
+@GetMapping("/jobs/{id}/edit")
+public String editJobForm(
+        @PathVariable Long id,
+        Model model,
+        RedirectAttributes ra) {
+
+    var jobOpt = jobRepository.findById(id);
+    if (jobOpt.isEmpty()) {
+        ra.addFlashAttribute("err", "ไม่พบบันทึกงาน");
+        return "redirect:/teacher/jobs";
+    }
+
+    Job job = jobOpt.get();
+
+
+    if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
+        ra.addFlashAttribute("err", "ไม่มีสิทธิ์แก้ไขงานนี้");
+        return "redirect:/teacher/jobs";
+    }
+
+    model.addAttribute("job", job);
+    return "teacher_job_edit";  
+}
+
+@PostMapping("/jobs/{id}/edit")
+public String updateJob(
+        @PathVariable Long id,
+        @RequestParam("title") String title,
+        @RequestParam("description") String description,
+        @RequestParam("requiredSkill") String requiredSkill,
+        @RequestParam("openDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate openDate,
+        @RequestParam("closeDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate closeDate,
+        @RequestParam(value = "image", required = false) MultipartFile image,
+        RedirectAttributes ra) {
+
+    var jobOpt = jobRepository.findById(id);
+    if (jobOpt.isEmpty()) {
+        ra.addFlashAttribute("err", "ไม่พบบันทึกงาน");
+        return "redirect:/teacher/jobs";
+    }
+
+    Job job = jobOpt.get();
+
+
+    if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
+        ra.addFlashAttribute("err", "ไม่มีสิทธิ์แก้ไขงานนี้");
+        return "redirect:/teacher/jobs";
+    }
+
+
+    job.setTitle(title);
+    job.setDescription(description);
+    job.setRequiredSkill(requiredSkill);
+    job.setOpenDate(openDate);
+    job.setCloseDate(closeDate);
+
+    if (image != null && !image.isEmpty()) {
+        try {
+            String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+            Path uploadDir = Paths.get(System.getProperty("user.dir") + "/jobUploads");
+            Files.createDirectories(uploadDir);
+
+            Path target = uploadDir.resolve(fileName);
+            image.transferTo(target.toFile());
+
+            job.setImage(new JobImage("/jobUploads/" + fileName));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ra.addFlashAttribute("err", "อัปโหลดรูปใหม่ไม่สำเร็จ");
+        }
+    }
+
+    jobRepository.save(job);
+
+    ra.addFlashAttribute("popupMsg", "อัปเดตประกาศงานเรียบร้อยแล้ว!");
+    return "redirect:/teacher/jobs/" + id + "/edit";
+}
 }

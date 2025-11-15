@@ -15,4 +15,11 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     boolean existsByJobIdAndApplicantUsername(Long jobId, String applicantUsername);
     @Query("SELECT a FROM Application a WHERE a.job.id = ?1 AND a.department = ?2 AND a.status = ?3 ORDER BY a.fullName ASC")
     List<Application> findStaffForDepartment(Long jobId, String department, ApplicationStatus status);
+    @Query("""
+       SELECT COUNT(a)
+       FROM Application a
+       WHERE a.job.creatorUsername = :teacher
+       AND a.status = 'PENDING'
+       """)
+int countNewApplicants(String teacher);
 }
