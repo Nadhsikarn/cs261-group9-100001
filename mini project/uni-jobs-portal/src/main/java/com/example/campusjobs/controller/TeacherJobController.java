@@ -520,7 +520,134 @@ public String reject(
     }
 
     @GetMapping("/final")
-    public String finalPage() {
-        return "teacher_final";
+    public String finalJobs(Model model) {
+        String me = SecUtil.currentUsername();
+        List<Job> jobs = jobRepository.findByCreatorUsernameOrderByCreatedAtDesc(me);
+        model.addAttribute("jobs", jobs);
+        return "teacher_final_staff_job";
+    }
+
+    /**
+     * หน้ารายการฝ่าย / สรุปจำนวน staff ที่ได้รับการอนุมัติ (APPROVED) ในแต่ละฝ่ายของงานหนึ่ง ๆ
+     */
+    @GetMapping("/final/{jobId}")
+    public String finalJobDepartments(@PathVariable Long jobId,
+                                      Model model,
+                                      RedirectAttributes ra) {
+
+        Optional<Job> jobOpt = jobRepository.findById(jobId);
+        if (jobOpt.isEmpty()) {
+            ra.addFlashAttribute("err", "ไม่พบบันทึกงาน");
+            return "redirect:/teacher/final";
+        }
+
+        Job job = jobOpt.get();
+        String me = SecUtil.currentUsername();
+        if (me == null || !job.getCreatorUsername().equals(me)) {
+            ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าถึงงานนี้");
+            return "redirect:/teacher/final";
+        }
+
+        // ดึง applicant ที่ได้รับการอนุมัติทั้งหมดของงานนี้
+        List<Application> approvedApps =
+                applicationRepository.findByJobIdAndStatus(jobId, ApplicationStatus.APPROVED);
+
+        // รวมจำนวนตามชื่อฝ่าย (department) ไว้ใน Map เพื่อให้ template ใช้แสดงผล
+        Map<String, Long> approvedCountByDepartment = approvedApps.stream()
+                .filter(a -> a.getDepartment() != null && !a.getDepartment().isBlank())
+                .collect(Collectors.groupingBy(Application::getDepartment, Collectors.counting()));
+
+        model.addAttribute("job", job);
+        model.addAttribute("departments", job.getDepartments());
+        model.addAttribute("approvedCountByDepartment", approvedCountByDepartment);
+
+        return "teacher_final_stafflist";
+    }
+
+    /**
+     * หน้ารายชื่อ staff ภายในฝ่ายหนึ่ง ๆ ของงานที่เลือก
+     */
+    @GetMapping("/final/{jobId}/department/{departmentId}")
+    public String finalDepartmentStaff(@PathVariable Long jobId,
+                                       @PathVariable Long departmentId,
+                                       Model model,
+                                       RedirectAttributes ra) {
+
+        Optional<Job> jobOpt = jobRepository.findById(jobId);
+        Optional<Department> deptOpt = departmentRepository.findById(departmentId);
+
+        if (jobOpt.isEmpty() || deptOpt.isEmpty()) {
+            ra.addFlashAttribute("err", "ไม่พบบันทึกงานหรือฝ่าย");
+            return "redirect:/teacher/final";
+        }
+
+        Job job = jobOpt.get();
+        Department dept = deptOpt.get();
+
+        // ตรวจสอบว่า department นี้อยู่ในงานที่เลือกหรือไม่
+        if (dept.getJob() == null || !dept.getJob().getId().equals(job.getId())) {
+            ra.addFlashAttribute("err", "ไม่พบฝ่ายในงานที่ระบุ");
+            return "redirect:/teacher/final";
+        }
+
+        String me = SecUtil.currentUsername();
+        if (me == null || !job.getCreatorUsername().equals(me)) {
+            ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าถึงงานนี้");
+            return "redirect:/teacher/final";
+        }
+
+        // ดึง applicant ที่ได้รับการอนุมัติในฝ่ายนี้
+        List<Application> staffInDepartment =
+                applicationRepository.findStaffForDepartment(
+                        jobId,
+                        dept.getName(),
+                        ApplicationStatus.APPROVED
+                );
+
+        model.addAttribute("job", job);
+        model.addAttribute("department", dept);
+        model.addAttribute("apps", staffInDepartment);
+
+        return "teacher_final_memberlist";
+    }
+
+    /**
+     * หน้ารายละเอียดของ staff รายบุคคล
+     */
+    @GetMapping("/final/{jobId}/department/{departmentId}/member/{appId}")
+    public String finalStaffDetail(@PathVariable Long jobId,
+                                   @PathVariable Long departmentId,
+                                   @PathVariable Long appId,
+                                   Model model,
+                                   RedirectAttributes ra) {
+
+        Optional<Job> jobOpt = jobRepository.findById(jobId);
+        Optional<Department> deptOpt = departmentRepository.findById(departmentId);
+        Optional<Application> appOpt = applicationRepository.findById(appId);
+
+        if (jobOpt.isEmpty() || deptOpt.isEmpty() || appOpt.isEmpty()) {
+            ra.addFlashAttribute("err", "ไม่พบบันทึกที่ต้องการ");
+            return "redirect:/teacher/final";
+        }
+
+        Job job = jobOpt.get();
+        Department dept = deptOpt.get();
+        Application app = appOpt.get();
+
+        if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
+            ra.addFlashAttribute("err", "ไม่มีสิทธิ์เข้าถึงงานนี้");
+            return "redirect:/teacher/final";
+        }
+
+        if (app.getJob() == null || !app.getJob().getId().equals(job.getId())) {
+            ra.addFlashAttribute("err", "ข้อมูลไม่สอดคล้องกับงานที่เลือก");
+            return "redirect:/teacher/final";
+        }
+
+        model.addAttribute("job", job);
+        model.addAttribute("department", dept);
+        model.addAttribute("app", app);
+
+        return "teacher_final_member_detail";
     }
 }
