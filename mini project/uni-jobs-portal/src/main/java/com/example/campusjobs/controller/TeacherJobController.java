@@ -67,7 +67,7 @@ public class TeacherJobController {
     public String myJobs(Model model) {
         String me = SecUtil.currentUsername();
         model.addAttribute("jobs", jobRepository.findByCreatorUsernameOrderByCreatedAtDesc(me));
-        return "teacher_jobs";
+        return "teacher_job_new";
     }
 
     @GetMapping("/jobs/new")

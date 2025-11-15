@@ -155,5 +155,29 @@
   }
 </script>
 
+ <script src="https://unpkg.com/lucide@latest"></script>
+    <div th:if="${popupMsg}" class="popup-overlay">
+        <div class="popup-box">
+            <div class="popup-icon-wrapper">
+                <div class="popup-icon-square">
+                    <i data-lucide="square-check-big"></i>
+                </div>
+            </div>
+            <h2 th:text="${popupMsg}" style="color:#A3062C;">Your Post has been published!</h2>
+            <button onclick="closePopup()">OK</button>
+        </div>
+    </div>  
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <script>
+        function closePopup() {
+            document.querySelector('.popup-overlay').style.display = 'none';
+        }
+    </script>
+
+
 </body>
 </html>
