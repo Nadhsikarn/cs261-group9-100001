@@ -10,60 +10,169 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div class="navbar">
-    <div class="logo">VolunteeU</div>
-    <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/teacher/jobs">Posts</a>
-        <a href="/teacher/applicant">Applicants</a>
-        <a href="/teacher/interview" class="active" style="font-weight: bold;">Interview</a>
-        <a href="/teacher/final">Final</a>
-        <a href="/profile">Profile</a>
-        
-    </div>
-</div>
+    <div class="navbar">
+        <div class="logo">VolunteeU</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/teacher/jobs">Posts</a>
+            <a href="/teacher/applicant">Applicants</a>
+            <a href="/teacher/interview" class="active" style="font-weight: bold;">Interview</a>
+            <a href="/teacher/final">Final</a>
+            <a href="/profile">Profile</a>
 
-<div class="main-content-app">
-    <h2 th:text="'ฝ่าย ' + ${app.department}">ฝ่าย xxx</h2>
-
-    <div class="applicant-info">
-        <h3>ข้อมูลผู้สมัคร</h3>
-        <p><strong>ชื่อ :</strong> <span th:text="${app.fullName}"></span></p>
-        <p><strong>ชื่อเล่น :</strong> <span th:text="${app.nickname}"></span></p>
-        <p><strong>ชั้นปีที่ :</strong> <span th:text="${app.yearLevel}"></span></p>
-        <p><strong>เลขนักศึกษา :</strong> <span th:text="${app.studentId}"></span></p>
-        <p><strong>คณะ :</strong> <span th:text="${app.faculty}"></span></p>
-        <p><strong>แนะนำตัวสั้น ๆ :</strong> <span th:text="${app.bio}"></span></p>
+        </div>
     </div>
 
-    <div class="action-buttons">
+    <div class="main-content-app">
+        <h2 th:text="'ฝ่าย ' + ${app.department}">ฝ่าย xxx</h2>
 
-    <div th:if="${app.status.name() == 'INTERVIEW'}">
-        <form th:action="@{|/teacher/applications/${app.id}/reject|}" method="post">
-            <input type="hidden" name="from" value="interview"/>
-            <button class="reject-btn">✖ Reject</button>
-        </form>
-        <form th:action="@{|/teacher/applications/${app.id}/approve|}" method="post">
-            <input type="hidden" name="from" value="interview"/>
-            <button class="approve-btn">✔ Approve</button>
-        </form>
+        <div class="applicant-info">
+            <h3>ข้อมูลผู้สมัคร</h3>
+            <p><strong>ชื่อ :</strong> <span th:text="${app.fullName}"></span></p>
+            <p><strong>ชื่อเล่น :</strong> <span th:text="${app.nickname}"></span></p>
+            <p><strong>ชั้นปีที่ :</strong> <span th:text="${app.yearLevel}"></span></p>
+            <p><strong>เลขนักศึกษา :</strong> <span th:text="${app.studentId}"></span></p>
+            <p><strong>คณะ :</strong> <span th:text="${app.faculty}"></span></p>
+            <p><strong>แนะนำตัวสั้น ๆ :</strong> <span th:text="${app.bio}"></span></p>
+        </div>
+
+        <div class="action-buttons">
+
+            <div th:if="${app.status.name() == 'INTERVIEW'}">
+                <form th:action="@{|/teacher/applications/${app.id}/reject|}" method="post">
+                    <input type="hidden" name="from" value="interview" />
+                    <button class="reject-btn">✖ Reject</button>
+                </form>
+                <form th:action="@{|/teacher/applications/${app.id}/approve|}" method="post">
+                    <input type="hidden" name="from" value="interview" />
+                    <button class="approve-btn">✔ Approve</button>
+                </form>
+            </div>
+
+            <p th:if="${app.status.name() == 'APPROVED'}" class="status-info">
+                ผู้สมัครคนนี้ได้รับเลือกเป็น staff ในงานนี้แล้ว
+            </p>
+
+            <p th:if="${app.status.name() == 'REJECTED'}" class="status-info">
+                ผู้สมัครคนนี้ถูกปฏิเสธแล้ว
+            </p>
+
+        </div>
     </div>
 
-    <p th:if="${app.status.name() == 'APPROVED'}" class="status-info">
-        ผู้สมัครคนนี้ได้รับเลือกเข้าสัมภาษณ์แล้ว
-    </p>
+   
+    <!-- Popup  -->
+    <div id="interview-confirm-overlay" class="confirm-overlay">
+        <div class="confirm-dialog">
+            <!-- approve-->
+            <div class="confirm-note-section">
+                <p class="confirm-note-title">
+                    แจ้งช่องทางการทำงาน<br>
+                    <span>(telegram/LINE openchat)</span>
+                </p>
+                <textarea id="interview-note" placeholder="กรอกรายละเอียดเพิ่มเติม . . ."></textarea>
+            </div>
+    
+            <!-- ข้อความหลัก -->
+            <p id="interview-confirm-main" class="confirm-main-text">
+                Confirm approval ?
+            </p>
+    
+            <!-- ปุ่ม -->
+            <div class="confirm-actions">
+                <button type="button" class="confirm-primary">confirm</button>
+                <button type="button" class="confirm-cancel">cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        (() => {
+            const overlay = document.getElementById('interview-confirm-overlay');
+            if (!overlay) return;
 
-    <p th:if="${app.status.name() == 'REJECTED'}" class="status-info">
-        ผู้สมัครคนนี้ถูกปฏิเสธแล้ว
-    </p>
+            const noteSection = overlay.querySelector('.confirm-note-section');
+            const noteInput = document.getElementById('interview-note');
+            const mainText = document.getElementById('interview-confirm-main');
+            const btnOk = overlay.querySelector('.confirm-primary');
+            const btnCancel = overlay.querySelector('.confirm-cancel');
 
-</div>
-</div>
+            let onConfirm = null;
 
-</div>
+            function openModal(type, submitFn) {
+                onConfirm = submitFn;
+                noteInput.value = '';
 
-<div class="footer">
-    © 2025 VolunteeU — Software Project Recruitment
-</div>
+                if (type === 'approve') {
+                    overlay.classList.remove('is-reject');   // ให้ textarea โผล่
+                    mainText.textContent = 'Confirm approval ?';
+                } else {
+                    overlay.classList.add('is-reject');      // ซ่อน textarea
+                    mainText.textContent = 'Confirm rejection ?';
+                }
+
+                overlay.classList.add('is-active');
+            }
+
+            function closeModal() {
+                overlay.classList.remove('is-active');
+                onConfirm = null;
+            }
+
+            // ปุ่ม Approve (ไป Final)
+            document.querySelectorAll('.approve-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const form = btn.closest('form');
+
+                    openModal('approve', () => {
+                        // ยิงข้อความช่องทางการทำงานกลับไปด้วย
+                        const fieldName = 'workChannel';  // เปลี่ยนชื่อได้ตาม backend
+                        let hidden = form.querySelector('input[name="' + fieldName + '"]');
+                        if (!hidden) {
+                            hidden = document.createElement('input');
+                            hidden.type = 'hidden';
+                            hidden.name = fieldName;
+                            form.appendChild(hidden);
+                        }
+                        hidden.value = noteInput.value || '';
+                        form.submit();
+                    });
+                });
+            });
+
+            // Reject
+            document.querySelectorAll('.reject-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const form = btn.closest('form');
+
+                    openModal('reject', () => {
+                        form.submit();
+                    });
+                });
+            });
+
+            // ปุ่มใน popup
+            btnOk.addEventListener('click', () => {
+                if (onConfirm) onConfirm();
+                closeModal();
+            });
+
+            btnCancel.addEventListener('click', closeModal);
+
+            // คลิกพื้นหลังเพื่อปิด
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    closeModal();
+                }
+            });
+        })();
+    </script>
+
+
+    <div class="footer">
+        © 2025 VolunteeU — Software Project Recruitment
+    </div>
 </body>
 </html>
