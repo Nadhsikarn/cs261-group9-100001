@@ -1938,6 +1938,53 @@ td {
     font-size: 16px;
     margin-top: 10px;
 }
+/* button */
+.action-buttons {
+    margin-top: 20px;
+}
+
+.action-buttons > div {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.reject-btn,
+.approve-btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Inria Sans';
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/*Reject*/
+.reject-btn {
+    background-color: #ffffff;
+    color: #333;
+    border: 2px solid #dcdcdc;
+}
+
+.reject-btn:hover {
+    background-color: #f2f2f2;
+}
+
+/*Approve*/
+.approve-btn {
+    background-color: #A3062C;
+    color: #ffffff;
+    border: none;
+}
+
+.approve-btn:hover {
+    background-color: #840421;
+}
+
 
 /*---- teacher applicant lists ----*/
 .detail-btn{

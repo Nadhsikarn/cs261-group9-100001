@@ -47,14 +47,14 @@
     <div class="action-buttons">
 
     <div th:if="${app.status.name() == 'PENDING'}">
-        <form th:action="@{|/teacher/applications/${app.id}/interview|}" method="post">
-            <input type="hidden" name="from" value="applicant"/>
-            <button class="approve-btn">✔ Approve (Interview)</button>
-        </form>
-
         <form th:action="@{|/teacher/applications/${app.id}/reject|}" method="post">
             <input type="hidden" name="from" value="applicant"/>
             <button class="reject-btn">✖ Reject</button>
+        </form>
+        
+        <form th:action="@{|/teacher/applications/${app.id}/interview|}" method="post">
+            <input type="hidden" name="from" value="applicant"/>
+            <button class="approve-btn">✔ Approve (Interview)</button>
         </form>
     </div>
 
