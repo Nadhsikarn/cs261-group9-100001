@@ -291,18 +291,32 @@ public class TeacherJobController {
 public String approve(
         @PathVariable("appId") Long appId,
         @RequestParam(value = "from", required = false) String from,
+        @RequestParam(value = "workChannel", required = false) String workChannel,
         RedirectAttributes ra) {
 
-    return updateStatus(appId, ApplicationStatus.APPROVED, from, ra);
+    return updateStatus(appId, ApplicationStatus.APPROVED, from,  workChannel, ra);
 }
 
 @PostMapping("/applications/{appId}/interview")
 public String interview(
         @PathVariable("appId") Long appId,
         @RequestParam(value = "from", required = false) String from,
+        @RequestParam(value = "interviewNote", required = false) String interviewNote,
         RedirectAttributes ra) {
 
-    return updateStatus(appId, ApplicationStatus.INTERVIEW, from, ra);
+    return updateStatus(appId, ApplicationStatus.INTERVIEW, from, interviewNote, ra);
+}
+
+
+@PostMapping("/applications/{appId}/reject")
+public String reject(
+        @PathVariable("appId") Long appId,
+        @RequestParam(value = "from", required = false) String from,
+        @RequestParam(value = "interviewNote", required = false) String interviewNote,
+        RedirectAttributes ra) {
+
+    return updateStatus(appId, ApplicationStatus.REJECTED, from, null, ra);
+
 }
 
 private String redirectByFrom(Long jobId, String from) {
@@ -316,16 +330,11 @@ private String redirectByFrom(Long jobId, String from) {
     };
 }
 
-@PostMapping("/applications/{appId}/reject")
-public String reject(
-        @PathVariable("appId") Long appId,
-        @RequestParam(value = "from", required = false) String from,
-        RedirectAttributes ra) {
-
-    return updateStatus(appId, ApplicationStatus.REJECTED, from, ra);
-}
-
-    private String updateStatus(Long appId, ApplicationStatus status, String from,RedirectAttributes ra) {
+    private String updateStatus(Long appId, 
+                                ApplicationStatus status,
+                                String from,
+                                String interviewNote,
+                                RedirectAttributes ra) {
         var appOpt = applicationRepository.findById(appId);
         if (appOpt.isEmpty()) {
             ra.addFlashAttribute("err", "ไม่พบใบสมัคร");
@@ -369,6 +378,7 @@ public String reject(
             notification.setUserId(applicantId);
             notification.setLinkUrl("/student/applications");
 
+            String note = interviewNote;
             String notiDescription = "";
             String emailDescription = "";
             String subject = "";
@@ -376,14 +386,40 @@ public String reject(
                 case APPROVED:
                     subject = "ยินดีด้วย! คุณผ่านการคัดเลือกเป็น Staff ในงาน " + job.getTitle();
                     notiDescription = "Congratulations! You’ve been selected for Staff " + job.getTitle() + " More details will be sent to your email.";
-                    emailDescription = "ขอแสดงความยินดีกับคุณ "+ app.getFullName() +" ที่ผ่านการสัมภาษณ์และได้รับเลือกเป็น Staff ของงาน " + 
-                                        job.getTitle() + " โปรดรอรับรายละเอียดการติดต่อจากทีมงานอีกครั้งทาง Email ที่แจ้งไว้";
+
+                    if (note == null || note.isBlank()) {
+                          note = "ไม่พบข้อมูลการนัดสัมภาษณ์เพิ่มเติม";
+                    }
+                    
+                    emailDescription =
+                        "ขอแสดงความยินดีกับคุณ " + app.getFullName() + " " +
+
+                        "คุณได้ผ่านการสัมภาษณ์และได้รับเลือกให้เป็น Staff ของงาน " 
+                        + job.getTitle() + " " +
+                    
+                        "📌 ช่องทางการทำงาน / ติดต่อเพิ่มเติม: "
+                        + note + " " +
+
+                        "หากมีคำถามเพิ่มเติม สามารถติดต่อทีมงานได้ทางอีเมลนี้ค่ะ";
                     break;
                 case INTERVIEW:
                     subject = "คุณได้รับสิทธิ์สัมภาษณ์งานเพื่อคัดเลือกเป็น Staff ในงาน " + job.getTitle();
                     notiDescription = "Congratulations! You’re shortlisted for Staff " + job.getTitle() + " check your email for interview details.";
-                    emailDescription = "ขอแสดงความยินดีกับคุณ "+ app.getFullName() +" ที่ผ่านการคัดเลือกรอบที่ 1 ได้รับสิทธิ์สัมภาษณ์การเป็น Staff ในงาน " + 
-                                        job.getTitle() + " โปรดรอรับรายละเอียดการสัมภาษณ์จากทีมงานทาง Email ที่แจ้งไว้";
+
+                    if (note == null || note.isBlank()) {
+                            note = "ไม่พบข้อมูลการนัดสัมภาษณ์เพิ่มเติม";
+                        }
+                    
+                    emailDescription =
+                        "ขอแสดงความยินดีกับคุณ " + app.getFullName() + " " +
+
+                        "คุณผ่านการคัดเลือกรอบที่ 1 และได้รับสิทธิ์เข้าสัมภาษณ์ในงาน "
+                        + job.getTitle() + " " +
+
+                        " 📌 รายละเอียดการนัดสัมภาษณ์ "
+                        + note + " " +
+
+                        "หากมีคำถามเพิ่มเติม สามารถติดต่อทีมงานได้ทางอีเมลนี้ค่ะ";
                     break;
                 case REJECTED:
                     subject = "ขอแสดงความเสียใจด้วย คุณไม่ผ่านการคัดเลือก " + job.getTitle();
