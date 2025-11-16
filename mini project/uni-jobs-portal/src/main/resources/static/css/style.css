@@ -696,10 +696,7 @@ body {
     margin-bottom: 8px;
     font-size: 0.9rem;
 }
-
-.application-form input[type="text"],
-.application-form input[type="email"],
-.application-form textarea {
+.application-form select {
     width: 100%;
     padding: 12px;
     border: 1px solid var(--border-color);
@@ -707,6 +704,27 @@ body {
     font-size: 1rem;
     box-sizing: border-box;
     transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: 'Inria Sans';
+}
+
+.application-form select:focus {
+    outline: none;
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+}
+
+.application-form input[type="text"],
+.application-form input[type="email"],
+.application-form textarea,
+.application-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: 'Inria Sans', sans-serif;
 }
 
 .application-form input:focus,
