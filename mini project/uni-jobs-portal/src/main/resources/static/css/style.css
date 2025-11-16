@@ -1946,7 +1946,7 @@ td {
 .action-buttons > div {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 20px;
 }
 
 .reject-btn,
@@ -2071,3 +2071,106 @@ td {
 .activity-text {
     text-decoration: none;  
 }
+
+/*--- pop-up applicant detail ---*/
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    display: none;             /* ซ่อนเริ่มต้น */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.confirm-overlay.is-active {
+    display: flex;
+}
+
+.confirm-dialog {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px 32px 28px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.15);
+    text-align: center;
+    font-family: 'Inria Sans', sans-serif;
+}
+
+/*approve*/
+.confirm-note-section {
+    margin-bottom: 18px;
+}
+
+.confirm-note-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.confirm-note-title span {
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+#interview-note {
+    width: 100%;
+    min-height: 120px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* ข้อความ Confirm */
+.confirm-main-text {
+    margin: 18px 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+/* ปุ่มข้างล่าง */
+.confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 4px;
+}
+
+.confirm-actions button {
+    min-width: 130px;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-family: 'Inria Sans', sans-serif;
+}
+
+.confirm-primary {
+    background-color: #A3062C;
+    color: #ffffff;
+    border: none;
+}
+
+.confirm-primary:hover {
+    background-color: #840421;
+}
+
+.confirm-cancel {
+    background-color: #ffffff;
+    color: #888;
+    border: 1px solid #d0d0d0;
+}
+
+.confirm-cancel:hover {
+    background-color: #f5f5f5;
+}
+
+.confirm-overlay.is-reject .confirm-note-section {
+    display: none;
+}
+

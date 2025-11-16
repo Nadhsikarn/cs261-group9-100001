@@ -51,7 +51,7 @@
             <input type="hidden" name="from" value="applicant"/>
             <button class="reject-btn">✖ Reject</button>
         </form>
-        
+
         <form th:action="@{|/teacher/applications/${app.id}/interview|}" method="post">
             <input type="hidden" name="from" value="applicant"/>
             <button class="approve-btn">✔ Approve (Interview)</button>
@@ -71,8 +71,114 @@
 
 </div>
 
+<!-- pop-up -->
+<div id="confirm-overlay" class="confirm-overlay">
+    <div class="confirm-dialog">
+        <!-- approve -->
+        <div class="confirm-note-section">
+            <p class="confirm-note-title">
+                รายละเอียดการนัดสัมภาษณ์<br>
+                <span>(วัน / เวลา / สถานที่ / ช่องทางการติดต่อเพิ่มเติม)</span>
+            </p>
+            <textarea id="interview-note"
+                      placeholder="กรอกรายละเอียดเพิ่มเติม..."></textarea>
+        </div>
+
+        <!-- ข้อความหลัก -->
+        <p id="confirm-main-text" class="confirm-main-text">
+            Confirm approval ?
+        </p>
+
+        <!-- ปุ่ม -->
+        <div class="confirm-actions">
+            <button type="button" class="confirm-primary">confirm</button>
+            <button type="button" class="confirm-cancel">cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const overlay = document.getElementById('confirm-overlay');
+        const mainText = document.getElementById('confirm-main-text');
+        const noteSection = overlay.querySelector('.confirm-note-section');
+        const noteInput = document.getElementById('interview-note');
+        const btnOk = overlay.querySelector('.confirm-primary');
+        const btnCancel = overlay.querySelector('.confirm-cancel');
+
+        let onConfirm = null;   // ฟังก์ชันที่จะเรียกตอนกด confirm
+
+        function openModal(type, submitFn) {
+            onConfirm = submitFn;
+            noteInput.value = '';
+
+            if (type === 'approve') {
+                overlay.classList.remove('is-reject');
+                mainText.textContent = 'Confirm approval ?';
+            } else {
+                overlay.classList.add('is-reject');   // ซ่อน textarea
+                mainText.textContent = 'Confirm rejection ?';
+            }
+
+            overlay.classList.add('is-active');
+        }
+
+        function closeModal() {
+            overlay.classList.remove('is-active');
+        }
+
+        // ปุ่ม approve -> popup แบบมี textarea
+        document.querySelectorAll('.approve-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const form = btn.closest('form');
+
+                openModal('approve', () => {
+                    // ส่งข้อความสัมภาษณ์ไปกับฟอร์มด้วย (hidden input)
+                    const noteName = 'interviewNote';  // ตั้งชื่อ field ตามที่ backend รับ
+                    let hidden = form.querySelector('input[name="' + noteName + '"]');
+                    if (!hidden) {
+                        hidden = document.createElement('input');
+                        hidden.type = 'hidden';
+                        hidden.name = noteName;
+                        form.appendChild(hidden);
+                    }
+                    hidden.value = noteInput.value || '';
+                    form.submit();
+                });
+            });
+        });
+
+        // ปุ่ม reject -> popup สั้น ๆ
+        document.querySelectorAll('.reject-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const form = btn.closest('form');
+
+                openModal('reject', () => {
+                    form.submit();
+                });
+            });
+        });
+
+        // ปุ่ม confirm / cancel
+        btnOk.addEventListener('click', () => {
+            if (onConfirm) onConfirm();
+            closeModal();
+        });
+
+        btnCancel.addEventListener('click', closeModal);
+
+        // คลิกพื้นหลังปิด popup
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeModal();
+        });
+    })();
+</script>
+
 <div class="footer">
     © 2025 VolunteeU — Software Project Recruitment
 </div>
+
 </body>
 </html>
