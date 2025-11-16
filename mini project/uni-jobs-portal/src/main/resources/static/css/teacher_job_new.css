@@ -1,13 +1,15 @@
 /*-----teacher_job_new.html-----*/
 
 .main-content {
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
     background-color: var(--white);
     border-radius: 8px;
     padding: 40px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border: 1px solid var(--border-color);
+    flex-direction: column;
+    align-items: center;
 }
 
 .main-content h2 {
@@ -17,53 +19,181 @@
     color: #A3062C;
 }
 
-.job-name {
+.grid-box {
     width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.job-bigbox {
+    width: 90%;
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+}
+
+.job-name {
     display: flex;
+    margin-right: 20px;
     margin-bottom: 20px;
     flex-direction: column;
 }
 
+.job-name h3 {
+    font-size: 1.5rem;
+    color: #A3062C;
+}
+
 .job-desc {
-    width: 100%;
+    margin-right: 20px;
     display: flex;
     margin-bottom: 20px;
     flex-direction: column;
 }
 
 .job-quiz {
-    width: 100%;
+    margin-right: 20px;
     display: flex;
     margin-bottom: 20px;
     flex-direction: column;
 }
 
 label {
-    width: 100%;
-    display: block;
-    font-size: 1.2rem;
-    margin-top: 10px;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
 }
 
 input, textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 5px;
-    border: none;
+    border: 1px solid #dbdbdb;
     border-radius: 6px;
     background: #fff;
 }
 
 textarea {
-    height: 80px;
+    height: 100px;
     resize: none;
 }
 
-.save-btn {
+.upload-n-date {
+    width: 90%;
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+}
+
+.date-text {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.date-row {
     display: flex;
-    gap: 12px;
-    margin-top: 32px;
-    padding-top: 24px;
+    gap: 10px;
+}
+
+.job-img {
+    padding: 40px 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 2px dashed #dbdbdb;
+    border-radius: 10px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    font-size: 15px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.preview-area {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.preview-area img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.imgs-text {
+    margin-top: 10px;
+    color: #555;
+    font-size: 15px;
+}
+
+.job-date {
+    background-color: var(--white);
+    border-radius: 8px;
+    padding-top: 50px;
+}
+
+.grid-box-second {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    gap: 40px;
+
+}
+
+.new-quiz, .new-department {
+    margin-top: 20px;
+    width: 90%;
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+}
+
+.question-header h3, .job-department h3{
+    font-size: 1.5rem;
+    color: #A3062C;
+}
+
+button {
+    background-color: #A3062C;
+    color: #f7f7f7;
+    border-radius: 15px;
+    padding: 12px 24px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+button:hover {
+    color: black;
+    background-color: #ff7b00;
+}
+
+
+
+
+.save-btn, .back-btn, .savenback-btn {
+    display: flex;
+    padding-top: 25px;
+    padding-left: 5px;
+    padding-right: 15px;
     border-top: 1px solid var(--border-color);
 }
 
@@ -80,15 +210,8 @@ textarea {
 }
 
 .job-save:hover {
-    background-color: #842029;
-}
-
-.back-btn {
-    display: flex;
-    gap: 12px;
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border-color);
+    color: black;
+    background-color: #ff7b00;
 }
 
 .job-back {
@@ -109,14 +232,6 @@ textarea {
 .job-back:hover {
     background-color: #777777;
     color: #f7f7f7;
-}
-
-.savenback-btn {
-    display: flex;
-    gap: 12px;
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border-color);
 }
 
 .modal-overlay {
@@ -159,7 +274,7 @@ textarea {
   font-size: 14px;
 }
 
-.save-btn {
+.save-btn-newquiz {
   background-color: #A3062C;
   color: #fff;
   border: none;
@@ -169,8 +284,9 @@ textarea {
   font-weight: 600;
   cursor: pointer;
 }
-.save-btn:hover {
-  background-color: #8c0526;
+
+.save-btn-newquiz:hover {
+  background-color: #dd6b00;
 }
 
 .close-btn {
@@ -181,6 +297,12 @@ textarea {
   font-size: 22px;
   color: #555;
   cursor: pointer;
+}
+
+.close-btn:hover {
+color: #ffffff;
+ background-color: #a0000d;
+ border-radius: 10cm;
 }
 
 .question-item {

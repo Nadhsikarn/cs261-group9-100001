@@ -25,68 +25,90 @@
     </div>
   </div>
 
-  <div class="main-content">
+<div class="main-content">
     <h2>สร้างงานใหม่</h2>
 
     <form method="post" th:action="@{/teacher/jobs}" enctype="multipart/form-data">
       <input type="hidden" th:name="${_csrf.parameterName}" value="${_csrf.token}" />
 
+    <div class = "grid-box">
       <div class="job-bigbox">
         <div class="job-name">
-          <label>ชื่อเรื่อง</label><br/>
-          <input type="text" name="title" required style="width:35%"/>
+          <h3>กรอกรายละเอียด</h3><br/>
+          <label>ชื่องาน</label><br/>
+          <input type="text" placeholder="ชื่องาน" name="title" required/>
         </div>
 
         <div class="job-desc">
           <label>รายละเอียด</label><br/>
-          <textarea name="description" required style="width:35%;height:120px"></textarea>
+          <textarea name="description" placeholder="รายละเอียดงาน" required></textarea>
         </div>
 
          <div class="job-quiz">
           <label>Skill ที่ต้องการในแต่ละฝ่าย</label><br/>
-          <textarea name="requiredSkill" required style="width:35%;height:80px"></textarea>
-        </div>
-        <div class="job-date">
-          <label>วันที่เปิดรับสมัคร</label><br/>
-          <input type="date" name="openDate" required style="width:35%" />
-          <br/>
-          <label>วันที่ปิดรับสมัคร</label><br/>
-          <input type="date" name="closeDate" required style="width:35%" />
+          <textarea name="requiredSkill" placeholder="ทักษะที่ต้องการในแต่ละฝ่าย" required></textarea>
         </div>
       </div>
 
-      <div class="job-img">
-        <label>อัปโหลดรูปภาพ</label><br/>
-        <input type="file" name="image" accept="image/*" style="width:35%; padding:5px;"/>
-      </div>
-
+        <div class="upload-n-date">
+          <label for="image-upload">
+            <div class="job-img">
+              <div class="preview-area">
+                <img id="preview-image" src="/image/pic.png" alt="Preview">
+              </div>
+              <div class="imgs-text">อัปโหลดรูปภาพงาน</div>
+              <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;"/>
+            </div>
+          </label>
+        
+          <div class="job-date">
+              <div class="date-text">วันที่เปิดรับสมัคร</div>
+                <div class="date-row">
+                  <input type="date" name="openDate" required/><br/>
+                </div>
+          <hr style="border: none; border-top: 1px solid #929292; margin: 15px 0;">
+              <div class="date-text">วันที่ปิดรับสมัคร</div>
+                <div class="date-row">
+                  <input type="date" name="closeDate" required/></br>
+                </div>
+          </div>
+        </div>
+    </div>
+ 
+  <div class="grid-box-second">
+    <div class="new-quiz">
       <div class="job-question-section">
-      <div class="question-header">
-        <h3>คำถามสำหรับผู้สมัคร</h3>
-        <button type="button" class="add-question-btn" onclick="openQuestionModal()">+ เพิ่มคำถามใหม่</button>
+        <div class="question-header">
+          <h3>คำถามสำหรับผู้สมัคร</h3>
+          
+        </div>
+
+        <div id="questionList"></div>
+        <div id="hiddenInputs"></div>
       </div>
 
-      <div id="questionList"></div>
-      <div id="hiddenInputs"></div>
+        <div class="modal-overlay" id="questionModal">
+          <div class="modal">
+            <button type="button" class="close-btn" onclick="closeQuestionModal()">×</button>
+            <h2>เพิ่มคำถามใหม่ (ข้อมูลส่วนตัว)</h2>
+            <textarea id="questionInput" placeholder="ใส่คำถาม...."></textarea>
+            <button type="button" class="save-btn-newquiz" onclick="saveQuestion()">บันทึก</button>
+          </div>
+        </div>
+        <button type="button" class="add-question-btn" onclick="openQuestionModal()" style="margin-top:5px;">+ เพิ่มคำถามใหม่</button>
     </div>
 
-      <div class="modal-overlay" id="questionModal">
-        <div class="modal">
-          <button type="button" class="close-btn" onclick="closeQuestionModal()">×</button>
-          <h2>เพิ่มคำถามใหม่ (ข้อมูลส่วนตัว)</h2>
-          <textarea id="questionInput" placeholder="ใส่คำถาม...."></textarea>
-          <button type="button" class="save-btn" onclick="saveQuestion()">บันทึก</button>
-        </div>
-      </div>
-
+    <div class="new-department">
       <div class="job-department">
-        <label>ฝ่ายที่ต้องการ</label><br/>
+        <h3>ฝ่ายที่ต้องการ</h3>
         <div id="departmentContainer">
-          <input type="text" name="departments" placeholder="เช่น ฝ่ายต้อนรับ" style="width:35%; padding:5px;" />
+          <input type="text" name="departments" placeholder="เช่น ฝ่ายต้อนรับ"/>
         </div>
         <button type="button" onclick="addDepartment()" style="margin-top:5px;">+ เพิ่มฝ่าย</button>
       </div>
-
+    </div>
+  </div>
+ 
       <div class="savenback-btn">
         <div class="save-btn">
           <button type="submit" class="job-save">บันทึก</button>
@@ -96,13 +118,29 @@
         </div>
       </div>
     </form>
-  </div>
+</div>
 
   <div class="footer">
     © 2025 VolunteeU — Software Project Recruitment
   </div>
 
   <script>
+
+    document.getElementById("image-upload").addEventListener("change", function () {
+    const file = this.files[0];
+    const imgPreview = document.getElementById("preview-image");
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+        alert("กรุณาเลือกไฟล์รูปภาพเท่านั้น");
+        this.value = "";
+        return;
+    }
+
+    imgPreview.src = URL.createObjectURL(file);
+  }
+  );
+
   let modal = document.getElementById("questionModal");
   let questionInput = document.getElementById("questionInput");
   let questionList = document.getElementById("questionList");
@@ -150,7 +188,6 @@
   input.type = "text";
   input.name = "departments";
   input.placeholder = "เพิ่มฝ่ายอื่น ๆ";
-  input.style = "width:35%; margin-top:5px; margin-right:5px; padding:5px;";
   container.appendChild(input);
   }
 </script>
@@ -177,7 +214,6 @@
             document.querySelector('.popup-overlay').style.display = 'none';
         }
     </script>
-
 
 </body>
 </html>
