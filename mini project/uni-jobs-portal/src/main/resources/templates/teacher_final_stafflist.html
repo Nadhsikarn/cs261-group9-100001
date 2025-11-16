@@ -29,8 +29,9 @@
     </div>
 
     <div class="details-link-head-wrapper">
-    <a th:href="@{|/teacher/final/${job.id}|}" class="details-link-head">
-        <span th:text="'< staff งาน ' + ${job.title}"> &lt; staff งาน</span>
+    <!-- ใช้ history.back() ให้กลับหน้าก่อนหน้า -->
+    <a href="javascript:history.back()" class="details-link-head">
+        < staff งาน จิตอาสา Big Cleaning Day
     </a>
 </div>
 
@@ -42,35 +43,40 @@
   </div>
 
   <div class="staff-row">
-    <span class="role">พัสดุ</span>
-    <span class="count">xx</span>
-    <a href="#" class="details-link">></a>
-  </div>
-  <div class="staff-row">
-    <span class="role">ทะเบียน</span>
-    <span class="count">xx</span>
-    <a href="#" class="details-link">></a>
-  </div>
-  <div class="staff-row">
-    <span class="role">สถานที่</span>
-    <span class="count">xx</span>
-    <a href="#" class="details-link">></a>
-  </div>
-  <div class="staff-row">
-    <span class="role">คมนาคม</span>
-    <span class="count">xx</span>
-    <a href="#" class="details-link">></a>
-  </div>
-  <div class="staff-row">
-    <span class="role">ประชาสัมพันธ์</span>
-    <span class="count">xx</span>
-    <a href="#" class="details-link">></a>
-  </div>
-  <div class="staff-row">
-    <span class="role">stage & run script</span>
-    <span class="count">xx</span>
-    <a href="#" class="details-link">></a>
-  </div>
+  <span class="role">พัสดุ</span>
+  <span class="count">xx</span>
+  <a href="/teacher/final/detail" class="details-link">></a>
+</div>
+
+<div class="staff-row">
+  <span class="role">ทะเบียน</span>
+  <span class="count">xx</span>
+  <a href="/teacher/final/detail" class="details-link">></a>
+</div>
+
+<div class="staff-row">
+  <span class="role">สถานที่</span>
+  <span class="count">xx</span>
+  <a href="/teacher/final/detail" class="details-link">></a>
+</div>
+
+<div class="staff-row">
+  <span class="role">คมนาคม</span>
+  <span class="count">xx</span>
+  <a href="/teacher/final/detail" class="details-link">></a>
+</div>
+
+<div class="staff-row">
+  <span class="role">ประชาสัมพันธ์</span>
+  <span class="count">xx</span>
+  <a href="/teacher/final/detail" class="details-link">></a>
+</div>
+
+<div class="staff-row">
+  <span class="role">stage & run script</span>
+  <span class="count">xx</span>
+  <a href="/teacher/final/detail" class="details-link">></a>
+</div>
 </div>
 </div>
 

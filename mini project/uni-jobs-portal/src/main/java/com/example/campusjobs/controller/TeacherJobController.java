@@ -527,6 +527,13 @@ public String reject(
         return "teacher_final_staff_job";
     }
 
+    @GetMapping("/final/detail")
+    public String finalDetailPage() {
+        // หน้า Final ข้อมูลชื่อ (รูปที่ 2)
+        return "teacher_final_member_detail";
+    }
+
+
     /**
      * หน้ารายการฝ่าย / สรุปจำนวน staff ที่ได้รับการอนุมัติ (APPROVED) ในแต่ละฝ่ายของงานหนึ่ง ๆ
      */
