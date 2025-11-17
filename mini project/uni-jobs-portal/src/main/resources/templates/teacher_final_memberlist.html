@@ -30,7 +30,7 @@
 
     <div class="details-link-head-wrapper">
     <a th:href="@{|/teacher/final/${job.id}|}" class="details-link-head">
-        <span th:text="'< ฝ่าย ' + ${department.name}">&lt; ฝ่าย</span>
+        < staff ฝ่าย <span th:text="${department.name}">ชื่อฝ่าย</span>
     </a>
 </div>
 
@@ -42,7 +42,7 @@
 
   <div class="staff-row-name" th:each="a : ${apps}">
     <span class="name" th:text="${a.fullName}">ชื่อผู้สมัคร</span>
-    <a th:href="@{|/teacher/final/${job.id}/department/${department.id}/member/${a.id}|}" class="details-link">></a>
+    <a class = "details-link">></a>
   </div>
 </div>
 

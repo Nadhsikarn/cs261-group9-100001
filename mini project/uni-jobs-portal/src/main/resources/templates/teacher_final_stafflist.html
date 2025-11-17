@@ -31,7 +31,7 @@
     <div class="details-link-head-wrapper">
     <!-- ใช้ history.back() ให้กลับหน้าก่อนหน้า -->
     <a href="javascript:history.back()" class="details-link-head">
-        < staff งาน จิตอาสา Big Cleaning Day
+         < staff งาน <span th:text="${job.title}">ชื่อกิจกรรม</span>
     </a>
 </div>
 
@@ -42,42 +42,19 @@
     <span class="details">ดูรายละเอียด</span>
   </div>
 
-  <div class="staff-row">
-  <span class="role">พัสดุ</span>
-  <span class="count">xx</span>
-  <a href="/teacher/final/detail" class="details-link">></a>
-</div>
+<div class="staff-row" th:each="d : ${departments}">
+    <span class="role" th:text="${d.name}">ชื่อฝ่าย</span>
 
-<div class="staff-row">
-  <span class="role">ทะเบียน</span>
-  <span class="count">xx</span>
-  <a href="/teacher/final/detail" class="details-link">></a>
+    <span class="count"
+          th:text="${approvedCountByDepartment[d.name] != null ? approvedCountByDepartment[d.name] : 0}">
+        xx
+    </span>
+  <a th:href="@{'/teacher/final/' + ${job.id} + '/department/' + ${d.id}}"
+   class="details-link">></a>
 </div>
+  
+  </div>
 
-<div class="staff-row">
-  <span class="role">สถานที่</span>
-  <span class="count">xx</span>
-  <a href="/teacher/final/detail" class="details-link">></a>
-</div>
-
-<div class="staff-row">
-  <span class="role">คมนาคม</span>
-  <span class="count">xx</span>
-  <a href="/teacher/final/detail" class="details-link">></a>
-</div>
-
-<div class="staff-row">
-  <span class="role">ประชาสัมพันธ์</span>
-  <span class="count">xx</span>
-  <a href="/teacher/final/detail" class="details-link">></a>
-</div>
-
-<div class="staff-row">
-  <span class="role">stage & run script</span>
-  <span class="count">xx</span>
-  <a href="/teacher/final/detail" class="details-link">></a>
-</div>
-</div>
 </div>
 
 <div class="footer">
