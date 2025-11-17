@@ -182,18 +182,14 @@ button {
 }
 
 button:hover {
-    color: black;
-    background-color: #ff7b00;
+    background-color: #840421;
 }
 
-
-
-
 .save-btn, .back-btn, .savenback-btn {
+    justify-content: center;
     display: flex;
+    padding-left: 15px;
     padding-top: 25px;
-    padding-left: 5px;
-    padding-right: 15px;
     border-top: 1px solid var(--border-color);
 }
 
@@ -210,8 +206,8 @@ button:hover {
 }
 
 .job-save:hover {
-    color: black;
-    background-color: #ff7b00;
+    color: rgb(255, 255, 255);
+    background-color: #840421;
 }
 
 .job-back {
@@ -286,7 +282,7 @@ button:hover {
 }
 
 .save-btn-newquiz:hover {
-  background-color: #dd6b00;
+  background-color: #840421;
 }
 
 .close-btn {
