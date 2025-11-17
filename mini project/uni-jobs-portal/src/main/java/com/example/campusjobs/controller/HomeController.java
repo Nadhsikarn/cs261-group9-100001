@@ -34,7 +34,7 @@ public class HomeController {
 
 
             int dbActive = jobRepository.countByCreatorUsernameAndCloseDateAfter(me, LocalDate.now());
-            int activePosts = dbActive + 2;   // บวก default showcase 2 งาน
+            int activePosts = dbActive;   // บวก default showcase 2 งาน
 
 
             int newApplicants = applicationRepository.countNewApplicants(me);

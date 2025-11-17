@@ -14,7 +14,7 @@ public class JobImage {
     private String imagePath;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_id", nullable = false)
+    @JoinColumn(name = "job_id", nullable = false, unique = false)
     private Job job;
 
     public JobImage() {}
