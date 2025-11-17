@@ -288,6 +288,15 @@ body {
     text-align: center;
 }
 
+.error-message {
+    color: #e80b21;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
 /*----------student_apps.html----------*/
 .page-header h1 {
     font-family: 'Inria Sans', sans-serif;

@@ -59,6 +59,7 @@ public class SecurityConfig {
                 .loginPage("/role")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error")
                 .permitAll()
             )
             .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
