@@ -111,7 +111,7 @@
  
       <div class="savenback-btn">
         <div class="save-btn">
-          <button type="submit" class="job-save">Post</button>
+          <button type="button" class="job-save">Post</button>
         </div>
         <div class="back-btn">
           <a href="/teacher/jobs" class="job-back">Cancel</a>
@@ -119,6 +119,22 @@
       </div>
     </form>
 </div>
+
+<!-- Confirm Publish Popup -->
+<div id="confirm-overlay" class="confirm-overlay">
+  <div class="confirm-dialog">
+    <p class="confirm-title">Are you sure you want to publish this ?</p>
+    <div class="confirm-actions">
+      <button type="button" id="confirm-yes" class="confirm-btn confirm-primary">
+        confirm
+      </button>
+      <button type="button" id="confirm-no" class="confirm-btn confirm-ghost">
+        cancel
+      </button>
+    </div>
+  </div>
+</div>
+
 
   <div class="footer">
     © 2025 VolunteeU — Software Project Recruitment
@@ -214,6 +230,49 @@
             document.querySelector('.popup-overlay').style.display = 'none';
         }
     </script>
+
+    <script>
+  // ฟอร์มสร้างโพสต์
+  const jobForm = document.querySelector('.main-content form');
+  const postBtn = document.querySelector('.job-save');
+
+  const confirmOverlay = document.getElementById('confirm-overlay');
+  const confirmYes = document.getElementById('confirm-yes');
+  const confirmNo = document.getElementById('confirm-no');
+
+  // กดปุ่ม Post => เปิด popup
+  postBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      // ให้เบราว์เซอร์เช็ค required / pattern ต่าง ๆ ก่อน
+      if (!jobForm.reportValidity()) {
+          // ถ้ามีช่องไม่ผ่าน validate ก็ไม่ต้องเปิด popup
+          return;
+      }
+
+      // ทุกอย่างกรอกครบและ valid แล้ว ค่อยเปิด popup
+      confirmOverlay.style.display = 'flex';
+  });
+
+  // กด cancel => ปิด popup
+  confirmNo.addEventListener('click', function () {
+    confirmOverlay.style.display = 'none';
+  });
+
+  // กด confirm => submit ฟอร์มจริง ๆ
+  confirmYes.addEventListener('click', function () {
+    confirmOverlay.style.display = 'none';
+    jobForm.submit();
+  });
+
+  // คลิกรอบ ๆ กล่อง => ปิด popup
+  confirmOverlay.addEventListener('click', function (e) {
+    if (e.target === confirmOverlay) {
+      confirmOverlay.style.display = 'none';
+    }
+  });
+</script>
+
 
 </body>
 </html>
