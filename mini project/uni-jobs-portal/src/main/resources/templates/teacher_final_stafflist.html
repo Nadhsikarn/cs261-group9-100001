@@ -29,9 +29,8 @@
     </div>
 
     <div class="details-link-head-wrapper">
-    <!-- ใช้ history.back() ให้กลับหน้าก่อนหน้า -->
-    <a href="javascript:history.back()" class="details-link-head">
-         < staff งาน <span th:text="${job.title}">ชื่อกิจกรรม</span>
+    <a th:href="@{/teacher/final}" class="details-link-head">
+         &lt; staff งาน <span th:text="${job.title}">ชื่อกิจกรรม</span>
     </a>
 </div>
 
