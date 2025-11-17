@@ -2,42 +2,90 @@
 <html lang="th" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>ดูรายชื่อ staff</title>
+    <title>ดูข้อมูล staff</title>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
-        rel="stylesheet">
+          rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
-        rel="stylesheet">
+          rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-<body>
-<div class="final-page-wrapper">
-<div class="navbar">
-    <div class="logo">VolunteeU</div>
-    <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/teacher/jobs">Posts</a>
-        <a href="/teacher/applicant">Applicant</a>
-        <a href="/teacher/interview">Interview</a>
-        <a href="/teacher/final" class="active" style="font-weight: bold;">Final</a>
-        <a href="/profile">Profile</a>
-        
+</head>
+
+<body style="margin:0;">
+<!-- ทำ wrapper ให้เป็น flex column + สูงเต็มจอ -->
+<div class="final-page-wrapper"
+     style="min-height:100vh; display:flex; flex-direction:column;">
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo">VolunteeU</div>
+        <div class="nav-links">
+            <a href="/teacher">Dashboard</a>
+            <a href="/teacher/jobs">Posts</a>
+            <a href="/teacher/applicant">Applicant</a>
+            <a href="/teacher/interview">Interview</a>
+            <a href="/teacher/final" class="active" style="font-weight: bold;">Final</a>
+            <a href="/profile">Profile</a>
+        </div>
     </div>
-</div>  
+
     <div class="finalstafflist-page-header">
         Final staff lists
         <div class="section-divider"></div>
     </div>
 
+    <!-- ปุ่มย้อนกลับ + ชื่อฝ่าย -->
     <div class="details-link-head-wrapper">
-    <!-- ให้ย้อนกลับไปหน้าก่อนหน้า (รูปที่ 1) -->
-    <a href="javascript:history.back()" class="details-link-head">
-         < staff งาน <span th:text="${job.title}">ชื่อกิจกรรม</span>
-    </a>
-</div>
+        <a th:href="@{'/teacher/final/' + ${job.id} + '/department/' + ${department.id}}"
+           class="details-link-head">
+            &lt; ฝ่าย <span th:text="${department.name}">ชื่อฝ่าย</span>
+        </a>
+    </div>
 
+    <div class="staff-info-card">
+  <h2 class="staff-title">ข้อมูล staff</h2>
+    <div class="section-divider-staff"></div>
+        <div class="staff-detail-body" style="line-height:1.8;">
+            <p>
+                ชื่อ :
+                <span th:text="${app.fullName}">xxxxxxx</span>
+            </p>
 
+            <p>
+                นามสกุล :
+                <span th:text="${app.fullName}">xxxxxxx</span>
+            </p>
 
-<div class="footer">
-    © 2025 VolunteeU — Software Project Recruitment
+            <p>
+                ชื่อเล่น :
+                <span th:text="${app.nickname}">xxx</span>
+            </p>
+
+            <p>
+                ชั้นปี :
+                <span th:text="${app.yearLevel}">x</span>
+            </p>
+
+            <p>
+                เลขนักศึกษา :
+                <span th:text="${app.studentId}">xxxx</span>
+            </p>
+
+            <p>
+                คณะ :
+                <span th:text="${app.faculty}">xxx</span>
+            </p>
+
+            <p>
+                แนะนำตัวสั้น ๆ :
+                <span th:text="${app.bio}">xxx</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- footer ดันลงล่างด้วย margin-top:auto -->
+    <div class="footer" style="margin-top:auto;">
+        © 2025 VolunteeU — Software Project Recruitment
+    </div>
 </div>
 </body>
 </html>

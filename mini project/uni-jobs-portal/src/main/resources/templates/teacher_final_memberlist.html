@@ -4,50 +4,70 @@
     <meta charset="UTF-8">
     <title>ดูรายชื่อ staff</title>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
-        rel="stylesheet">
+          rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
-        rel="stylesheet">
+          rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-<div class="final-page-wrapper">
-<div class="navbar">
-    <div class="logo">VolunteeU</div>
-    <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/teacher/jobs">Posts</a>
-        <a href="/teacher/applicant">Applicant</a>
-        <a href="/teacher/interview">Interview</a>
-        <a href="/teacher/final" class="active" style="font-weight: bold;">Final</a>
-        <a href="/profile">Profile</a>
-        
+<body style="margin:0;">
+<div class="final-page-wrapper"
+     style="min-height:100vh; display:flex; flex-direction:column;">
+
+    <!-- ✅ NAVBAR แบบเดียวกับ Figma -->
+    <div class="navbar">
+        <div class="logo">VolunteeU</div>
+        <div class="nav-links">
+            <!-- ก่อนแก้: <a href="/">Home</a> -->
+            <a href="/teacher">Dashboard</a>
+            <a href="/teacher/jobs">Posts</a>
+            <a href="/teacher/applicant">Applicant</a>
+            <a href="/teacher/interview">Interview</a>
+            <a href="/teacher/final" class="active" style="font-weight: bold;">Final</a>
+            <a href="/profile">Profile</a>
+        </div>
     </div>
-</div>  
+
     <div class="finalstafflist-page-header">
         Final staff lists
         <div class="section-divider"></div>
     </div>
 
+    <!-- แถวหัว: ปุ่มย้อนกลับ + ชื่อฝ่าย -->
     <div class="details-link-head-wrapper">
-    <a th:href="@{|/teacher/final/${job.id}|}" class="details-link-head">
-        < staff ฝ่าย <span th:text="${department.name}">ชื่อฝ่าย</span>
-    </a>
-</div>
+        <!-- ก่อนแก้: กลับไป /teacher/final/${job.id} เหมือนเดิม -->
+        <a th:href="@{|/teacher/final/${job.id}|}" class="details-link-head">
+            <!-- ใช้ < เป็นลูกศรย้อนกลับ -->
+            &lt; staff ฝ่าย <span th:text="${department.name}">ชื่อฝ่าย</span>
+        </a>
+    </div>
 
-<div class="staff-list-name">
-  <div class="staff-row-mem">
-    <span class="name">ชื่อ</span>
-    <span class="details">ดูรายละเอียด</span>
-  </div>
+    <div class="staff-list-name">
+        <!-- หัวตาราง -->
+        <div class="staff-row-mem">
+            <span class="name">ชื่อ</span>
+            <span class="details">ดูรายละเอียด</span>
+        </div>
 
-  <div class="staff-row-name" th:each="a : ${apps}">
-    <span class="name" th:text="${a.fullName}">ชื่อผู้สมัคร</span>
-    <a class = "details-link">></a>
-  </div>
-</div>
+        <!-- รายชื่อ final staff แต่ละคน -->
+        <div class="staff-row-name" th:each="a : ${apps}">
+            <span class="name" th:text="${a.fullName}">ชื่อผู้สมัคร</span>
 
+            <!-- ลูกศรไปหน้า Final member detail -->
+            <a class="details-link-staff"
+               th:href="@{'/teacher/final/' + ${job.id}
+                         + '/department/' + ${department.id}
+                         + '/member/' + ${a.id}}">
+                &gt;
+            </a>
+        </div>
+    </div>
+
+    <div style="flex-grow:1;"></div>
+
+<!-- footer -->
 <div class="footer">
     © 2025 VolunteeU — Software Project Recruitment
+</div>
 </div>
 </body>
 </html>
