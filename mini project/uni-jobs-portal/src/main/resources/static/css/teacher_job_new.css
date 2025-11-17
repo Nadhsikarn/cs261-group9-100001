@@ -197,7 +197,7 @@ button:hover {
     background-color: #A3062C;
     color: #f7f7f7;
     border-radius: 15px;
-    padding: 12px 24px;
+    padding: 12px 45px;
     border: none;
     font-size: 1rem;
     font-weight: 600;
@@ -213,7 +213,7 @@ button:hover {
 .job-back {
     background-color: #fff;
     color:black;
-    padding: 12px 24px;
+    padding: 12px 45px;
     border-radius: 15px;
     font-size: 1rem;
     font-weight: 600;
