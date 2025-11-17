@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Map;   
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campusjobs.model.Application;
 import com.example.campusjobs.model.ApplicationStatus;
@@ -33,6 +35,7 @@ import com.example.campusjobs.model.Question;
 import com.example.campusjobs.model.User;
 import com.example.campusjobs.repo.ApplicationRepository;
 import com.example.campusjobs.repo.JobRepository;
+import com.example.campusjobs.repo.JobImageRepository;
 import com.example.campusjobs.repo.DepartmentRepository;
 import com.example.campusjobs.repo.NotificationRepository;
 import com.example.campusjobs.repo.QuestionRepository;
@@ -54,17 +57,21 @@ public class TeacherJobController {
     private final EmailService emailService;
     private NotificationRepository notificationRepository;
     private UserRepository userRepository;
+
+    @Autowired
+    private JobImageRepository jobImageRepository;
     @org.springframework.beans.factory.annotation.Autowired
     private DepartmentRepository departmentRepository;
 
     public TeacherJobController(JobRepository jobRepository, ApplicationRepository applicationRepository,  QuestionRepository questionRepository,
-                                NotificationRepository notificationRepository, UserRepository userRepository, EmailService emailService) {
+                                NotificationRepository notificationRepository, UserRepository userRepository, EmailService emailService, JobImageRepository jobImageRepository) {
         this.jobRepository = jobRepository;
         this.applicationRepository = applicationRepository;
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
         this.emailService = emailService;
+        this.jobImageRepository = jobImageRepository;
     }
 
     @GetMapping("/jobs")
@@ -732,6 +739,7 @@ public String editJobForm(
     return "teacher_job_edit";  
 }
 
+ @Transactional
 @PostMapping("/jobs/{id}/edit")
 public String updateJob(
         @PathVariable Long id,
@@ -751,12 +759,10 @@ public String updateJob(
 
     Job job = jobOpt.get();
 
-
     if (!job.getCreatorUsername().equals(SecUtil.currentUsername())) {
         ra.addFlashAttribute("err", "ไม่มีสิทธิ์แก้ไขงานนี้");
         return "redirect:/teacher/jobs";
     }
-
 
     job.setTitle(title);
     job.setDescription(description);
@@ -765,24 +771,31 @@ public String updateJob(
     job.setCloseDate(closeDate);
 
     if (image != null && !image.isEmpty()) {
+        
+        
         try {
             String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-            Path uploadDir = Paths.get(System.getProperty("user.dir") + "/jobUploads");
+
+            String uploadFolder = System.getProperty("user.dir") + "/jobUploads";
+
+            Path uploadDir = Paths.get(uploadFolder);
             Files.createDirectories(uploadDir);
 
             Path target = uploadDir.resolve(fileName);
             image.transferTo(target.toFile());
+            JobImage jobImage = job.getImage();
+            jobImage.setImagePath("/jobUploads/" + fileName);
+            job.setImage(jobImage);
 
-            job.setImage(new JobImage("/jobUploads/" + fileName));
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
             ra.addFlashAttribute("err", "อัปโหลดรูปใหม่ไม่สำเร็จ");
+            return "redirect:/teacher/jobs/" + id + "/edit";
         }
     }
 
     jobRepository.save(job);
 
     ra.addFlashAttribute("popupMsg", "อัปเดตประกาศงานเรียบร้อยแล้ว!");
-    return "redirect:/teacher/jobs/" + id + "/edit";
+    return "redirect:/teacher/jobs";
 }
 }
