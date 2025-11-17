@@ -24,30 +24,30 @@
 </div>
 
 <div class="main-contents">
-        <div class="finalstafflist-page-header">
-        Final staff lists
-    </div>
-    
+    <h2>Final staff lists</h2>
 
-    <div class="container"> 
-      <div class="application-list" th:if="${jobs != null and !#lists.isEmpty(jobs)}">
-                <div class="application-card" th:each="job : ${jobs}">
-                    <div class="application-details">
-                            <div class="job-title">
-                                รายชื่อ Staff งาน <span th:text="${job.title}">งานรับเพื่อนใหม่</span>
-                            </div>
-                    </div>
+    <div class="job-list">
 
-                    <!-- ปุ่ม -->
-                    <div class="status-container">
-                        <a th:href="@{|/teacher/final/${job.id}|}" class="details-link-s">></a>
-                    </div>            
-                </div>
-                <!-- กรณีไม่มีงานที่สร้าง -->
-                <div class="no-applications" th:if="${jobs == null or #lists.isEmpty(jobs)}">
-                    <p>ยังไม่มีงานที่คุณสร้าง หรือยังไม่มีผู้ผ่านการคัดเลือกเป็น staff.</p>
-                </div>
+        <!-- กรณีไม่มีงาน -->
+        <div th:if="${#lists.isEmpty(jobs)}">
+            <p>ยังไม่มีงานที่คุณสร้าง หรือยังไม่มีผู้ผ่านการคัดเลือกเป็น staff.</p>
         </div>
+
+        <!-- รายการงาน -->
+        <div th:each="job : ${jobs}" class="job-card">
+
+            <div class="job-info">
+                รายชื่อ Staff งาน <span th:text="${job.title}">งานรับเพื่อนใหม่</span>
+            </div>
+
+            <!-- ปุ่มลูกศร -->
+            <div class="arrow-btn"
+                 th:onclick="|window.location.href='/teacher/final/${job.id}'|">
+                ›
+            </div>
+
+        </div>
+
     </div>
 </div>
 
