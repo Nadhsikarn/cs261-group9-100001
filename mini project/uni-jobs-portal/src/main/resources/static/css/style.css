@@ -178,7 +178,8 @@ body {
 }
 
 .job-image {
-    border: solid red 1px;
+    border: none;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.10);
     width: 30%;
     height: 90px;
     border-radius: 8px;
@@ -1438,7 +1439,7 @@ td {
 }
 
 .details-link-head-wrapper {
-    padding-left: 350px;
+    padding-left: 175px;
     margin-bottom: 10px;
     margin-bottom: 30px;
 }
@@ -1450,8 +1451,8 @@ td {
     font-weight: 600;
     margin-bottom: 30px;
     padding-top: 40px;
-    padding-left: 350px;
-    padding-right: 350px;
+    padding-left: 175px;
+    padding-right: 175px;
     
 }
 .back-link:hover {
@@ -1853,7 +1854,7 @@ td {
 
 /* teacher applicant & teacher interview */
 .main-contents {
-    padding: 40px 50px;
+    padding: 40px 135px;
     flex-grow: 1;
 }
 
