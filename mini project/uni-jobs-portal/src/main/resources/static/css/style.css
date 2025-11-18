@@ -1022,7 +1022,7 @@ td {
 }
 .popup-box {
     background: #fff;
-    border: 2px solid #A3062C;
+   /* border: 2px solid #A3062C;*/
     border-radius: 10px;
     padding: 25px;
     width: 350px;

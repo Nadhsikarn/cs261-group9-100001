@@ -30,70 +30,95 @@
 
 <div class="main-content">
 
-    <h2>แก้ไขงาน</h2>
+    <h2>Edit post</h2>
 
     <form method="post"
           th:action="@{'/teacher/jobs/' + ${job.id} + '/edit'}"
           enctype="multipart/form-data">
 
-        <!-- TITLE -->
-        <div class="job-name">
-            <label>ชื่อเรื่อง</label><br/>
-            <input type="text" name="title" th:value="${job.title}" required style="width:35%"/>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="grid-box">
+
+            <!-- กล่องซ้าย -->
+            <div class="job-bigbox">
+
+                <div class="job-name">
+                    <h3>แก้ไขรายละเอียดงาน</h3><br/>
+                    <label>ชื่องาน</label>
+                    <input type="text" name="title" required
+                           th:value="${job.title}" />
+                </div>
+
+                <div class="job-desc">
+                    <label>รายละเอียด</label>
+                    <textarea name="description" required
+                              th:text="${job.description}"></textarea>
+                </div>
+
+                <div class="job-quiz">
+                    <label>Skill ที่ต้องการในแต่ละฝ่าย</label>
+                    <textarea name="requiredSkill" required
+                              th:text="${job.requiredSkill}"></textarea>
+                </div>
+
+            </div>
+
+            <!-- กล่องขวา -->
+            <div class="upload-n-date">
+
+                <!-- รูปภาพ -->
+                <label for="image-upload">
+                    <div class="job-img">
+                        <div class="preview-area">
+                            <img id="preview-image"
+                                 th:src="${job.image != null ? job.image.imagePath : '/image/pic.png'}"
+                                 alt="Preview">
+                        </div>
+                        <div class="imgs-text">เปลี่ยนรูปภาพงาน</div>
+                        <input type="file" id="image-upload" name="image"
+                               accept="image/*" style="display:none;">
+                    </div>
+                </label>
+
+                <!-- วันที่ -->
+                <div class="job-date">
+                    <div class="date-text">วันที่เปิดรับสมัคร</div>
+                    <div class="date-row">
+                        <input type="date" name="openDate" required
+                               th:value="${job.openDate}" />
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid #929292; margin: 15px 0;">
+
+                    <div class="date-text">วันที่ปิดรับสมัคร</div>
+                    <div class="date-row">
+                        <input type="date" name="closeDate" required
+                               th:value="${job.closeDate}" />
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- DESCRIPTION -->
-        <div class="job-desc">
-            <label>รายละเอียด</label><br/>
-            <textarea name="description" required style="width:35%;height:120px"
-                      th:text="${job.description}"></textarea>
-        </div>
-
-        <!-- SKILL -->
-        <div class="job-quiz">
-            <label>Skill ที่ต้องการในแต่ละฝ่าย</label><br/>
-            <textarea name="requiredSkill" required style="width:35%;height:80px"
-                      th:text="${job.requiredSkill}"></textarea>
-        </div>
-
-        <!-- DATES -->
-        <div class="job-date">
-            <label>วันที่เปิดรับสมัคร</label><br/>
-            <input type="date" name="openDate" th:value="${job.openDate}" required style="width:35%" /><br/>
-
-            <label>วันที่ปิดรับสมัคร</label><br/>
-            <input type="date" name="closeDate" th:value="${job.closeDate}" required style="width:35%" />
-        </div>
-
-        <!-- IMAGE -->
-        <div class="job-img">
-            <label>รูปภาพปัจจุบัน</label><br/>
-            <img th:if="${job.image != null}"
-                 th:src="@{${job.image.imagePath}}"
-                 style="max-width:250px; border-radius:8px; margin-bottom:10px;">
-            <p th:if="${job.image == null}" style="color:#777;">ยังไม่มีรูปภาพ</p>
-
-            <label>อัปโหลดรูปใหม่</label><br/>
-            <input type="file" name="image" accept="image/*" style="width:35%; padding:5px;"/>
-        </div>
-
-        <!-- BUTTONS -->
+        <!-- ปุ่ม Save / Back -->
         <div class="savenback-btn">
             <div class="save-btn">
-                <button type="submit" class="job-save">บันทึก</button>
+                <button type="submit" class="job-save">Save</button>
             </div>
-
             <div class="back-btn">
-                <a th:href="@{/teacher/jobs}" class="job-back">ย้อนกลับ</a>
+                <a th:href="@{/teacher/jobs}" class="job-back">Cancel</a>
             </div>
         </div>
-    </form>
 
+    </form>
 </div>
 
 <div class="footer">
     © 2025 VolunteeU — Software Project Recruitment
 </div>
+
 
 </body>
 </html>

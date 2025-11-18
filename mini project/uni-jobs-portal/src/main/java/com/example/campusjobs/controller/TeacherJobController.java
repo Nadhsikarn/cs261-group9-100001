@@ -795,7 +795,7 @@ public String updateJob(
 
     jobRepository.save(job);
 
-    ra.addFlashAttribute("popupMsg", "อัปเดตประกาศงานเรียบร้อยแล้ว!");
+    ra.addFlashAttribute("popupMsg", "The job announcement has already been updated.");
     return "redirect:/teacher/jobs";
 }
 }
