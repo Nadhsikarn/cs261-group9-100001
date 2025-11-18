@@ -23,18 +23,31 @@
         </div>
     </div>
 
-    <div class="main-content-app">
-        <h2 th:text="'ฝ่าย ' + ${app.department}">ฝ่าย xxx</h2>
+    <div class="app-page-header">
+        Interview
+        <div class="section-divider"></div>
+    </div>
 
-        <div class="applicant-info">
-            <h3>ข้อมูลผู้สมัคร</h3>
-            <p><strong>ชื่อ :</strong> <span th:text="${app.fullName}"></span></p>
-            <p><strong>ชื่อเล่น :</strong> <span th:text="${app.nickname}"></span></p>
-            <p><strong>ชั้นปีที่ :</strong> <span th:text="${app.yearLevel}"></span></p>
-            <p><strong>เลขนักศึกษา :</strong> <span th:text="${app.studentId}"></span></p>
-            <p><strong>คณะ :</strong> <span th:text="${app.faculty}"></span></p>
-            <p><strong>แนะนำตัวสั้น ๆ :</strong> <span th:text="${app.bio}"></span></p>
+
+    <div class="main-content-app">
+            <h2 class="app-dep">
+                <a th:href="@{|/teacher/interview/${job.id}|}" class="details-link-head">
+                    &lt; ฝ่าย <span th:text="${app.department}">ชื่อฝ่าย</span>
+                </a>
+            </h2>
+
+    <div class="staff-info-card">
+        <h2 class="staff-title">ข้อมูล staff</h2>
+        <div class="section-divider-staff"></div>
+        <div class="staff-detail-body" style="line-height:1.8;">
+            <p>ชื่อ-นามสกุล :<span th:text="${app.fullName}">xxxxxxx</span></p>
+            <p>ชื่อเล่น :<span th:text="${app.nickname}">xxx</span></p>
+            <p>ชั้นปี :<span th:text="${app.yearLevel}">x</span></p>
+            <p>เลขนักศึกษา :<span th:text="${app.studentId}">xxxx</span></p>
+            <p>คณะ :<span th:text="${app.faculty}">xxx</span></p>
+            <p>แนะนำตัวสั้น ๆ :<span th:text="${app.bio}">xxx</span></p>
         </div>
+    </div>
 
         <div class="action-buttons">
 
@@ -49,11 +62,11 @@
                 </form>
             </div>
 
-            <p th:if="${app.status.name() == 'APPROVED'}" class="status-info">
+            <p th:if="${app.status.name() == 'APPROVED'}" class="status-info-approve">
                 ผู้สมัครคนนี้ได้รับเลือกเป็น staff ในงานนี้แล้ว
             </p>
 
-            <p th:if="${app.status.name() == 'REJECTED'}" class="status-info">
+            <p th:if="${app.status.name() == 'REJECTED'}" class="status-info-reject">
                 ผู้สมัครคนนี้ถูกปฏิเสธแล้ว
             </p>
 

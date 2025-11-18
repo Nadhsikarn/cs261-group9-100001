@@ -802,11 +802,29 @@ body {
     color: #0f5132;
     border: 1px solid #badbcc;
 }
-
 .status-info {
     background-color: #cff4fc;
     color: #055160;
     border: 1px solid #b6effb;
+}
+.status-info-approve {
+    max-width: 900px;          
+    margin: 24px auto 0;       
+    border-radius: 12px;      
+    background-color: #cffcd2;
+    color: #0e6005;
+    border: 1px solid #c4fbb6;
+    margin-bottom: 30px;
+}
+
+.status-info-reject {
+    max-width: 900px;          
+    margin: 24px auto 0;       
+    border-radius: 12px;    
+    background-color: #fccfcf;
+    color: #600505;
+    border: 1px solid #fbb6b6;
+    margin-bottom: 30px;
 }
 
 .status-error {
@@ -1563,7 +1581,7 @@ td {
 }
 
 .staff-title {
-  font-size: 1.5em;
+  font-size: 1.25em;
   color: #3E3C3C;
   margin-bottom: 20px;
   font-weight: bold;
@@ -1864,6 +1882,22 @@ td {
     color: #A3062C;
     font-size: 36px;
 }
+.app-page-header {
+    font-family: 'Inria Sans', sans-serif;
+    color: #A3062C;
+    font-size: 2.5em;
+    font-weight: 600;
+    padding-top: 40px;
+    padding-left: 175px;
+    padding-right: 175px;
+    margin-bottom: 10px;
+}
+
+.app-dep {
+    font-size: 18px;
+    padding-left: 125px;
+    margin-bottom: 30px;
+}
 
 .job-info {
     font-size: 16px;
@@ -1892,7 +1926,7 @@ td {
 
 /* ----teacher application detail ----*/
 .main-content-app {
-    padding: 40px 50px;
+    padding: 0px 50px;
     flex-grow: 1;
 }
 /* Applicant Info Section */
@@ -1918,12 +1952,15 @@ td {
 
 /* Answer Box */
 .qa-box {
-    margin-top: 30px;
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto 50px;  /* ให้ตรงกับด้านบน */
     background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 20px 20px 20px 50px; /* padding-left ให้เท่า .staff-info-card */
+    border-radius: 10px;
     border: 1px solid #ddd;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-sizing: border-box;
 }
 
 .qa-box h3 {
@@ -1972,6 +2009,7 @@ td {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-bottom: 30px;
 }
 
 /*Reject*/
@@ -2102,7 +2140,7 @@ td {
     background: #ffffff;
     border-radius: 20px;
     padding: 24px 32px 28px;
-    max-width: 480px;
+    max-width: 360px;
     width: 100%;
     box-shadow: 0 14px 40px rgba(0,0,0,0.15);
     text-align: center;
