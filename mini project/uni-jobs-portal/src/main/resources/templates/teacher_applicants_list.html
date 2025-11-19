@@ -90,6 +90,7 @@
                 <td th:text="${a.department}">ฝ่าย</td>
                 <td th:text="${#temporals.format(a.appliedAt, 'dd.MM.yy')}">วันที่</td>
                 <td class="status-icon">
+                    <span th:if="${a.status.name() == 'APPROVED'}" class="circle approve">✔</span>
                     <span th:if="${a.status.name() == 'INTERVIEW'}" class="circle interview">✔</span>
                     <span th:if="${a.status.name()  == 'PENDING'}" class="circle pending"></span>
                     <span th:if="${a.status.name()  == 'REJECTED'}" class="circle rejected">✖</span>

@@ -227,6 +227,7 @@ public class TeacherJobController {
         }
     
         List<ApplicationStatus> statusFilter = List.of(
+            ApplicationStatus.APPROVED,
             ApplicationStatus.PENDING,
             ApplicationStatus.INTERVIEW,
             ApplicationStatus.REJECTED
